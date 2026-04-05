@@ -49,6 +49,9 @@ abstract class BaseFragment<B : ViewBinding> :
 	}
 
 	override fun onDestroyView() {
+		viewBinding?.root?.let {
+			ViewCompat.setOnApplyWindowInsetsListener(it, null)
+		}
 		viewBinding = null
 		super.onDestroyView()
 	}

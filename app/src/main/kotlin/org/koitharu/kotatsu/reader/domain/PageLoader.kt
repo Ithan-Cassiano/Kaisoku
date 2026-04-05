@@ -177,7 +177,7 @@ class PageLoader @Inject constructor(
 		} else if (task?.isCancelled == false) {
 			return task
 		}
-		task = loadPageAsyncImpl(page, skipCache = force, isPrefetch = false)
+		task = loadPageAsyncImpl(page, skipCache = force, isPrefetch = false, useTranslatedOverride = true)
 		synchronized(tasks) {
 			tasks[page.id] = task
 		}
@@ -186,6 +186,35 @@ class PageLoader @Inject constructor(
 
 	suspend fun loadPage(page: MangaPage, force: Boolean): Uri {
 		return loadPageAsync(page, force).await()
+	}
+
+	suspend fun loadOriginalPage(
+		page: MangaPage,
+		force: Boolean = false,
+		pageUrlOverride: String? = null,
+	): Uri {
+		return loadPageImpl(
+			page = page,
+			progress = MutableStateFlow(PROGRESS_UNDEFINED),
+			isPrefetch = false,
+			skipCache = force,
+			useTranslatedOverride = false,
+			pageUrlOverride = pageUrlOverride,
+		)
+	}
+
+	suspend fun registerTranslatedPage(
+		page: MangaPage,
+		bitmap: android.graphics.Bitmap,
+		pageUrlOverride: String? = null,
+	) {
+		val pageUrl = pageUrlOverride ?: getPageUrl(page)
+		cache.set(translatedPageCacheKey(pageUrl), bitmap)
+		synchronized(tasks) {
+			val task = tasks[page.id]
+			tasks.remove(page.id)
+			task?.cancel()
+		}
 	}
 
 	@CheckResult
@@ -247,7 +276,12 @@ class PageLoader @Inject constructor(
 			while (prefetchQueue.isNotEmpty()) {
 				val page = prefetchQueue.pollFirst() ?: return@launch
 				synchronized(tasks) {
-					tasks[page.id] = loadPageAsyncImpl(page, skipCache = false, isPrefetch = true)
+					tasks[page.id] = loadPageAsyncImpl(
+						page = page,
+						skipCache = false,
+						isPrefetch = true,
+						useTranslatedOverride = true,
+					)
 				}
 			}
 		}
@@ -257,6 +291,7 @@ class PageLoader @Inject constructor(
 		page: MangaPage,
 		skipCache: Boolean,
 		isPrefetch: Boolean,
+		useTranslatedOverride: Boolean,
 	): ProgressDeferred<Uri, Float> {
 		val progress = MutableStateFlow(PROGRESS_UNDEFINED)
 		val deferred = loaderScope.async {
@@ -267,6 +302,7 @@ class PageLoader @Inject constructor(
 					progress = progress,
 					isPrefetch = isPrefetch,
 					skipCache = skipCache,
+					useTranslatedOverride = useTranslatedOverride,
 				)
 			} finally {
 				if (counter.decrementAndGet() == 0) {
@@ -292,10 +328,17 @@ class PageLoader @Inject constructor(
 		progress: MutableStateFlow<Float>,
 		isPrefetch: Boolean,
 		skipCache: Boolean,
+		useTranslatedOverride: Boolean,
+		pageUrlOverride: String? = null,
 	): Uri = semaphore.withPermit {
 		val repo = getRepository(page.source)
-		val pageUrl = getPageUrl(page)
+		val pageUrl = pageUrlOverride ?: getPageUrl(page)
 		check(pageUrl.isNotBlank()) { "Cannot obtain full image url for $page" }
+		if (useTranslatedOverride) {
+			cache[translatedPageCacheKey(pageUrl)]?.let { translatedFile ->
+				return translatedFile.toUri()
+			}
+		}
 		if (!skipCache) {
 			cache.get(pageUrl)?.let { cachedFile ->
 				if (shouldValidateInkStoryCache(pageUrl, page.source) && !isCachedImageFileValid(cachedFile)) {
@@ -351,6 +394,10 @@ class PageLoader @Inject constructor(
 
 	private fun isLowRam(): Boolean {
 		return context.ramAvailable <= FileSize.MEGABYTES.convert(PREFETCH_MIN_RAM_MB, FileSize.BYTES)
+	}
+
+	private fun translatedPageCacheKey(pageUrl: String): String {
+		return "translated:${settings.pageTranslationCacheKey}:$pageUrl"
 	}
 
 	private fun Image.toImageSource(): ImageSource = if (this is BitmapImage) {

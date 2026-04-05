@@ -1,6 +1,7 @@
 package org.koitharu.kotatsu.reader.ui
 
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
@@ -65,10 +66,13 @@ import org.koitharu.kotatsu.parsers.util.sizeOrZero
 import org.koitharu.kotatsu.reader.domain.ChaptersLoader
 import org.koitharu.kotatsu.reader.domain.DetectReaderModeUseCase
 import org.koitharu.kotatsu.reader.domain.PageLoader
+import org.koitharu.kotatsu.reader.translation.PageTranslationSettings
+import org.koitharu.kotatsu.reader.translation.TranslatePageUseCase
 import org.koitharu.kotatsu.reader.ui.config.ReaderSettings
 import org.koitharu.kotatsu.reader.ui.pager.ReaderUiState
 import org.koitharu.kotatsu.scrobbling.discord.ui.DiscordRpc
 import org.koitharu.kotatsu.stats.domain.StatsCollector
+import java.net.SocketTimeoutException
 import java.time.Instant
 import javax.inject.Inject
 
@@ -83,6 +87,8 @@ class ReaderViewModel @Inject constructor(
     private val bookmarksRepository: BookmarksRepository,
     settings: AppSettings,
     private val pageLoader: PageLoader,
+    private val pageTranslationSettings: PageTranslationSettings,
+    private val translatePageUseCase: TranslatePageUseCase,
     private val chaptersLoader: ChaptersLoader,
     private val appShortcutManager: AppShortcutManager,
     private val detailsLoadUseCase: DetailsLoadUseCase,
@@ -108,6 +114,7 @@ class ReaderViewModel @Inject constructor(
 
     private var loadingJob: Job? = null
     private var pageSaveJob: Job? = null
+    private var pageTranslationJob: Job? = null
     private var bookmarkJob: Job? = null
     private var stateChangeJob: Job? = null
     private var lastScrollProgress: Float = -1f
@@ -119,6 +126,7 @@ class ReaderViewModel @Inject constructor(
 
     val readerMode = MutableStateFlow<ReaderMode?>(null)
     val onPageSaved = MutableEventFlow<Collection<Uri>>()
+    val onPageTranslated = MutableEventFlow<Long>()
     val onLoadingError = MutableEventFlow<Throwable>()
     val onShowToast = MutableEventFlow<Int>()
     val onAskNsfwIncognito = MutableEventFlow<Unit>()
@@ -285,6 +293,44 @@ class ReaderViewModel @Inject constructor(
             )
             val dest = pageSaveHelper.save(setOf(task))
             onPageSaved.call(dest)
+        }
+    }
+
+    fun translateCurrentPage() {
+        if (pageTranslationJob?.isActive == true) {
+            Log.d(TAG, "Ignoring translate request because another translation is already running")
+            return
+        }
+        pageTranslationJob = launchJob(Dispatchers.Default) {
+            if (!pageTranslationSettings.isConfigured()) {
+                Log.d(TAG, "Page translation is not configured")
+                onShowToast.call(R.string.page_translation_not_configured)
+                return@launchJob
+            }
+            val page = checkNotNull(getCurrentPage()) { "Cannot find current page" }
+            val traceId = "${page.id}:${page.source.name}:${page.url.hashCode().toUInt().toString(16)}"
+            Log.d(TAG, "[$traceId] Reader translation requested")
+            onShowToast.call(R.string.processing_)
+            try {
+                val translatedBlocks = translatePageUseCase(page)
+                if (translatedBlocks == 0) {
+                    Log.d(TAG, "[$traceId] Reader translation completed without OCR blocks")
+                    onShowToast.call(R.string.page_translation_no_text)
+                } else {
+                    Log.d(TAG, "[$traceId] Reader translation completed blocks=$translatedBlocks")
+                    onPageTranslated.call(page.id)
+                    onShowToast.call(R.string.page_translated)
+                }
+            } catch (e: CancellationException) {
+                Log.d(TAG, "[$traceId] Reader translation cancelled")
+                throw e
+            } catch (e: SocketTimeoutException) {
+                Log.w(TAG, "[$traceId] Reader translation timed out: ${e.message}", e)
+                onShowToast.call(R.string.page_translation_timeout)
+            } catch (e: Throwable) {
+                Log.e(TAG, "[$traceId] Reader translation failed", e)
+                onLoadingError.call(e)
+            }
         }
     }
 
@@ -641,5 +687,9 @@ class ReaderViewModel @Inject constructor(
     } else {
         other.addSuppressed(this)
         other
+    }
+
+    private companion object {
+        private const val TAG = "PageTranslation"
     }
 }

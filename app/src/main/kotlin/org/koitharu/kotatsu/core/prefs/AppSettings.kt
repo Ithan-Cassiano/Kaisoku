@@ -38,9 +38,12 @@ import org.koitharu.kotatsu.parsers.util.mapNotNullToSet
 import org.koitharu.kotatsu.parsers.util.mapToSet
 import org.koitharu.kotatsu.parsers.util.nullIfEmpty
 import org.koitharu.kotatsu.reader.domain.ReaderColorFilter
+import org.koitharu.kotatsu.reader.translation.PageTranslationOcrMode
+import org.koitharu.kotatsu.reader.translation.PageTranslationProvider
 import java.io.File
 import java.net.Proxy
 import java.util.EnumSet
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -166,6 +169,38 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 
 	val isReaderOptimizationEnabled: Boolean
 		get() = prefs.getBoolean(KEY_READER_OPTIMIZE, false)
+
+	val pageTranslationProvider: PageTranslationProvider
+		get() = prefs.getEnumValue(KEY_READER_PAGE_TRANSLATION_PROVIDER, PageTranslationProvider.OPENAI_COMPATIBLE)
+
+	val pageTranslationEndpoint: String?
+		get() = prefs.getString(KEY_READER_PAGE_TRANSLATION_ENDPOINT, null)?.trim()?.nullIfEmpty()
+
+	val pageTranslationApiKey: String?
+		get() = prefs.getString(KEY_READER_PAGE_TRANSLATION_API_KEY, null)?.nullIfEmpty()
+
+	val pageTranslationModel: String?
+		get() = prefs.getString(KEY_READER_PAGE_TRANSLATION_MODEL, null)?.trim()?.nullIfEmpty()
+
+	val pageTranslationTargetLanguage: String
+		get() = prefs.getString(KEY_READER_PAGE_TRANSLATION_TARGET_LANGUAGE, null)?.trim()?.nullIfEmpty()
+			?: Locale.getDefault().language
+
+	val pageTranslationOcrMode: PageTranslationOcrMode
+		get() = prefs.getEnumValue(KEY_READER_PAGE_TRANSLATION_OCR_MODE, PageTranslationOcrMode.AUTO)
+
+	val pageTranslationCacheKey: String
+		get() = buildString {
+			append(pageTranslationProvider.name)
+			append('|')
+			append(pageTranslationEndpoint.orEmpty())
+			append('|')
+			append(pageTranslationModel.orEmpty())
+			append('|')
+			append(pageTranslationTargetLanguage)
+			append('|')
+			append(pageTranslationOcrMode.name)
+		}.hashCode().toUInt().toString(16)
 
 	val readerControls: Set<ReaderControl>
 		get() = prefs.getStringSet(KEY_READER_CONTROLS, null)?.mapNotNullTo(EnumSet.noneOf(ReaderControl::class.java)) {
@@ -764,6 +799,12 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_SHORTCUTS = "dynamic_shortcuts"
 		const val KEY_READER_TAP_ACTIONS = "reader_tap_actions"
 		const val KEY_READER_OPTIMIZE = "reader_optimize"
+		const val KEY_READER_PAGE_TRANSLATION_PROVIDER = "reader_page_translation_provider"
+		const val KEY_READER_PAGE_TRANSLATION_ENDPOINT = "reader_page_translation_endpoint"
+		const val KEY_READER_PAGE_TRANSLATION_API_KEY = "reader_page_translation_api_key"
+		const val KEY_READER_PAGE_TRANSLATION_MODEL = "reader_page_translation_model"
+		const val KEY_READER_PAGE_TRANSLATION_TARGET_LANGUAGE = "reader_page_translation_target_language"
+		const val KEY_READER_PAGE_TRANSLATION_OCR_MODE = "reader_page_translation_ocr_mode"
 		const val KEY_LOCAL_LIST_ORDER = "local_order"
 		const val KEY_HISTORY_ORDER = "history_order"
 		const val KEY_FAVORITES_ORDER = "fav_order"

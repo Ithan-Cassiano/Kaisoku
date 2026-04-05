@@ -14,8 +14,10 @@ fun <T> Flow<T>.observe(owner: LifecycleOwner, collector: FlowCollector<T>) {
 }
 
 fun <T> Flow<T>.observe(owner: LifecycleOwner, minState: Lifecycle.State, collector: FlowCollector<T>) {
-	owner.lifecycleScope.launch {
-		owner.lifecycle.repeatOnLifecycle(minState) {
+	val lifecycle = owner.lifecycle
+	val scope = owner.lifecycleScope
+	scope.launch {
+		lifecycle.repeatOnLifecycle(minState) {
 			collect(collector)
 		}
 	}
@@ -26,8 +28,10 @@ fun <T> Flow<Event<T>?>.observeEvent(owner: LifecycleOwner, collector: FlowColle
 }
 
 fun <T> Flow<Event<T>?>.observeEvent(owner: LifecycleOwner, minState: Lifecycle.State, collector: FlowCollector<T>) {
-	owner.lifecycleScope.launch {
-		owner.repeatOnLifecycle(minState) {
+	val lifecycle = owner.lifecycle
+	val scope = owner.lifecycleScope
+	scope.launch {
+		lifecycle.repeatOnLifecycle(minState) {
 			collect {
 				it?.consume(collector)
 			}

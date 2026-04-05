@@ -6,7 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -72,6 +71,7 @@ open class RemoteListViewModel @Inject constructor(
 	private val mangaList = MutableStateFlow<List<Manga>?>(null)
 	private val hasNextPage = MutableStateFlow(false)
 	private val listError = MutableStateFlow<Throwable?>(null)
+	private var filterJob: Job? = null
 	private var loadingJob: Job? = null
 	private var randomJob: Job? = null
 
@@ -106,18 +106,20 @@ open class RemoteListViewModel @Inject constructor(
 	}.stateIn(viewModelScope + Dispatchers.Default, SharingStarted.Lazily, listOf(LoadingState))
 
 	init {
-		filterCoordinator.observe()
+		val listErrorFlow = listError
+		filterJob = filterCoordinator.observe()
 			.debounce(FILTER_MIN_INTERVAL)
 			.onEach { filterState ->
-				loadingJob?.cancelAndJoin()
 				mangaList.value = null
-				loadList(filterState, false)
+				hasNextPage.value = false
+				loadList(filterState, append = false, cancelRunning = true)
 			}.catch { error ->
-				listError.value = error
-			}.launchIn(viewModelScope)
+				listErrorFlow.value = error
+			}.launchIn(viewModelScope + Dispatchers.Default)
 
+		val usageSource = source
 		launchJob(Dispatchers.Default) {
-			sourcesRepository.trackUsage(source)
+			sourcesRepository.trackUsage(usageSource)
 		}
 
         if (source is MangaParserSource && source.isBroken) {
@@ -127,11 +129,15 @@ open class RemoteListViewModel @Inject constructor(
 	}
 
 	override fun onRefresh() {
-		loadList(filterCoordinator.snapshot(), append = false)
+		loadList(filterCoordinator.snapshot(), append = false, cancelRunning = true)
 	}
 
 	override fun onRetry() {
-		loadList(filterCoordinator.snapshot(), append = !mangaList.value.isNullOrEmpty())
+		loadList(
+			filterState = filterCoordinator.snapshot(),
+			append = !mangaList.value.isNullOrEmpty(),
+			cancelRunning = mangaList.value.isNullOrEmpty(),
+		)
 	}
 
 	fun loadNextPage() {
@@ -140,9 +146,17 @@ open class RemoteListViewModel @Inject constructor(
 		}
 	}
 
-	protected fun loadList(filterState: FilterCoordinator.Snapshot, append: Boolean): Job {
+	protected fun loadList(
+		filterState: FilterCoordinator.Snapshot,
+		append: Boolean,
+		cancelRunning: Boolean = false,
+	): Job {
 		loadingJob?.let {
-			if (it.isActive) return it
+			if (cancelRunning) {
+				it.cancel()
+			} else if (it.isActive) {
+				return it
+			}
 		}
 		return launchLoadingJob(Dispatchers.Default) {
 			try {
@@ -213,5 +227,12 @@ open class RemoteListViewModel @Inject constructor(
 			onOpenManga.call(manga)
 			isRandomLoading.value = false
 		}
+	}
+
+	override fun onCleared() {
+		filterJob?.cancel()
+		loadingJob?.cancel()
+		randomJob?.cancel()
+		super.onCleared()
 	}
 }

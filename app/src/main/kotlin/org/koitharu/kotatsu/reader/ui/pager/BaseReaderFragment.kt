@@ -71,6 +71,8 @@ abstract class BaseReaderFragment<B : ViewBinding> : BaseFragment<B>(), ZoomCont
 
 	abstract fun getCurrentState(): ReaderState?
 
+	open fun reloadPage(pageId: Long) = Unit
+
 	protected abstract fun onCreateAdapter(): BaseReaderAdapter<*>
 
 	protected abstract suspend fun onPagesChanged(pages: List<ReaderPage>, pendingState: ReaderState?)

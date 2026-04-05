@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.PageTransformer
 import com.google.android.material.snackbar.Snackbar
@@ -170,6 +171,13 @@ abstract class BasePagerReaderFragment : BaseReaderFragment<FragmentReaderPagerB
 			page = page.index,
 			scroll = 0,
 		)
+	}
+
+	override fun reloadPage(pageId: Long) {
+		val position = readerAdapter?.findItemPosition(pageId) ?: RecyclerView.NO_POSITION
+		if (position != RecyclerView.NO_POSITION) {
+			readerAdapter?.notifyItemChanged(position)
+		}
 	}
 
 	protected open fun onWheelScroll(axisValue: Float) {

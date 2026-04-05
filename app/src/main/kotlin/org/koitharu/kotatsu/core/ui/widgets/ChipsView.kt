@@ -219,6 +219,11 @@ class ChipsView @JvmOverloads constructor(
 
 		override fun toggle() = Unit
 
+		override fun onDetachedFromWindow() {
+			disposeIcon()
+			super.onDetachedFromWindow()
+		}
+
 		private fun bindIcon(model: ChipModel) {
 			when {
 				model.isChecked -> disposeIcon()
@@ -233,8 +238,9 @@ class ChipsView @JvmOverloads constructor(
 				!iconsVisible -> disposeIcon()
 
 				model.iconData != null -> {
+					val requestContext = context.applicationContext ?: context
 					val placeholder = model.icon.ifZero { materialR.drawable.navigation_empty_icon }
-					imageRequest = ImageRequest.Builder(context)
+					imageRequest = ImageRequest.Builder(requestContext)
 						.data(model.iconData)
 						.crossfade(false)
 						.size(resources.getDimensionPixelSize(materialR.dimen.m3_chip_icon_size))

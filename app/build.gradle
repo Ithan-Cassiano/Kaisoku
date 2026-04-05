@@ -162,6 +162,8 @@ dependencies {
 	implementation libs.androidx.preference
 	implementation libs.androidx.biometric
 	implementation libs.material
+	implementation libs.mlkit.text.recognition
+	implementation libs.mlkit.text.recognition.japanese
 	implementation libs.androidx.lifecycle.common.java8
 	implementation libs.androidx.webkit
 

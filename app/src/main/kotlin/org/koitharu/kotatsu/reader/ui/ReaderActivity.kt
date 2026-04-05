@@ -171,6 +171,9 @@ class ReaderActivity :
         )
         viewModel.readerMode.observe(this, Lifecycle.State.STARTED, this::onInitReader)
         viewModel.onPageSaved.observeEvent(this, PagesSavedObserver(viewBinding.container))
+        viewModel.onPageTranslated.observeEvent(this) { pageId ->
+            readerManager.currentReader?.reloadPage(pageId)
+        }
         viewModel.uiState.zipWithPrevious().observe(this, this::onUiStateChanged)
         combine(
             viewModel.isLoading,
@@ -194,7 +197,7 @@ class ReaderActivity :
         viewModel.isZoomControlsEnabled.observe(this) {
             viewBinding.zoomControl.isVisible = it
         }
-        addMenuProvider(ReaderMenuProvider(viewModel))
+        addMenuProvider(ReaderMenuProvider())
 
         observeWindowLayout()
 
@@ -461,6 +464,10 @@ class ReaderActivity :
 
     override fun onSavePageClick() {
         viewModel.saveCurrentPage(pageSaveHelper)
+    }
+
+    override fun onTranslatePageClick() {
+        viewModel.translateCurrentPage()
     }
 
     override fun onScrollTimerClick(isLongClick: Boolean) {

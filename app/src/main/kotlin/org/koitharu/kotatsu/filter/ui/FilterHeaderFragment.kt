@@ -24,6 +24,7 @@ import org.koitharu.kotatsu.parsers.model.Demographic
 import org.koitharu.kotatsu.parsers.model.MangaState
 import org.koitharu.kotatsu.parsers.model.MangaTag
 import org.koitharu.kotatsu.parsers.model.YEAR_UNKNOWN
+import java.lang.ref.WeakReference
 import java.util.Locale
 import javax.inject.Inject
 
@@ -45,9 +46,37 @@ class FilterHeaderFragment : BaseFragment<FragmentFilterHeaderBinding>(), ChipsV
         super.onViewBindingCreated(binding, savedInstanceState)
         binding.chipsTags.onChipClickListener = this
         binding.chipsTags.onChipCloseClickListener = this
+        val rootRef = WeakReference(binding.root)
+        val chipsTagsRef = WeakReference(binding.chipsTags)
+        val scrollViewRef = WeakReference(binding.scrollView)
         filterHeaderProducer.observeHeader(filter)
             .flowOn(Dispatchers.Default)
-            .observe(viewLifecycleOwner, ::onDataChanged)
+            .observe(viewLifecycleOwner) { header ->
+                val root = rootRef.get() ?: return@observe
+                val chipsTags = chipsTagsRef.get() ?: return@observe
+                val scrollView = scrollViewRef.get() ?: return@observe
+                val chips = header.chips
+                if (chips.isEmpty()) {
+                    chipsTags.setChips(emptyList())
+                    root.isVisible = false
+                    return@observe
+                }
+                chipsTags.setChips(chips)
+                root.isVisible = true
+                if (root.context.isAnimationsEnabled) {
+                    scrollView.smoothScrollTo(0, 0)
+                } else {
+                    scrollView.scrollTo(0, 0)
+                }
+            }
+    }
+
+    override fun onDestroyView() {
+        viewBinding?.chipsTags?.setChips(emptyList())
+        viewBinding?.chipsTags?.onChipClickListener = null
+        viewBinding?.chipsTags?.onChipCloseClickListener = null
+        viewBinding?.chipsTags?.onChipLongClickListener = null
+        super.onDestroyView()
     }
 
     override fun onApplyWindowInsets(v: View, insets: WindowInsetsCompat): WindowInsetsCompat = insets
@@ -84,20 +113,4 @@ class FilterHeaderFragment : BaseFragment<FragmentFilterHeaderBinding>(), ChipsV
         }
     }
 
-    private fun onDataChanged(header: FilterHeaderModel) {
-        val binding = viewBinding ?: return
-        val chips = header.chips
-        if (chips.isEmpty()) {
-            binding.chipsTags.setChips(emptyList())
-            binding.root.isVisible = false
-            return
-        }
-        binding.chipsTags.setChips(header.chips)
-        binding.root.isVisible = true
-        if (binding.root.context.isAnimationsEnabled) {
-            binding.scrollView.smoothScrollTo(0, 0)
-        } else {
-            binding.scrollView.scrollTo(0, 0)
-        }
-    }
 }

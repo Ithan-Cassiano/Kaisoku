@@ -106,6 +106,39 @@
 		android:summary="@string/reader_optimize_summary"
 		android:title="@string/reader_optimize" />
 
+	<PreferenceCategory
+		android:title="@string/page_translation"
+		app:allowDividerAbove="true">
+
+		<ListPreference
+			android:entries="@array/page_translation_providers"
+			android:key="reader_page_translation_provider"
+			android:title="@string/page_translation_provider"
+			app:useSimpleSummaryProvider="true" />
+
+		<EditTextPreference
+			android:key="reader_page_translation_endpoint"
+			android:title="@string/page_translation_endpoint" />
+
+		<EditTextPreference
+			android:key="reader_page_translation_api_key"
+			android:title="@string/page_translation_api_key" />
+
+		<EditTextPreference
+			android:key="reader_page_translation_model"
+			android:title="@string/page_translation_model" />
+
+		<EditTextPreference
+			android:key="reader_page_translation_target_language"
+			android:title="@string/page_translation_target_language" />
+
+		<ListPreference
+			android:entries="@array/page_translation_ocr_modes"
+			android:key="reader_page_translation_ocr_mode"
+			android:title="@string/page_translation_ocr_mode"
+			app:useSimpleSummaryProvider="true" />
+	</PreferenceCategory>
+
 	<MultiSelectListPreference
 		android:entries="@array/reader_crop"
 		android:entryValues="@array/values_reader_crop"

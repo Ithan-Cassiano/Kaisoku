@@ -227,6 +227,13 @@ class WebtoonReaderFragment : BaseReaderFragment<FragmentReaderWebtoonBinding>()
 		)
 	}
 
+	override fun reloadPage(pageId: Long) {
+		val position = readerAdapter?.findItemPosition(pageId) ?: RecyclerView.NO_POSITION
+		if (position != RecyclerView.NO_POSITION) {
+			readerAdapter?.notifyItemChanged(position)
+		}
+	}
+
 	private fun getSavedScrollOffset(chapterId: Long, pageIndex: Int): Int {
 		return viewModel.getCurrentState()
 			?.takeIf { it.chapterId == chapterId && it.page == pageIndex }

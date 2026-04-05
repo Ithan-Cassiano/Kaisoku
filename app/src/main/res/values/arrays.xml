@@ -74,6 +74,15 @@
 		<item>@string/system_default</item>
 		<item>@string/advanced</item>
 	</string-array>
+	<string-array name="page_translation_providers" translatable="false">
+		<item>OpenAI-compatible</item>
+		<item>LibreTranslate</item>
+	</string-array>
+	<string-array name="page_translation_ocr_modes" translatable="false">
+		<item>@string/automatic</item>
+		<item>@string/japanese</item>
+		<item>@string/latin</item>
+	</string-array>
 	<string-array name="backup_frequency" translatable="false">
 		<item>@string/frequency_every_6_hours</item>
 		<item>@string/frequency_every_day</item>

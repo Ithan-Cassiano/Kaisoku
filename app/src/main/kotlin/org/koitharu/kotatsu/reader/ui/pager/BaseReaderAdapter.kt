@@ -53,6 +53,8 @@ abstract class BaseReaderAdapter<H : BasePageHolder<*>>(
 
 	open fun getItemOrNull(position: Int) = differ.currentList.getOrNull(position)
 
+	fun findItemPosition(pageId: Long): Int = differ.currentList.indexOfFirst { it.id == pageId }
+
 	final override fun getItemCount() = differ.currentList.size
 
 	final override fun onCreateViewHolder(
