@@ -9,7 +9,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 if ([string]::IsNullOrWhiteSpace($Token)) {
-	Write-Error "Token GitHub ausente. Use: `$env:GH_TOKEN='seu_token' ou -Token 'seu_token'"
+	$Token = & (Join-Path $PSScriptRoot "Get-GitHubToken.ps1")
 }
 
 $tag = if ($Version.StartsWith('v')) { $Version } else { "v$Version" }

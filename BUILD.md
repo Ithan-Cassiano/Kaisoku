@@ -80,34 +80,36 @@ O app verifica automaticamente novas versões no repositório configurado em:
 
 `app/src/main/res/values/constants.xml` → `github_updates_repo`
 
-Padrão: `Ithan-Cassiano/Kaisoku`
+Padrão: `Ithan-Cassiano/Kosen-Releases` (repo público, só APKs)
+
+O código-fonte fica em repos **privados** (`Kaisoku`, `kaisoku-parsers`).
 
 ### Como publicar uma atualização
 
 1. Atualize `versionCode` e `versionName` em `app/build.gradle`
-2. **Publique o APK no GitHub Release** (obrigatório — o app não detecta só a tag):
+2. **Release privada** (histórico interno, repo `Kaisoku`):
 
 ```powershell
 cd scripts
-.\publish-release.ps1 -Version 9.7.12
+.\publish-release.ps1 -Version 9.7.13
+```
+
+3. **Release pública** (usuários recebem no app — **somente quando você pedir**):
+
+```powershell
+.\publish-public-release.ps1 -Version 9.7.13
 ```
 
 O script procura o APK em `Kosen-vX.Y.Z.apk` (raiz) ou em `app/build/outputs/apk/release/app-release.apk`.
 
-3. Compile **somente se não houver APK** ou quando quiser gerar um novo:
+4. Compile **somente se não houver APK**:
 
 ```powershell
 .\build.ps1 -Variant release
 ```
 
-4. (Opcional) Crie tag Git e envie:
-
-```powershell
-git tag v9.7.12
-git push origin v9.7.12
-```
-
-> Sem o passo 2, o app **nunca** mostrará atualização, mesmo com a tag criada.
+> Usuários **só** veem atualização se existir release com APK em `Kosen-Releases`.
+> Releases em `Kaisoku` (privado) não aparecem no app.
 
 ### Secrets necessários no GitHub (para CI)
 

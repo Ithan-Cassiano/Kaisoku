@@ -5,21 +5,25 @@ alwaysApply: true
 
 # Publicar atualização do Kosen
 
-Quando o usuário pedir **atualização**, **release**, **nova versão** ou **publicar APK**, execute este fluxo completo (referência: `Kaisoku/BUILD.md`).
+Quando o usuário pedir **atualização**, **release**, **nova versão** ou **publicar APK**, execute este fluxo (referência: `Kaisoku/BUILD.md`).
 
-**Não compilar localmente por padrão.** Só rode `.\build.ps1` se o usuário pedir build explícito ou se não existir APK para publicar.
+**Não compilar localmente por padrão.** Só rode `.\build.ps1` se o usuário pedir build explícito ou se não existir APK.
+
+## Repositórios
+
+| Repo | Visibilidade | Uso |
+|------|--------------|-----|
+| `Ithan-Cassiano/Kaisoku` | **Privado** | Código + releases internas |
+| `Ithan-Cassiano/kaisoku-parsers` | **Privado** | Parsers |
+| `Ithan-Cassiano/Kosen-Releases` | **Público** | Só APKs — **apenas quando o usuário pedir publicação pública** |
+
+O app consulta updates em `Ithan-Cassiano/Kosen-Releases` (`constants.xml` → `github_updates_repo`).
 
 ## 1. Bump de versão
 
-Edite `Kaisoku/app/build.gradle`:
+Edite `Kaisoku/app/build.gradle`: incremente `versionCode` e `versionName`.
 
-- Incremente `versionCode` (+1, obrigatório)
-- Atualize `versionName` (ex.: `9.7.12`)
-- A tag Git deve corresponder ao `versionName` com prefixo `v` (ex.: `v9.7.12`)
-
-## 2. Commit e tag Git
-
-Somente se o usuário pedir commit/push (regra de git do projeto):
+## 2. Commit e tag (se o usuário pedir)
 
 ```powershell
 cd C:\Users\ithan\Downloads\kaisoku\Kaisoku
@@ -30,48 +34,31 @@ git push origin HEAD
 git push origin vX.Y.Z
 ```
 
-## 3. Publicar GitHub Release (obrigatório a cada pedido de atualização)
+## 3. Release privada (a cada pedido de atualização)
 
-Use o script `Kaisoku/scripts/publish-release.ps1` — **sempre** publicar junto com o pedido de atualização:
+Publica no repo **privado** `Kaisoku` — histórico interno, não visível ao público:
 
 ```powershell
 cd C:\Users\ithan\Downloads\kaisoku\Kaisoku\scripts
-.\publish-release.ps1 -Version X.Y.Z -ApkPath "C:\caminho\para\Kosen-vX.Y.Z.apk"
+.\publish-release.ps1 -Version X.Y.Z
 ```
 
-O script procura APK automaticamente nesta ordem:
+## 4. Release pública (SOMENTE se o usuário pedir)
 
-1. `Kosen-vX.Y.Z.apk` na raiz do workspace
-2. `Kaisoku/app/build/outputs/apk/release/app-release.apk`
-3. `Kosen-vX.Y.Z.apk` na raiz
+Publica APK no repo **público** para usuários receberem via app:
 
-Token GitHub: `$env:GH_TOKEN` ou credencial do git (`git credential fill`).
+```powershell
+.\publish-public-release.ps1 -Version X.Y.Z
+```
 
-Repo de updates: `Ithan-Cassiano/Kaisoku` (`constants.xml` → `github_updates_repo`).
+**Não** publicar em `Kosen-Releases` automaticamente. Só quando o usuário pedir explicitamente: "publicar para usuários", "release pública", "publicar no Kosen-Releases", etc.
 
-## 4. Build (somente quando necessário)
-
-Compilar **apenas** se não houver APK disponível ou o usuário pedir build:
+## 5. Build (somente quando necessário)
 
 ```powershell
 cd C:\Users\ithan\Downloads\kaisoku
 .\build.ps1 -Variant release
 ```
-
-APK release: `Kaisoku/app/build/outputs/apk/release/app-release.apk`
-
-## 5. CI opcional
-
-O workflow `Kaisoku/.github/workflows/release.yml` dispara na tag `v*` (requer secrets `KOSEN_*` no GitHub).
-
-## Requisitos do APK no release
-
-- Asset `.apk` no GitHub Release
-- `content_type`: `application/vnd.android.package-archive`
-- Tag no formato `vX.Y.Z`
-- O `versionCode` dentro do APK deve corresponder ao bump em `build.gradle`
-
-Usuários recebem a atualização em **Configurações → Sobre → Verificar atualizações**.
 
 ## Identidade do app
 
@@ -79,12 +66,10 @@ Usuários recebem a atualização em **Configurações → Sobre → Verificar a
 |------|-------|
 | Nome | Kosen |
 | applicationId (release) | `com.kosen.reader` |
-| applicationId (debug) | `com.kosen.reader.debug` |
-| Deep link | `kosen://` |
+| Updates in-app | `Ithan-Cassiano/Kosen-Releases` |
 
 ## Não esquecer
 
-- `gradlew.bat` fica em `Kaisoku/`, não na raiz — usar `.\build.ps1` na raiz ou `cd Kaisoku` antes
-- Parsers locais: `../kaisoku-parsers` via `includeBuild`
+- Release privada ≠ release pública — são fluxos separados
+- Usuários só veem update se existir release em `Kosen-Releases`
 - Nunca fazer push/tag sem o usuário pedir explicitamente
-- **Sempre publicar** a release no GitHub quando o usuário solicitar atualização

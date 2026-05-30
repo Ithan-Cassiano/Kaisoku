@@ -9,7 +9,7 @@
 	<string name="url_error_report" translatable="false">https://github.com/Ithan-Cassiano/Kaisoku/issues/new/choose</string>
 	<string name="acra_report_url" translatable="false"></string>
 	<string name="account_type_sync" translatable="false">com.kosen.reader.sync</string>
-	<string name="github_updates_repo" translatable="false">Ithan-Cassiano/Kaisoku</string>
+	<string name="github_updates_repo" translatable="false">Ithan-Cassiano/Kosen-Releases</string>
 	<string name="shikimori_clientId" translatable="false">Mw6F0tPEOgyV7F9U9Twg50Q8SndMY7hzIOfXg0AX_XU</string>
 	<string name="shikimori_clientSecret" translatable="false">euBMt1GGRSDpVIFQVPxZrO7Kh6X4gWyv0dABuj4B-M8</string>
 	<string name="anilist_clientId" translatable="false">9887</string>
