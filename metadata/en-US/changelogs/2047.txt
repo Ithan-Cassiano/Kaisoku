@@ -1,0 +1,2 @@
+- Correção: atualização in-app agora detecta APKs no GitHub Releases corretamente
+- Yomu: suporte à API `prateleira` (listagem de obras)
