@@ -18,7 +18,7 @@ jobs:
       - name: Checkout parsers
         uses: actions/checkout@v4
         with:
-          repository: glitch-228/kaisoku-parsers
+          repository: Ithan-Cassiano/kaisoku-parsers
           path: kaisoku-parsers
           token: ${{ secrets.GITHUB_TOKEN }}
 

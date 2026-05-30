@@ -1,0 +1,3 @@
+- Kosen: rebranding independente do Kaisoku upstream
+- Yomu: corrigida listagem após mudança da API (`prateleira` / `acervo` / `catalogo`)
+- Build release: APK assinado corretamente para instalação em dispositivos Samsung/Android

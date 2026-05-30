@@ -28,8 +28,8 @@ android {
 		applicationId 'com.kosen.reader'
 		minSdk = 23
 		targetSdk = 36
-		versionCode = 2045
-		versionName = '9.7.7-1'
+		versionCode = 2046
+		versionName = '9.7.8'
 		generatedDensities = []
 		testInstrumentationRunner 'org.koitharu.kotatsu.HiltTestRunner'
 		ksp {
@@ -157,6 +157,14 @@ android {
 				output.versionCodeOverride = now.format("yyMMdd").toInteger()
 				output.versionNameOverride = 'N' + now.format("yyyyMMdd")
 			}
+		}
+	}
+}
+configurations.configureEach {
+	resolutionStrategy.eachDependency { details ->
+		if (details.requested.group == 'org.jetbrains.kotlinx' && details.requested.name.startsWith('kotlinx-serialization')) {
+			details.useVersion libs.versions.serialization.get()
+			details.because 'Align kotlinx-serialization for Room KSP'
 		}
 	}
 }
