@@ -17,6 +17,7 @@ online content sources and Mihon/Tachiyomi-compatible extension support.**
 * Online [manga catalogues](https://github.com/glitch-228/kaisoku-parsers) (with 1200+ manga sources)
 * Regular source fixes and additions taken from other active forks
 * Mihon/Tachiyomi-compatible extensions, including extension repositories, direct repo-link import from Explore, in-app extension management, and app-private loading without system-wide APK installs
+* Usagi plugins
 * Search manga by name, genres and more filters
 * Favorites organized by user-defined categories
 * Reading history, bookmarks and incognito mode support
@@ -59,7 +60,8 @@ please head over to the [Kotatsu-Redo Weblate page](https://hosted.weblate.org/e
 
 ### Support And Bug Reports
 
-- Discord/Telegram: TBD at 30+stars
+- Discord: <https://discord.gg/gSabQBGGnj>
+- Telegram: <https://t.me/KaisokuApp>
 - If you find a bug, open an issue in the [Issues tab](https://github.com/glitch-228/Kaisoku/issues).
 
 ### Contributing

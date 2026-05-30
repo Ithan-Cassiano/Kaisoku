@@ -149,6 +149,8 @@
     <string name="zoom_mode_keep_start">Keep at start</string>
     <string name="black_dark_theme">Black</string>
     <string name="black_dark_theme_summary">Uses less power on AMOLED screens</string>
+    <string name="amoled_navbar">Pure black bottom navigation</string>
+    <string name="amoled_navbar_summary">Force the bottom navigation bar to pure black on the AMOLED theme. Turn off to keep the default Material tint.</string>
     <string name="backup_restore">Backup and restore</string>
     <string name="create_backup">Create data backup</string>
     <string name="restore_backup">Restore from backup</string>
@@ -168,6 +170,7 @@
     <string name="silent">Silent</string>
     <string name="captcha_required">CAPTCHA required</string>
     <string name="captcha_solve">Solve</string>
+    <string name="captcha_solving">Solving captcha…</string>
     <string name="clear_cookies">Clear cookies</string>
     <string name="cookies_cleared">All cookies were removed</string>
     <string name="clear_feed">Clear feed</string>
@@ -676,6 +679,8 @@
     <string name="migrate_confirmation">Manga \"%1$s\" from \"%2$s\" will be replaced with \"%3$s\" from \"%4$s\" in your history and favorites (if present)</string>
     <string name="manga_migration">Manga migration</string>
     <string name="migration_completed">Migration completed</string>
+    <string name="migrate_to_another_manga">Migrate to another manga…</string>
+    <string name="migrate_to_manga_confirmation">Migrate progress to \"%1$s\" from \"%2$s\"? Source and target may differ — proceed only if you\'re sure they refer to the same work.</string>
     <string name="delete_read_chapters">Delete read chapters</string>
     <string name="no_chapters_deleted">No chapters have been deleted</string>
     <string name="chapters_deleted_pattern">Removed %1$s, cleared %2$s</string>
@@ -872,6 +877,10 @@
     <string name="reader_chapter_toast">Show chapter change popup</string>
     <string name="reader_chapter_toast_summary">Show a pop-up message with a chapter title when it is changed</string>
     <string name="reader_info_bar_transparent">Transparent reader information bar</string>
+    <string name="reader_top_bar_opacity">Reader top bar opacity</string>
+    <string name="reader_bottom_bar_opacity">Reader bottom bar opacity</string>
+    <string name="reader_float_bar">Floating bottom bar</string>
+    <string name="reader_float_bar_summary">Lift the reader\'s bottom bar off the screen edge with side margins and rounded corners.</string>
     <string name="backup_restored_background">The backup will be restored in the background</string>
     <string name="restoring_backup">Restoring backup</string>
     <string name="reader_controls_in_bottom_bar">Reader controls in bottom bar</string>
@@ -885,6 +894,8 @@
     <string name="global_search">Global search</string>
     <string name="disable_captcha_notifications">Disable captcha notifications</string>
     <string name="disable_captcha_notifications_summary">You will not receive notifications about solving CAPTCHA for this source but this can lead to breaking background operations (checking for new chapters, obtaining recommendations, etc)</string>
+    <string name="disable_captcha_auto_solve">Disable automatic CAPTCHA solving</string>
+    <string name="disable_captcha_auto_solve_summary">Don\'t try to solve CAPTCHA silently in the background. You will be asked to solve it manually instead.</string>
     <string name="chapter_volume_number">Vol %1$s Chapter %2$s</string>
     <string name="chapter_number">Chapter %s</string>
     <string name="unnamed_chapter">Unnamed chapter</string>
@@ -977,6 +988,8 @@
     <string name="password_reset">Password reset successfully</string>
     <string name="no_reset_token">No reset token provided</string>
     <string name="manage_plugins">Manage plugins</string>
+    <string name="auto_update_plugins">Auto-update plugins</string>
+    <string name="auto_update_plugins_summary">Periodically check installed plugins for new GitHub releases and update them in place</string>
     <string name="no_plugins_installed">No plugins installed</string>
     <string name="no_plugins_summary">Use the import action to add parser plugin JAR files.</string>
     <string name="load_success">Plugin imported and loaded successfully</string>

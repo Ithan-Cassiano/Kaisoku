@@ -18,6 +18,7 @@ import org.koitharu.kotatsu.browser.BrowserActivity
 import org.koitharu.kotatsu.browser.cloudflare.CloudFlareActivity
 import org.koitharu.kotatsu.core.exceptions.CloudFlareProtectedException
 import org.koitharu.kotatsu.core.exceptions.EmptyMangaException
+import org.koitharu.kotatsu.core.prefs.SourceSettings
 import org.koitharu.kotatsu.core.exceptions.InteractiveActionRequiredException
 import org.koitharu.kotatsu.core.exceptions.ProxyConfigException
 import org.koitharu.kotatsu.core.exceptions.UnsupportedSourceException
@@ -48,6 +49,7 @@ import kotlin.coroutines.resume
 class ExceptionResolver private constructor(
     private val host: Host,
     private val settings: AppSettings,
+    private val captchaCoordinator: CaptchaAutoResolveCoordinator,
     private val scrobblerAuthHelperProvider: Provider<ScrobblerAuthHelper>,
 ) {
     private val continuations = MutableScatterMap<String, Continuation<Boolean>>(1)
@@ -66,9 +68,9 @@ class ExceptionResolver private constructor(
         host.router.showErrorDialog(e, url)
     }
 
-    suspend fun resolve(e: Throwable): Boolean = host.lifecycleScope.async {
+    suspend fun resolve(e: Throwable, tryAutoResolve: Boolean = true): Boolean = host.lifecycleScope.async {
         when (e) {
-            is CloudFlareProtectedException -> resolveCF(e)
+            is CloudFlareProtectedException -> resolveCF(e, tryAutoResolve)
             is AuthRequiredException -> resolveAuthException(e.source)
             is SSLException,
             is CertPathValidatorException -> {
@@ -131,9 +133,21 @@ class ExceptionResolver private constructor(
         browserActionContract.launch(e)
     }
 
-    private suspend fun resolveCF(e: CloudFlareProtectedException): Boolean = suspendCancellableCoroutine { cont ->
-        continuations[CloudFlareActivity.TAG] = cont
-        cloudflareContract.launch(e)
+    private suspend fun resolveCF(e: CloudFlareProtectedException, tryAutoResolve: Boolean): Boolean {
+        val ctx = host.context
+        val autoDisabled = ctx != null && SourceSettings(ctx, e.source).isCaptchaAutoResolveDisabled
+        if (tryAutoResolve && !autoDisabled) {
+            // Delegated to the singleton coordinator: it owns the activity lifecycle (so the result is
+            // delivered even if this Fragment / Activity dies while CloudFlareActivity is still
+            // running) AND owns the user-facing toast (so duplicate calls that just await the
+            // in-flight resolve don't pile new toasts on top of the loading state).
+            return captchaCoordinator.resolve(e.source, e)
+        }
+        // tryAutoResolve=false OR user disabled auto-solve for this source → manual visible activity.
+        return suspendCancellableCoroutine { cont ->
+            continuations[CloudFlareActivity.TAG] = cont
+            cloudflareContract.launch(e)
+        }
     }
 
     private suspend fun resolveAuthException(source: MangaSource): Boolean {
@@ -186,18 +200,21 @@ class ExceptionResolver private constructor(
 
     class Factory @Inject constructor(
         private val settings: AppSettings,
+        private val captchaCoordinator: CaptchaAutoResolveCoordinator,
         private val scrobblerAuthHelperProvider: Provider<ScrobblerAuthHelper>,
     ) {
 
         fun create(fragment: Fragment) = ExceptionResolver(
             host = Host.FragmentHost(fragment),
             settings = settings,
+            captchaCoordinator = captchaCoordinator,
             scrobblerAuthHelperProvider = scrobblerAuthHelperProvider,
         )
 
         fun create(activity: FragmentActivity) = ExceptionResolver(
             host = Host.ActivityHost(activity),
             settings = settings,
+            captchaCoordinator = captchaCoordinator,
             scrobblerAuthHelperProvider = scrobblerAuthHelperProvider,
         )
     }

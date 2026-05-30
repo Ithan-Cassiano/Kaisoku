@@ -70,6 +70,9 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 	val isAmoledTheme: Boolean
 		get() = prefs.getBoolean(KEY_THEME_AMOLED, false)
 
+	val isAmoledNavBarEnabled: Boolean
+		get() = prefs.getBoolean(KEY_THEME_AMOLED_NAVBAR, true)
+
 	var mainNavItems: List<NavItem>
 		get() {
 			val raw = prefs.getString(KEY_NAV_MAIN, null)?.split(',')
@@ -208,6 +211,21 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 
 	val trackerDownloadStrategy: TrackerDownloadStrategy
 		get() = prefs.getEnumValue(KEY_TRACKER_DOWNLOAD, TrackerDownloadStrategy.DISABLED)
+
+	var isTrackerUnstuckMigrationDone: Boolean
+		get() = prefs.getBoolean(KEY_TRACKER_UNSTUCK_MIGRATION_DONE, false)
+		set(value) = prefs.edit { putBoolean(KEY_TRACKER_UNSTUCK_MIGRATION_DONE, value) }
+
+	var isTrackerProgressRefreshDone: Boolean
+		get() = prefs.getBoolean(KEY_TRACKER_PROGRESS_REFRESH_DONE, false)
+		set(value) = prefs.edit { putBoolean(KEY_TRACKER_PROGRESS_REFRESH_DONE, value) }
+
+	val isAutoPluginsEnabled: Boolean
+		get() = prefs.getBoolean(KEY_AUTO_PLUGINS, false)
+
+	var lastAutoPlugins: Long
+		get() = prefs.getLong(KEY_LAST_AUTO_PLUGINS, 0L)
+		set(value) = prefs.edit { putLong(KEY_LAST_AUTO_PLUGINS, value) }
 
 	var notificationSound: Uri
 		get() = prefs.getString(KEY_NOTIFICATIONS_SOUND, null)?.toUriOrNull()
@@ -426,6 +444,18 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 
 	val isReaderBarTransparent: Boolean
 		get() = prefs.getBoolean(KEY_READER_BAR_TRANSPARENT, true)
+
+	/** Reader top bar opacity, 50–100; 100 = opaque, 50 = ~50% see-through. */
+	val readerTopBarOpacity: Int
+		get() = prefs.getInt(KEY_READER_TOP_BAR_OPACITY, 50).coerceIn(50, 100)
+
+	/** Reader bottom bar opacity, 50–100; 100 = opaque. */
+	val readerBottomBarOpacity: Int
+		get() = prefs.getInt(KEY_READER_BOTTOM_BAR_OPACITY, 50).coerceIn(50, 100)
+
+	/** When true, the reader's bottom bar floats with side margins + rounded corners. */
+	val isReaderFloatBar: Boolean
+		get() = prefs.getBoolean(KEY_READER_FLOAT_BAR, true)
 
 	val isReaderChapterToastEnabled: Boolean
 		get() = prefs.getBoolean(KEY_READER_CHAPTER_TOAST, true)
@@ -737,6 +767,7 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_THEME = "theme"
 		const val KEY_COLOR_THEME = "color_theme"
 		const val KEY_THEME_AMOLED = "amoled_theme"
+		const val KEY_THEME_AMOLED_NAVBAR = "amoled_navbar"
 		const val KEY_OFFLINE_DISABLED = "no_offline"
 		const val KEY_PAGES_CACHE_CLEAR = "pages_cache_clear"
 		const val KEY_HTTP_CACHE_CLEAR = "http_cache_clear"
@@ -769,6 +800,10 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_TRACKER_NOTIFICATIONS = "tracker_notifications"
 		const val KEY_TRACKER_NO_NSFW = "tracker_no_nsfw"
 		const val KEY_TRACKER_DOWNLOAD = "tracker_download"
+		const val KEY_TRACKER_UNSTUCK_MIGRATION_DONE = "tracker_unstuck_migration_done"
+		const val KEY_TRACKER_PROGRESS_REFRESH_DONE = "tracker_progress_refresh_done"
+		const val KEY_AUTO_PLUGINS = "auto_plugins"
+		const val KEY_LAST_AUTO_PLUGINS = "last_auto_plugins"
 		const val KEY_NOTIFICATIONS_SETTINGS = "notifications_settings"
 		const val KEY_NOTIFICATIONS_SOUND = "notifications_sound"
 		const val KEY_NOTIFICATIONS_VIBRATE = "notifications_vibrate"
@@ -821,6 +856,9 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_READER_MULTITASK = "reader_multitask"
 		const val KEY_READER_BAR = "reader_bar"
 		const val KEY_READER_BAR_TRANSPARENT = "reader_bar_transparent"
+		const val KEY_READER_TOP_BAR_OPACITY = "reader_top_bar_opacity"
+		const val KEY_READER_BOTTOM_BAR_OPACITY = "reader_bottom_bar_opacity"
+		const val KEY_READER_FLOAT_BAR = "reader_float_bar"
 		const val KEY_READER_CHAPTER_TOAST = "reader_chapter_toast"
 		const val KEY_READER_BACKGROUND = "reader_background"
 		const val KEY_READER_SCREEN_ON = "reader_screen_on"
