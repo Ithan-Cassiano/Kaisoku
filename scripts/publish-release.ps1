@@ -1,6 +1,8 @@
 param(
 	[Parameter(Mandatory = $true)]
 	[string]$Version,
+	[Parameter(Mandatory = $true)]
+	[string]$Description,
 	[string]$ApkPath = "",
 	[string]$Token = $env:GH_TOKEN,
 	[string]$Repo = "Ithan-Cassiano/Kaisoku"
@@ -14,6 +16,11 @@ if ([string]::IsNullOrWhiteSpace($Token)) {
 
 $tag = if ($Version.StartsWith('v')) { $Version } else { "v$Version" }
 $ver = $tag.TrimStart('v')
+$Description = $Description.Trim()
+
+if ([string]::IsNullOrWhiteSpace($Description)) {
+	Write-Error "Descrição da release obrigatória. Use -Description '...' ou -DescriptionFile."
+}
 
 if ([string]::IsNullOrWhiteSpace($ApkPath)) {
 	$candidates = @(
@@ -31,30 +38,51 @@ if (-not (Test-Path $ApkPath)) {
 }
 
 $apkName = "Kosen-$tag.apk"
+$releaseName = "Kosen $ver"
 $headers = @{
 	Authorization = "Bearer $Token"
 	Accept = "application/vnd.github+json"
 	"X-GitHub-Api-Version" = "2022-11-28"
 }
 
+function Update-ReleaseMetadata {
+	param($ReleaseId)
+	$patchBody = @{
+		name = $releaseName
+		body = $Description
+	} | ConvertTo-Json -Depth 3
+	Invoke-RestMethod -Method Patch `
+		-Uri "https://api.github.com/repos/$Repo/releases/$ReleaseId" `
+		-Headers $headers `
+		-Body $patchBody `
+		-ContentType "application/json; charset=utf-8" | Out-Null
+}
+
 Write-Host "Criando release $tag em $Repo..." -ForegroundColor Cyan
 $releaseBody = @{
 	tag_name = $tag
-	name = "Kosen $ver"
-	body = "Release Kosen $ver"
+	name = $releaseName
+	body = $Description
 	draft = $false
 	prerelease = $false
-} | ConvertTo-Json
+} | ConvertTo-Json -Depth 3
 
 try {
 	$release = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$Repo/releases" -Headers $headers -Body $releaseBody -ContentType "application/json; charset=utf-8"
 } catch {
 	if ($_.Exception.Response.StatusCode.value__ -eq 422) {
-		Write-Host "Release já existe, buscando..." -ForegroundColor Yellow
+		Write-Host "Release já existe, atualizando descrição..." -ForegroundColor Yellow
 		$release = Invoke-RestMethod -Method Get -Uri "https://api.github.com/repos/$Repo/releases/tags/$tag" -Headers $headers
+		Update-ReleaseMetadata -ReleaseId $release.id
 	} else {
 		throw
 	}
+}
+
+$existingAsset = $release.assets | Where-Object { $_.name -eq $apkName }
+if ($existingAsset) {
+	Write-Host "Removendo APK anterior..." -ForegroundColor Yellow
+	Invoke-RestMethod -Method Delete -Uri "https://api.github.com/repos/$Repo/releases/assets/$($existingAsset.id)" -Headers $headers | Out-Null
 }
 
 $uploadUrl = $release.upload_url -replace '\{.*$', "?name=$apkName"

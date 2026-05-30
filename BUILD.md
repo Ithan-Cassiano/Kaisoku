@@ -86,30 +86,31 @@ O código-fonte fica em repos **privados** (`Kaisoku`, `kaisoku-parsers`).
 
 ### Como publicar uma atualização
 
+**Só execute quando o usuário pedir** (build, release, commit, etc.).
+
 1. Atualize `versionCode` e `versionName` em `app/build.gradle`
-2. **Release privada** (histórico interno, repo `Kaisoku`):
+2. Escreva a **descrição** da release (aparece no app ao atualizar)
+3. **Release privada** (repo `Kaisoku`):
 
 ```powershell
 cd scripts
-.\publish-release.ps1 -Version 9.7.13
+.\publish-release.ps1 -Version 9.7.14 -Description "## O que há de novo`n- ...`n`n## Correções`n- ..."
 ```
 
-3. **Release pública** (usuários recebem no app — **somente quando você pedir**):
+4. **Release pública** (usuários recebem no app — **somente se pedir**):
 
 ```powershell
-.\publish-public-release.ps1 -Version 9.7.13
+.\publish-public-release.ps1 -Version 9.7.14 -Description "..."
 ```
 
-O script procura o APK em `Kosen-vX.Y.Z.apk` (raiz) ou em `app/build/outputs/apk/release/app-release.apk`.
-
-4. Compile **somente se não houver APK**:
+5. **Build** — somente se pedir build ou não houver APK:
 
 ```powershell
 .\build.ps1 -Variant release
 ```
 
-> Usuários **só** veem atualização se existir release com APK em `Kosen-Releases`.
-> Releases em `Kaisoku` (privado) não aparecem no app.
+> `-Description` é **obrigatório** em toda publicação.
+> Usuários só veem update se existir release com APK em `Kosen-Releases`.
 
 ### Secrets necessários no GitHub (para CI)
 

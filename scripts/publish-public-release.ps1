@@ -1,6 +1,8 @@
 param(
 	[Parameter(Mandatory = $true)]
 	[string]$Version,
+	[Parameter(Mandatory = $true)]
+	[string]$Description,
 	[string]$ApkPath = "",
 	[string]$Token = ""
 )
@@ -13,6 +15,7 @@ if ([string]::IsNullOrWhiteSpace($Token)) {
 
 & (Join-Path $PSScriptRoot "publish-release.ps1") `
 	-Version $Version `
+	-Description $Description `
 	-ApkPath $ApkPath `
 	-Token $Token `
 	-Repo "Ithan-Cassiano/Kosen-Releases"
