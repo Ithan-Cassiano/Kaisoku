@@ -76,18 +76,20 @@ class SourceSettings(context: Context, source: MangaSource) : MangaSourceConfig 
 			is ConfigKey.SplitByTranslations -> prefs.getBoolean(key.key, key.defaultValue)
 			is ConfigKey.PreferredImageServer -> prefs.getString(key.key, key.defaultValue)?.nullIfEmpty()
 			is ConfigKey.DisableUpdateChecking -> prefs.getBoolean(key.key, key.defaultValue)
-            is ConfigKey.InterceptCloudflare -> prefs.getBoolean(key.key, key.defaultValue)
+			is ConfigKey.InterceptCloudflare -> prefs.getBoolean(key.key, key.defaultValue)
+			is ConfigKey.AuthSession -> prefs.getBoolean(key.key, key.defaultValue)
 		} as T
 	}
 
-	operator fun <T> set(key: ConfigKey<T>, value: T) = prefs.edit(commit = true) {
+	override operator fun <T> set(key: ConfigKey<T>, value: T) = prefs.edit(commit = true) {
 		when (key) {
 			is ConfigKey.Domain -> putString(key.key, value as String?)
 			is ConfigKey.ShowSuspiciousContent -> putBoolean(key.key, value as Boolean)
 			is ConfigKey.UserAgent -> putString(key.key, (value as String?)?.sanitizeHeaderValue())
 			is ConfigKey.SplitByTranslations -> putBoolean(key.key, value as Boolean)
 			is ConfigKey.PreferredImageServer -> putString(key.key, value as String?)
-            is ConfigKey.InterceptCloudflare -> putBoolean(key.key, value as Boolean)
+			is ConfigKey.InterceptCloudflare -> putBoolean(key.key, value as Boolean)
+			is ConfigKey.AuthSession -> putBoolean(key.key, value as Boolean)
 			is ConfigKey.DisableUpdateChecking -> {
 				// Read-only - parser-controlled only, users cannot change this
 			}

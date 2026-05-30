@@ -1,0 +1,86 @@
+---
+description: Fluxo obrigatório ao publicar atualização do app Kosen (release GitHub)
+alwaysApply: true
+---
+
+# Publicar atualização do Kosen
+
+Quando o usuário pedir **atualização**, **release**, **nova versão** ou **publicar APK**, execute este fluxo completo (referência: `Kaisoku/BUILD.md`).
+
+## 1. Bump de versão
+
+Edite `Kaisoku/app/build.gradle`:
+
+- Incremente `versionCode` (+1, obrigatório)
+- Atualize `versionName` (ex.: `9.7.3` ou `9.7.3-1`)
+- A tag Git deve corresponder ao `versionName` com prefixo `v` (ex.: `v9.7.3`)
+
+## 2. Validar build (local)
+
+```powershell
+cd C:\Users\ithan\Downloads\kaisoku
+.\build.ps1 -Variant release
+```
+
+Ou, se for só teste rápido: `.\build.ps1 -Variant debug`
+
+APK release: `Kaisoku/app/build/outputs/apk/release/app-release.apk`
+
+## 3. Commit e tag Git
+
+Somente se o usuário pedir commit/push (regra de git do projeto):
+
+```powershell
+cd C:\Users\ithan\Downloads\kaisoku\Kaisoku
+git add -A
+git commit -m "release: vX.Y.Z"
+git tag vX.Y.Z
+git push origin HEAD
+git push origin vX.Y.Z
+```
+
+## 4. GitHub Release (CI)
+
+O workflow `Kaisoku/.github/workflows/release.yml` dispara na tag `v*`:
+
+- Compila APK release assinado
+- Cria GitHub Release com o APK anexo
+- Repo de updates: `glitch-228/Kosen` (`constants.xml` → `github_updates_repo`)
+
+### Secrets necessários no GitHub
+
+| Secret | Descrição |
+|--------|-----------|
+| `KOSEN_KEYSTORE_BASE64` | Keystore `.jks` em base64 |
+| `KOSEN_STORE_PASSWORD` | Senha do keystore |
+| `KOSEN_KEY_ALIAS` | Alias da chave |
+| `KOSEN_KEY_PASSWORD` | Senha da chave |
+
+Base64 do keystore:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("kosen-release.jks")) | Set-Clipboard
+```
+
+## 5. Requisitos do APK no release
+
+- Asset `.apk` no GitHub Release
+- `content_type`: `application/vnd.android.package-archive`
+- Tag no formato `vX.Y.Z`
+
+Usuários recebem a atualização em **Configurações → Sobre → Verificar atualizações**.
+
+## Identidade do app
+
+| Item | Valor |
+|------|-------|
+| Nome | Kosen |
+| applicationId (release) | `com.kosen.reader` |
+| applicationId (debug) | `com.kosen.reader.debug` |
+| Deep link | `kosen://` |
+
+## Não esquecer
+
+- `gradlew.bat` fica em `Kaisoku/`, não na raiz — usar `.\build.ps1` na raiz ou `cd Kaisoku` antes
+- Parsers locais: `../kaisoku-parsers` via `includeBuild`
+- Nunca fazer push/tag sem o usuário pedir explicitamente

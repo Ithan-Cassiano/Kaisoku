@@ -25,11 +25,16 @@ import org.koitharu.kotatsu.core.util.ext.observe
 import org.koitharu.kotatsu.core.util.ext.observeEvent
 import org.koitharu.kotatsu.core.util.ext.withArgs
 import org.koitharu.kotatsu.parsers.model.MangaSource
+import org.koitharu.kotatsu.settings.sources.auth.SourceAuthActivity
 
 @AndroidEntryPoint
 class SourceSettingsFragment : BasePreferenceFragment(0), Preference.OnPreferenceChangeListener {
 
 	private val viewModel: SourceSettingsViewModel by viewModels()
+
+	private val sourceAuthLauncher = registerForActivityResult(SourceAuthActivity.Contract()) {
+		viewModel.onResume()
+	}
 
 	override fun onResume() {
 		super.onResume()
@@ -53,18 +58,19 @@ class SourceSettingsFragment : BasePreferenceFragment(0), Preference.OnPreferenc
 			val authProvider = (viewModel.repository as? ParserMangaRepository)?.getAuthProvider()
 			isVisible = authProvider != null
 		}
+		findPreference<Preference>(KEY_AUTH_STATUS)?.run {
+			isVisible = (viewModel.repository as? ParserMangaRepository)?.getAuthProvider() != null
+		}
 		findPreference<Preference>(SourceSettings.KEY_SLOWDOWN)?.isVisible = isValidSource
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		viewModel.isAuthorized.filterNotNull().observe(viewLifecycleOwner) { isAuthorized ->
-			findPreference<Preference>(KEY_AUTH)?.isEnabled = !isAuthorized
+			updateAuthUi(isAuthorized, viewModel.username.value)
 		}
 		viewModel.username.observe(viewLifecycleOwner) { username ->
-			findPreference<Preference>(KEY_AUTH)?.summary = username?.let {
-				getString(R.string.logged_in_as, it)
-			}
+			updateAuthUi(viewModel.isAuthorized.value == true, username)
 		}
 		viewModel.onError.observeEvent(
 			viewLifecycleOwner,
@@ -89,10 +95,33 @@ class SourceSettingsFragment : BasePreferenceFragment(0), Preference.OnPreferenc
 		viewModel.onActionDone.observeEvent(viewLifecycleOwner, ReversibleActionObserver(listView))
 	}
 
+	private fun updateAuthUi(isAuthorized: Boolean, username: String?) {
+		findPreference<Preference>(KEY_AUTH_STATUS)?.apply {
+			summary = if (isAuthorized) {
+				getString(R.string.source_auth_status_connected)
+			} else {
+				getString(R.string.source_auth_status_disconnected)
+			}
+		}
+		findPreference<Preference>(KEY_AUTH)?.apply {
+			isEnabled = true
+			title = if (isAuthorized) {
+				getString(R.string.source_account_connected)
+			} else {
+				getString(R.string.sign_in)
+			}
+			summary = when {
+				isAuthorized && !username.isNullOrBlank() -> getString(R.string.logged_in_as, username)
+				isAuthorized -> getString(R.string.source_account_connected_summary)
+				else -> getString(R.string.source_login_required_summary)
+			}
+		}
+	}
+
 	override fun onPreferenceTreeClick(preference: Preference): Boolean {
 		return when (preference.key) {
 			KEY_AUTH -> {
-				router.openSourceAuth(viewModel.source)
+				sourceAuthLauncher.launch(viewModel.source)
 				true
 			}
 
@@ -165,6 +194,7 @@ class SourceSettingsFragment : BasePreferenceFragment(0), Preference.OnPreferenc
 	companion object {
 
 		private const val KEY_AUTH = "auth"
+		private const val KEY_AUTH_STATUS = "auth_status"
 		private const val KEY_ENABLE = "enable"
 
 		fun newInstance(source: MangaSource) = SourceSettingsFragment().withArgs(1) {

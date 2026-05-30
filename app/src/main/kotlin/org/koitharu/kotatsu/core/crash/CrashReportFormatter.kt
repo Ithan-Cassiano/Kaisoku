@@ -65,13 +65,13 @@ internal object CrashReportFormatter {
 		val baseUrl = context.getString(R.string.url_error_report)
 			.trim()
 			.removeSuffix("/choose")
-			.ifEmpty { "https://github.com/glitch-228/Kaisoku/issues/new" }
+			.ifEmpty { "https://github.com/glitch-228/Kosen/issues/new" }
 		return Uri.parse(baseUrl).buildUpon()
 			.appendQueryParameter("template", ISSUE_TEMPLATE)
 			.appendQueryParameter("title", title)
 			.appendQueryParameter("summary", summary.limit(MAX_FIELD_LENGTH))
 			.appendQueryParameter("reproduce-steps", steps.limit(MAX_FIELD_LENGTH))
-			.appendQueryParameter("kaisoku-version", appVersion)
+			.appendQueryParameter("kosen-version", appVersion)
 			.appendQueryParameter("android-version", androidVersion)
 			.appendQueryParameter("device", device)
 			.appendQueryParameter("body", body.limit(MAX_ISSUE_BODY_LENGTH))
@@ -120,7 +120,7 @@ internal object CrashReportFormatter {
 			### Steps to reproduce
 			$steps
 
-			### Kaisoku version
+			### Kosen version
 			$appVersion
 
 			### Android version

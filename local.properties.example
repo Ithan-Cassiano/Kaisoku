@@ -1,0 +1,13 @@
+# Copie este arquivo para local.properties e preencha os valores.
+# local.properties NÃO deve ser commitado no Git.
+
+# sdk.dir=C\:\\Users\\SeuUsuario\\AppData\\Local\\Android\\Sdk
+
+# Assinatura release (opcional para debug)
+# kosen.storeFile=../kosen-release.jks
+# kosen.storePassword=D16m12260722@
+# kosen.keyAlias=kosen
+# kosen.keyPassword=D16m12260722@
+
+# Token do bot Telegram para backups (opcional)
+# tg_backup_bot_token=

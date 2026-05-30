@@ -111,15 +111,23 @@ private fun PreferenceFragmentCompat.addPreferencesFromConfigKeys(configKeys: Li
 				}
 			}
 
+			is ConfigKey.AuthSession -> continue
+
 			is ConfigKey.DisableUpdateChecking -> {
-				// No UI - this is parser-controlled only
-				continue
+				SwitchPreferenceCompat(screen.context).apply {
+					setDefaultValue(key.defaultValue)
+					setTitle(R.string.disable_chapter_updates)
+					setSummary(R.string.disable_chapter_updates_summary)
+				}
 			}
 
-            is ConfigKey.InterceptCloudflare -> {
-                // No UI - this is parser-controlled only
-                continue
-            }
+			is ConfigKey.InterceptCloudflare -> {
+				SwitchPreferenceCompat(screen.context).apply {
+					setDefaultValue(key.defaultValue)
+					setTitle(R.string.intercept_cloudflare)
+					setSummary(R.string.intercept_cloudflare_summary)
+				}
+			}
 		}
 		preference.isIconSpaceReserved = false
 		preference.key = key.key

@@ -2,6 +2,7 @@ package org.koitharu.kotatsu.core.network.webview
 
 import android.content.Context
 import android.util.AndroidRuntimeException
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -24,6 +25,7 @@ import org.koitharu.kotatsu.core.util.ext.configureForParser
 import org.koitharu.kotatsu.core.util.ext.printStackTraceDebug
 import org.koitharu.kotatsu.core.util.ext.sanitizeHeaderValue
 import org.koitharu.kotatsu.parsers.model.MangaSource
+import org.koitharu.kotatsu.parsers.network.UserAgents
 import org.koitharu.kotatsu.parsers.util.nullIfEmpty
 import org.koitharu.kotatsu.parsers.util.runCatchingCancellable
 import java.lang.ref.WeakReference
@@ -135,6 +137,7 @@ class WebViewExecutor @Inject constructor(
                     }
 
                     val headers = mapOf("Accept-Language" to "en-EN,en;q=0.9")
+                    CookieManager.getInstance().flush()
                     if (preserveCookies) {
                         webView.loadDataWithBaseURL(baseUrl, " ", "text/html", null, null)
                     } else {
@@ -187,7 +190,7 @@ class WebViewExecutor @Inject constructor(
 
     @MainThread
     private fun obtainWebView(): WebView = webViewCached?.get() ?: WebView(context).also {
-        it.configureForParser(null)
+        it.configureForParser(UserAgents.CHROME_MOBILE)
         webViewCached = WeakReference(it)
     }
 

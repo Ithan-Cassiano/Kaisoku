@@ -25,7 +25,7 @@ android {
     }
 
     defaultConfig {
-		applicationId 'io.github.glitch228.kaisoku'
+		applicationId 'com.kosen.reader'
 		minSdk = 23
 		targetSdk = 36
 		versionCode = 2040
@@ -49,18 +49,50 @@ android {
 			resValue 'string', 'tg_backup_bot_token', telegramBackupBotToken
 		}
 	}
+	signingConfigs {
+		release {
+			def localProperties = new Properties()
+			def localPropertiesFile = rootProject.file('local.properties')
+			if (localPropertiesFile.exists()) {
+				localProperties.load(new FileInputStream(localPropertiesFile))
+			}
+			def storeFilePath = localProperties.getProperty('kosen.storeFile')
+			if (storeFilePath != null && !storeFilePath.isBlank()) {
+				storeFile rootProject.file(storeFilePath)
+				storePassword localProperties.getProperty('kosen.storePassword')
+				keyAlias localProperties.getProperty('kosen.keyAlias')
+				keyPassword localProperties.getProperty('kosen.keyPassword')
+			}
+		}
+	}
 	buildTypes {
 		debug {
 			applicationIdSuffix = '.debug'
+			versionNameSuffix = '-debug'
 		}
 		release {
 			minifyEnabled true
 			shrinkResources true
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+			def localProperties = new Properties()
+			def localPropertiesFile = rootProject.file('local.properties')
+			if (localPropertiesFile.exists()) {
+				localProperties.load(new FileInputStream(localPropertiesFile))
+			}
+			if (localProperties.getProperty('kosen.storeFile') != null) {
+				signingConfig signingConfigs.release
+			} else {
+				signingConfig signingConfigs.debug
+				logger.warn('kosen.storeFile não configurado — release assinado com chave debug (apenas para testes locais)')
+			}
 		}
 		nightly {
 			initWith release
 			applicationIdSuffix = '.nightly'
+			versionNameSuffix = '-nightly'
+			if (signingConfigs.release.storeFile != null) {
+				signingConfig signingConfigs.release
+			}
 		}
 	}
 	buildFeatures {
@@ -136,7 +168,7 @@ dependencies {
 		parsersVersion = System.getProperty('parsersVersionOverride')
 	}
 	//noinspection UseTomlInstead
-	implementation("com.github.glitch-228:kaisoku-parsers:$parsersVersion") {
+	implementation("com.github.glitch-228:kosen-parsers:$parsersVersion") {
 		exclude group: 'org.json', module: 'json'
 	}
 

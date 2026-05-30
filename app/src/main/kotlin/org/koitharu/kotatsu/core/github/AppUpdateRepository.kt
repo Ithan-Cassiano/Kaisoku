@@ -145,9 +145,7 @@ class AppUpdateRepository @Inject constructor(
 		}.getOrNull()
 	}
 
-	suspend fun isUpdateSupported(): Boolean {
-		return appValidator.isOriginalApp.getOrNull() == true
-	}
+	suspend fun isUpdateSupported(): Boolean = true
 
 	private inline fun JSONArray.find(predicate: (JSONObject) -> Boolean): JSONObject? {
 		val size = length()

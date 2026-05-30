@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.webkit.CookieManager
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withTimeout
 import org.koitharu.kotatsu.browser.BrowserCallback
 import org.koitharu.kotatsu.core.network.webview.adblock.AdBlock
 import org.koitharu.kotatsu.core.util.ext.configureForParser
+import org.koitharu.kotatsu.parsers.network.UserAgents
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -102,6 +104,7 @@ class WebViewRequestInterceptorExecutor @Inject constructor(
                         }
                     }
 
+                    CookieManager.getInstance().flush()
                     webView.loadUrl(url)
 
                     val timeoutRunnable = Runnable {
@@ -220,7 +223,7 @@ class WebViewRequestInterceptorExecutor @Inject constructor(
         cleanupOldWebViews()
 
         val wv = WebView(context).apply {
-            configureForParser(null)
+            configureForParser(UserAgents.CHROME_MOBILE)
             // Clear any existing state
             clearHistory()
             clearCache(true)

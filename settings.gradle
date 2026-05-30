@@ -28,5 +28,16 @@ dependencyResolutionManagement {
 	}
 }
 
+def parsersDir = [file('../kaisoku-parsers'), file('kaisoku-parsers')].find { it.exists() }
+if (parsersDir != null) {
+	includeBuild(parsersDir) {
+		dependencySubstitution {
+			substitute module('com.github.glitch-228:kosen-parsers') using project(':')
+		}
+	}
+} else {
+	logger.lifecycle('kaisoku-parsers not found locally — using JitPack dependency')
+}
+
 include ':app'
-rootProject.name = "Kaisoku"
+rootProject.name = "Kosen"

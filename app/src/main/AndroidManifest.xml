@@ -100,6 +100,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 
+				<data android:scheme="kosen" />
 				<data android:scheme="kaisoku" />
 				<data android:scheme="kotatsu" />
 				<data android:host="manga" />
@@ -156,6 +157,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 
+				<data android:scheme="kosen" />
 				<data android:scheme="kaisoku" />
 				<data android:scheme="kotatsu" />
 				<data android:host="about" />
@@ -262,6 +264,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 
+				<data android:scheme="kosen" />
 				<data android:scheme="kaisoku" />
 				<data android:scheme="kotatsu" />
 				<data android:host="reset-password" />
@@ -282,7 +285,8 @@
 					<category android:name="android.intent.category.DEFAULT" />
 					<category android:name="android.intent.category.BROWSABLE" />
 
-					<data android:scheme="kaisoku" />
+					<data android:scheme="kosen" />
+				<data android:scheme="kaisoku" />
 					<data android:scheme="kotatsu" />
 					<data android:host="shikimori-auth" />
 					<data android:host="anilist-auth" />
@@ -339,6 +343,7 @@
 				<intent-filter>
 					<action android:name="android.intent.action.VIEW" />
 					<category android:name="android.intent.category.DEFAULT" />
+					<data android:scheme="kosen+kitsu" />
 					<data android:scheme="kaisoku+kitsu" />
 					<data android:scheme="kotatsu+kitsu" />
 				</intent-filter>
@@ -1497,6 +1502,11 @@
 				<data android:host="origami-orpheans.com" />
 				<data android:host="silencescan.com.br" />
 				<data android:host="sssscanlator.com.br" />
+				<data android:host="yomu.com.br" />
+				<data android:host="blackoutcomics.com" />
+				<data android:host="verdinha.wtf" />
+				<data android:host="api.verdinha.wtf" />
+				<data android:host="cdn.verdinha.wtf" />
 				<data android:host="tsundoku.com.br" />
 				<data android:host="doujin69.com" />
 				<data android:host="www.dragon-manga.com" />

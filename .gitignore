@@ -1,5 +1,8 @@
 *.iml
 .gradle
+/signing/
+*.jks
+*.keystore
 /local.properties
 /.idea/caches
 /.idea/libraries

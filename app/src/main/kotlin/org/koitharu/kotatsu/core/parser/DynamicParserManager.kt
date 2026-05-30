@@ -70,6 +70,7 @@ object DynamicParserManager {
 		val sources = mutableListOf<MangaSource>()
 		val methods = mutableMapOf<String, Method>()
 		val loaders = mutableMapOf<String, ClassLoader>()
+		val builtInParserNames = MangaParserSource.entries.mapTo(HashSet()) { it.name }
 		if (!pluginDir.exists()) {
 			pluginDir.mkdirs()
 		}
@@ -83,6 +84,13 @@ object DynamicParserManager {
 				val newParser = factory.getMethod("newParser", enumClass, contextClass)
 				enumClass.enumConstants?.forEach { constant ->
 					if (constant is MangaSource) {
+						if (constant.name in builtInParserNames) {
+							Log.w(
+								TAG,
+								"Skipping plugin parser ${constant.name} from ${jar.name}: already built into the app",
+							)
+							return@forEach
+						}
 						val source = PluginMangaSource(constant, jar.name)
 						sources.add(source)
 						methods[source.name] = newParser

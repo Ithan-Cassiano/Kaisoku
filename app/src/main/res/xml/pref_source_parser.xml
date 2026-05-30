@@ -5,11 +5,19 @@
 
 	<Preference
 		android:enabled="false"
+		android:key="auth_status"
+		android:order="99"
+		android:persistent="false"
+		android:selectable="false"
+		android:title="@string/source_auth_status"
+		app:allowDividerAbove="true" />
+
+	<Preference
 		android:key="auth"
 		android:order="100"
 		android:persistent="false"
 		android:title="@string/sign_in"
-		app:allowDividerAbove="true" />
+		app:allowDividerAbove="false" />
 
 	<Preference
 		android:key="cookies_clear"

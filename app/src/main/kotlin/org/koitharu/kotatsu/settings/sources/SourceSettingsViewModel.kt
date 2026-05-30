@@ -14,6 +14,7 @@ import org.koitharu.kotatsu.core.network.cookies.MutableCookieJar
 import org.koitharu.kotatsu.core.parser.CachingMangaRepository
 import org.koitharu.kotatsu.core.parser.MangaRepository
 import org.koitharu.kotatsu.core.parser.ParserMangaRepository
+import org.koitharu.kotatsu.core.parser.setAuthSessionConfirmed
 import org.koitharu.kotatsu.core.parser.PluginMangaRepository
 import org.koitharu.kotatsu.core.prefs.SourceSettings
 import org.koitharu.kotatsu.core.ui.BaseViewModel
@@ -109,6 +110,7 @@ class SourceSettingsViewModel @Inject constructor(
 				.host(domain)
 				.build()
 			cookieJar.removeCookies(url, null)
+			(repository as? ParserMangaRepository)?.setAuthSessionConfirmed(false)
 			onActionDone.call(ReversibleAction(R.string.cookies_cleared, null))
 			when (repository) {
 				is ParserMangaRepository -> loadUsername(repository.getAuthProvider())

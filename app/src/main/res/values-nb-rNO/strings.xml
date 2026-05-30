@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="text_file_sizes">B|kB|MB|GB|TB</string>
     <string name="cannot_find_available_storage">Ingen tilgjengelig lagring</string>

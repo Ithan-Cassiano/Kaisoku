@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="details">Detaļas</string>
     <string name="list">Saraksts</string>
@@ -96,7 +96,7 @@
     <string name="enter_password">Ievadi paroli</string>
     <string name="wrong_password">Nepareiza parole</string>
     <string name="protect_application">Pasargāt aplikāciju</string>
-    <string name="protect_application_summary">Prasīt paroli, kad atver Kaisoku</string>
+    <string name="protect_application_summary">Prasīt paroli, kad atver Kosen</string>
     <string name="repeat_password">Atkārto paroli</string>
     <string name="passwords_mismatch">Nesakrīt paroles</string>
     <string name="about">Par</string>
