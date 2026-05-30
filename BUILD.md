@@ -80,29 +80,34 @@ O app verifica automaticamente novas versões no repositório configurado em:
 
 `app/src/main/res/values/constants.xml` → `github_updates_repo`
 
-Padrão: `glitch-228/Kosen`
+Padrão: `Ithan-Cassiano/Kaisoku`
 
 ### Como publicar uma atualização
 
 1. Atualize `versionCode` e `versionName` em `app/build.gradle`
-2. Compile: `.\build.ps1 -Variant release`
-3. Crie uma tag Git com prefixo `v` e envie:
+2. **Publique o APK no GitHub Release** (obrigatório — o app não detecta só a tag):
 
 ```powershell
-git tag v9.7.9
-git push origin v9.7.9
+cd scripts
+.\publish-release.ps1 -Version 9.7.12
 ```
 
-4. **Publique o APK no GitHub Release** (obrigatório — o app não detecta só a tag):
+O script procura o APK em `Kosen-vX.Y.Z.apk` (raiz) ou em `app/build/outputs/apk/release/app-release.apk`.
+
+3. Compile **somente se não houver APK** ou quando quiser gerar um novo:
 
 ```powershell
-# Crie um token em: GitHub → Settings → Developer settings → Personal access tokens
-# Permissão necessária: repo
-$env:GH_TOKEN = "seu_token_aqui"
-.\scripts\publish-release.ps1 -Version 9.7.9
+.\build.ps1 -Variant release
 ```
 
-> Sem o passo 4, o app **nunca** mostrará atualização, mesmo com a tag criada.
+4. (Opcional) Crie tag Git e envie:
+
+```powershell
+git tag v9.7.12
+git push origin v9.7.12
+```
+
+> Sem o passo 2, o app **nunca** mostrará atualização, mesmo com a tag criada.
 
 ### Secrets necessários no GitHub (para CI)
 

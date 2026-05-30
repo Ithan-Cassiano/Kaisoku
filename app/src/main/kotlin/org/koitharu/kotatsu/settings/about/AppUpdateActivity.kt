@@ -7,7 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
@@ -33,7 +35,6 @@ import org.koitharu.kotatsu.core.util.ext.consumeAllSystemBarsInsets
 import org.koitharu.kotatsu.core.util.ext.getDisplayMessage
 import org.koitharu.kotatsu.core.util.ext.observe
 import org.koitharu.kotatsu.core.util.ext.observeEvent
-import org.koitharu.kotatsu.core.util.ext.printStackTraceDebug
 import org.koitharu.kotatsu.core.util.ext.setTextAndVisible
 import org.koitharu.kotatsu.core.util.ext.showOrHide
 import org.koitharu.kotatsu.core.util.ext.systemBarsInsets
@@ -56,6 +57,16 @@ class AppUpdateActivity : BaseActivity<ActivityAppUpdateBinding>(), View.OnClick
 		}
 	}
 
+	private val installPermissionRequest = registerForActivityResult(
+		ActivityResultContracts.StartActivityForResult(),
+	) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && packageManager.canRequestPackageInstalls()) {
+			viewModel.startDownload()
+		} else {
+			Snackbar.make(viewBinding.scrollView, R.string.allow_install_unknown_apps, Snackbar.LENGTH_LONG).show()
+		}
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(ActivityAppUpdateBinding.inflate(layoutInflater))
@@ -74,11 +85,15 @@ class AppUpdateActivity : BaseActivity<ActivityAppUpdateBinding>(), View.OnClick
 			.observe(this, ::onProgressChanged)
 		viewModel.downloadState.observe(this, ::onDownloadStateChanged)
 		viewModel.onError.observeEvent(this, ::onError)
+		viewModel.onInstallPermissionRequired.observeEvent(this) {
+			requestInstallPermission()
+		}
 		viewModel.onDownloadDone.observeEvent(this) { intent ->
 			try {
 				startActivity(intent)
 			} catch (e: ActivityNotFoundException) {
-				e.printStackTraceDebug()
+				viewModel.installIntent.value = null
+				onError(e)
 			}
 		}
 	}
@@ -134,12 +149,8 @@ class AppUpdateActivity : BaseActivity<ActivityAppUpdateBinding>(), View.OnClick
 	}
 
 	private fun doUpdate() {
-		viewModel.installIntent.value?.let { intent ->
-			try {
-				startActivity(intent)
-			} catch (e: Exception) {
-				onError(e)
-			}
+		if (viewModel.installIntent.value != null) {
+			viewModel.retryInstall()
 			return
 		}
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -147,6 +158,18 @@ class AppUpdateActivity : BaseActivity<ActivityAppUpdateBinding>(), View.OnClick
 		} else {
 			viewModel.startDownload()
 		}
+	}
+
+	private fun requestInstallPermission() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+			viewModel.startDownload()
+			return
+		}
+		val intent = Intent(
+			Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+			Uri.parse("package:$packageName"),
+		)
+		installPermissionRequest.launch(intent)
 	}
 
 	private fun openInBrowser() {

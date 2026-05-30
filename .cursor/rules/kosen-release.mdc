@@ -7,26 +7,17 @@ alwaysApply: true
 
 Quando o usuário pedir **atualização**, **release**, **nova versão** ou **publicar APK**, execute este fluxo completo (referência: `Kaisoku/BUILD.md`).
 
+**Não compilar localmente por padrão.** Só rode `.\build.ps1` se o usuário pedir build explícito ou se não existir APK para publicar.
+
 ## 1. Bump de versão
 
 Edite `Kaisoku/app/build.gradle`:
 
 - Incremente `versionCode` (+1, obrigatório)
-- Atualize `versionName` (ex.: `9.7.3` ou `9.7.3-1`)
-- A tag Git deve corresponder ao `versionName` com prefixo `v` (ex.: `v9.7.3`)
+- Atualize `versionName` (ex.: `9.7.12`)
+- A tag Git deve corresponder ao `versionName` com prefixo `v` (ex.: `v9.7.12`)
 
-## 2. Validar build (local)
-
-```powershell
-cd C:\Users\ithan\Downloads\kaisoku
-.\build.ps1 -Variant release
-```
-
-Ou, se for só teste rápido: `.\build.ps1 -Variant debug`
-
-APK release: `Kaisoku/app/build/outputs/apk/release/app-release.apk`
-
-## 3. Commit e tag Git
+## 2. Commit e tag Git
 
 Somente se o usuário pedir commit/push (regra de git do projeto):
 
@@ -39,34 +30,46 @@ git push origin HEAD
 git push origin vX.Y.Z
 ```
 
-## 4. GitHub Release (CI)
+## 3. Publicar GitHub Release (obrigatório a cada pedido de atualização)
 
-O workflow `Kaisoku/.github/workflows/release.yml` dispara na tag `v*`:
-
-- Compila APK release assinado
-- Cria GitHub Release com o APK anexo
-- Repo de updates: `glitch-228/Kosen` (`constants.xml` → `github_updates_repo`)
-
-### Secrets necessários no GitHub
-
-| Secret | Descrição |
-|--------|-----------|
-| `KOSEN_KEYSTORE_BASE64` | Keystore `.jks` em base64 |
-| `KOSEN_STORE_PASSWORD` | Senha do keystore |
-| `KOSEN_KEY_ALIAS` | Alias da chave |
-| `KOSEN_KEY_PASSWORD` | Senha da chave |
-
-Base64 do keystore:
+Use o script `Kaisoku/scripts/publish-release.ps1` — **sempre** publicar junto com o pedido de atualização:
 
 ```powershell
-[Convert]::ToBase64String([IO.File]::ReadAllBytes("kosen-release.jks")) | Set-Clipboard
+cd C:\Users\ithan\Downloads\kaisoku\Kaisoku\scripts
+.\publish-release.ps1 -Version X.Y.Z -ApkPath "C:\caminho\para\Kosen-vX.Y.Z.apk"
 ```
 
-## 5. Requisitos do APK no release
+O script procura APK automaticamente nesta ordem:
+
+1. `Kosen-vX.Y.Z.apk` na raiz do workspace
+2. `Kaisoku/app/build/outputs/apk/release/app-release.apk`
+3. `Kosen-vX.Y.Z.apk` na raiz
+
+Token GitHub: `$env:GH_TOKEN` ou credencial do git (`git credential fill`).
+
+Repo de updates: `Ithan-Cassiano/Kaisoku` (`constants.xml` → `github_updates_repo`).
+
+## 4. Build (somente quando necessário)
+
+Compilar **apenas** se não houver APK disponível ou o usuário pedir build:
+
+```powershell
+cd C:\Users\ithan\Downloads\kaisoku
+.\build.ps1 -Variant release
+```
+
+APK release: `Kaisoku/app/build/outputs/apk/release/app-release.apk`
+
+## 5. CI opcional
+
+O workflow `Kaisoku/.github/workflows/release.yml` dispara na tag `v*` (requer secrets `KOSEN_*` no GitHub).
+
+## Requisitos do APK no release
 
 - Asset `.apk` no GitHub Release
 - `content_type`: `application/vnd.android.package-archive`
 - Tag no formato `vX.Y.Z`
+- O `versionCode` dentro do APK deve corresponder ao bump em `build.gradle`
 
 Usuários recebem a atualização em **Configurações → Sobre → Verificar atualizações**.
 
@@ -84,3 +87,4 @@ Usuários recebem a atualização em **Configurações → Sobre → Verificar a
 - `gradlew.bat` fica em `Kaisoku/`, não na raiz — usar `.\build.ps1` na raiz ou `cd Kaisoku` antes
 - Parsers locais: `../kaisoku-parsers` via `includeBuild`
 - Nunca fazer push/tag sem o usuário pedir explicitamente
+- **Sempre publicar** a release no GitHub quando o usuário solicitar atualização

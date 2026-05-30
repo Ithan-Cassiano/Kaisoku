@@ -200,6 +200,7 @@
     <string name="create_backup">Criar backup de dados</string>
     <string name="text_local_holder_secondary">Salve algo do catálogo online ou importe de um arquivo.</string>
     <string name="check_for_updates">Verificar se há atualizações</string>
+    <string name="allow_install_unknown_apps">Permita instalar desta fonte nas configurações do sistema para atualizar o app</string>
     <string name="text_feed_holder">Novos capítulos da(s) obra(s) que você lê serão mostrados aqui</string>
     <string name="app_version">Versão %s</string>
     <string name="zoom_mode_fit_width">Ajustar à largura</string>
