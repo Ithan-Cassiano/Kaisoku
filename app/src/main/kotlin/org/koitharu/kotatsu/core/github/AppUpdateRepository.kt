@@ -74,8 +74,11 @@ class AppUpdateRepository @Inject constructor(
 
 			val asset = assets?.find { jo ->
 				val contentType = jo.optString("content_type")
-				val matches = contentType == CONTENT_TYPE_APK
-				android.util.Log.d("UPDATE_DEBUG", "  Checking asset content_type: '$contentType' == '$CONTENT_TYPE_APK' -> $matches")
+				val name = jo.optString("name")
+				val matches = contentType == CONTENT_TYPE_APK ||
+					(contentType == "application/octet-stream" && name.endsWith(".apk", ignoreCase = true)) ||
+					name.endsWith(".apk", ignoreCase = true)
+				android.util.Log.d("UPDATE_DEBUG", "  Checking asset '$name' (content_type: '$contentType') -> $matches")
 				matches
 			}
 
