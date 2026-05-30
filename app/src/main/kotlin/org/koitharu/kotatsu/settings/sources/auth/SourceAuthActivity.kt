@@ -134,9 +134,14 @@ class SourceAuthActivity : BaseBrowserActivity(), BrowserCallback {
 	}
 
 	private fun finishAuthSuccess() {
-		Toast.makeText(this, R.string.auth_complete, Toast.LENGTH_SHORT).show()
-		setResult(RESULT_OK)
-		finishAfterTransition()
+		lifecycleScope.launch {
+			withContext(Dispatchers.IO) {
+				parserRepository?.setAuthSessionConfirmed(true)
+			}
+			Toast.makeText(this@SourceAuthActivity, R.string.auth_complete, Toast.LENGTH_SHORT).show()
+			setResult(RESULT_OK)
+			finishAfterTransition()
+		}
 	}
 
 	class Contract : ActivityResultContract<MangaSource, Boolean>() {

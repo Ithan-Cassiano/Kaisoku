@@ -116,7 +116,8 @@ class TrackingRepository @Inject constructor(
 		// Check if parser has DisableUpdateChecking ConfigKey
 		val configKeys = repository.getConfigKeys()
 		val disableKey = configKeys.filterIsInstance<ConfigKey.DisableUpdateChecking>().firstOrNull()
-		return disableKey?.defaultValue == true
+			?: return false
+		return repository.getConfig()[disableKey]
 	}
 
 	@Deprecated("")

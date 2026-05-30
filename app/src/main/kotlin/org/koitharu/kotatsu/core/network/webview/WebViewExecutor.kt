@@ -136,7 +136,13 @@ class WebViewExecutor @Inject constructor(
                         }
                     }
 
-                    val headers = mapOf("Accept-Language" to "en-EN,en;q=0.9")
+                    val headers = buildMap {
+                        put("Accept-Language", "pt-BR,pt;q=0.9,en;q=0.8")
+                        webView.settings.userAgentString?.takeIf { it.isNotBlank() }?.let {
+                            put("User-Agent", it)
+                        }
+                    }
+                    CookieManager.getInstance().flush()
                     CookieManager.getInstance().flush()
                     if (preserveCookies) {
                         webView.loadDataWithBaseURL(baseUrl, " ", "text/html", null, null)

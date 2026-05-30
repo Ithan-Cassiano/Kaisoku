@@ -1,14 +1,21 @@
 param(
 	[Parameter(Mandatory = $true)]
 	[string]$Version,
-	[Parameter(Mandatory = $true)]
-	[string]$Description,
+	[Parameter(Mandatory = $false)]
+	[string]$Description = "",
+	[Parameter(Mandatory = $false)]
+	[string]$DescriptionFile = "",
 	[string]$ApkPath = "",
 	[string]$Token = $env:GH_TOKEN,
 	[string]$Repo = "Ithan-Cassiano/Kaisoku"
 )
 
 $ErrorActionPreference = 'Stop'
+$Utf8NoBom = New-Object System.Text.UTF8Encoding $false
+
+if (-not [string]::IsNullOrWhiteSpace($DescriptionFile)) {
+	$Description = [System.IO.File]::ReadAllText((Resolve-Path $DescriptionFile).Path, $Utf8NoBom)
+}
 
 if ([string]::IsNullOrWhiteSpace($Token)) {
 	$Token = & (Join-Path $PSScriptRoot "Get-GitHubToken.ps1")
@@ -20,6 +27,18 @@ $Description = $Description.Trim()
 
 if ([string]::IsNullOrWhiteSpace($Description)) {
 	Write-Error "Descrição da release obrigatória. Use -Description '...' ou -DescriptionFile."
+}
+
+function Invoke-GitHubJson {
+	param(
+		[string]$Method,
+		[string]$Uri,
+		[hashtable]$Headers,
+		[hashtable]$Body
+	)
+	$json = $Body | ConvertTo-Json -Depth 5
+	$bytes = $Utf8NoBom.GetBytes($json)
+	Invoke-RestMethod -Method $Method -Uri $Uri -Headers $Headers -Body $bytes -ContentType "application/json; charset=utf-8"
 }
 
 if ([string]::IsNullOrWhiteSpace($ApkPath)) {
@@ -47,15 +66,20 @@ $headers = @{
 
 function Update-ReleaseMetadata {
 	param($ReleaseId)
+	if (-not [string]::IsNullOrWhiteSpace($DescriptionFile)) {
+		$notesScript = Join-Path $PSScriptRoot "update-release-notes.py"
+		$ver = $tag.TrimStart('v')
+		python $notesScript $Token $ver
+		return
+	}
 	$patchBody = @{
 		name = $releaseName
 		body = $Description
-	} | ConvertTo-Json -Depth 3
-	Invoke-RestMethod -Method Patch `
+	}
+	Invoke-GitHubJson -Method Patch `
 		-Uri "https://api.github.com/repos/$Repo/releases/$ReleaseId" `
 		-Headers $headers `
-		-Body $patchBody `
-		-ContentType "application/json; charset=utf-8" | Out-Null
+		-Body $patchBody
 }
 
 Write-Host "Criando release $tag em $Repo..." -ForegroundColor Cyan
@@ -65,10 +89,10 @@ $releaseBody = @{
 	body = $Description
 	draft = $false
 	prerelease = $false
-} | ConvertTo-Json -Depth 3
+}
 
 try {
-	$release = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$Repo/releases" -Headers $headers -Body $releaseBody -ContentType "application/json; charset=utf-8"
+	$release = Invoke-GitHubJson -Method Post -Uri "https://api.github.com/repos/$Repo/releases" -Headers $headers -Body $releaseBody
 } catch {
 	if ($_.Exception.Response.StatusCode.value__ -eq 422) {
 		Write-Host "Release já existe, atualizando descrição..." -ForegroundColor Yellow
@@ -95,5 +119,11 @@ $uploadHeaders = @{
 }
 
 Invoke-RestMethod -Method Post -Uri $uploadUrl -Headers $uploadHeaders -InFile $ApkPath | Out-Null
+
+if (-not [string]::IsNullOrWhiteSpace($DescriptionFile)) {
+	$notesScript = Join-Path $PSScriptRoot "update-release-notes.py"
+	$ver = $tag.TrimStart('v')
+	python $notesScript $Token $ver
+}
 
 Write-Host "Release publicado: $($release.html_url)" -ForegroundColor Green
