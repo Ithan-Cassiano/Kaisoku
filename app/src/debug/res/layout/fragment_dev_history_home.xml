@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<TextView
+		android:id="@+id/textView_page_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingHorizontal="@dimen/list_spacing_normal"
+		android:paddingTop="@dimen/list_spacing_normal"
+		android:paddingBottom="@dimen/margin_small"
+		android:text="@string/history_home_title"
+		android:textAppearance="?attr/textAppearanceHeadlineMedium" />
+
+	<include
+		android:id="@+id/list_container"
+		layout="@layout/fragment_list"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+</LinearLayout>

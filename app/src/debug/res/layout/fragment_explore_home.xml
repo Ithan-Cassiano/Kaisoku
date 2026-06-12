@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<include
+		android:id="@+id/continue_reading_panel"
+		layout="@layout/include_continue_reading_panel" />
+
+	<com.kosen.reader.core.ui.widgets.ChipsView
+		android:id="@+id/chips_active_filters"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="@dimen/list_spacing_normal"
+		android:layout_marginBottom="@dimen/margin_small"
+		android:visibility="gone"
+		tools:visibility="visible" />
+
+	<include
+		android:id="@+id/explore_container"
+		layout="@layout/fragment_explore"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+</LinearLayout>

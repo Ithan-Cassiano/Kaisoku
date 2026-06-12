@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kosen UX — ALL BOOKS list row (square thumb + metadata). -->
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/list_selector"
+	android:clipChildren="false"
+	android:paddingVertical="8dp">
+
+	<com.kosen.reader.image.ui.CoverImageView
+		android:id="@+id/imageView_cover"
+		android:layout_width="72dp"
+		android:layout_height="72dp"
+		android:layout_marginStart="12dp"
+		android:background="@color/kosenux_surfaceContainerHigh"
+		app:aspectRationHeight="0"
+		app:aspectRationWidth="0"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Kosen.Cover.Medium"
+		app:trimImage="true"
+		tools:src="@tools:sample/backgrounds/scenic" />
+
+	<TextView
+		android:id="@+id/textView_title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="14dp"
+		android:layout_marginEnd="8dp"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:textAppearance="?attr/textAppearanceTitleMedium"
+		android:textColor="@color/kosenux_onSurface"
+		app:layout_constraintBottom_toTopOf="@+id/textView_subtitle"
+		app:layout_constraintEnd_toStartOf="@+id/badge"
+		app:layout_constraintStart_toEndOf="@+id/imageView_cover"
+		app:layout_constraintTop_toTopOf="@+id/imageView_cover"
+		app:layout_constraintVertical_chainStyle="packed"
+		tools:text="The Beginning After The End" />
+
+	<TextView
+		android:id="@+id/textView_subtitle"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="14dp"
+		android:layout_marginTop="2dp"
+		android:layout_marginEnd="8dp"
+		android:ellipsize="end"
+		android:maxLines="2"
+		android:textAppearance="?attr/textAppearanceBodySmall"
+		android:textColor="@color/kosenux_onSurfaceVariant"
+		app:layout_constraintBottom_toBottomOf="@+id/imageView_cover"
+		app:layout_constraintEnd_toStartOf="@+id/badge"
+		app:layout_constraintStart_toEndOf="@+id/imageView_cover"
+		app:layout_constraintTop_toBottomOf="@+id/textView_title"
+		tools:text="TurtleMe • Cap. 180" />
+
+	<com.kosen.reader.core.ui.widgets.BadgeView
+		android:id="@+id/badge"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_margin="@dimen/margin_small"
+		android:visibility="gone"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:maxCharacterCount="@integer/manga_badge_max_character_count"
+		tools:number="8"
+		tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

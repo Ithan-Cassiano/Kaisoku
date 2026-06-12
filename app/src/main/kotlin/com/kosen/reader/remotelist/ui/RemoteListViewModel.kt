@@ -1,0 +1,357 @@
+package com.kosen.reader.remotelist.ui
+
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.plus
+import kotlinx.coroutines.launch
+import com.kosen.reader.R
+import com.kosen.reader.core.model.MangaSource
+import com.kosen.reader.core.model.distinctById
+import com.kosen.reader.core.parser.MangaDataRepository
+import com.kosen.reader.core.parser.MangaRepository
+import com.kosen.reader.core.prefs.AppSettings
+import com.kosen.reader.core.prefs.ListMode
+import com.kosen.reader.core.util.ext.MutableEventFlow
+import com.kosen.reader.core.util.ext.call
+import com.kosen.reader.core.util.ext.getCauseUrl
+import com.kosen.reader.core.util.ext.printStackTraceDebug
+import com.kosen.reader.explore.data.MangaSourcesRepository
+import com.kosen.reader.explore.domain.ExploreRepository
+import com.kosen.reader.filter.ui.FilterCoordinator
+import com.kosen.reader.list.domain.MangaListMapper
+import com.kosen.reader.list.ui.MangaListViewModel
+import com.kosen.reader.list.ui.model.ButtonFooter
+import com.kosen.reader.list.ui.model.EmptyState
+import com.kosen.reader.list.ui.model.ListModel
+import com.kosen.reader.list.ui.model.LoadingFooter
+import com.kosen.reader.list.ui.model.LoadingState
+import com.kosen.reader.list.ui.model.toErrorFooter
+import com.kosen.reader.list.ui.model.toErrorState
+import com.kosen.reader.local.data.LocalStorageChanges
+import com.kosen.reader.local.domain.model.LocalManga
+import com.kosen.reader.parsers.model.Manga
+import com.kosen.reader.parsers.model.MangaParserSource
+import com.kosen.reader.parsers.util.sizeOrZero
+import java.lang.ref.WeakReference
+import javax.inject.Inject
+
+private const val FILTER_MIN_INTERVAL = 250L
+
+@HiltViewModel
+open class RemoteListViewModel @Inject constructor(
+	savedStateHandle: SavedStateHandle,
+	mangaRepositoryFactory: MangaRepository.Factory,
+	final override val filterCoordinator: FilterCoordinator,
+	settings: AppSettings,
+	protected val mangaListMapper: MangaListMapper,
+	private val exploreRepository: ExploreRepository,
+	sourcesRepository: MangaSourcesRepository,
+	mangaDataRepository: MangaDataRepository,
+	@LocalStorageChanges localStorageChanges: SharedFlow<LocalManga?>
+) : MangaListViewModel(settings, mangaDataRepository, localStorageChanges), FilterCoordinator.Owner {
+
+	val source = MangaSource(savedStateHandle[RemoteListFragment.ARG_SOURCE])
+	val isRandomLoading = MutableStateFlow(false)
+	val onOpenManga = MutableEventFlow<Manga>()
+	val onSourceBroken = MutableEventFlow<Unit>()
+
+	protected val repository = mangaRepositoryFactory.create(source)
+	private val mangaList = MutableStateFlow<List<Manga>?>(null)
+	private val hasNextPage = MutableStateFlow(false)
+	private val listError = MutableStateFlow<Throwable?>(null)
+	private val mutableContent = MutableStateFlow<List<ListModel>>(listOf(LoadingState))
+	private var loadingJob: Job? = null
+	private var randomJob: Job? = null
+	private var contentJob: Job? = null
+
+	override val content = mutableContent
+
+	init {
+		val owner = WeakReference(this)
+		val contentState = mutableContent
+		val currentFilterCoordinator = filterCoordinator
+		contentJob = combine(
+			mangaList.map { list -> owner.get()?.run { list?.skipNsfwIfNeeded() } },
+			observeListModeWithTriggers(),
+			listError,
+			hasNextPage,
+		) { list, mode, error, hasNext ->
+			buildRemoteListContent(
+				list = list,
+				mode = mode,
+				error = error,
+				hasNext = hasNext,
+				canResetFilter = currentFilterCoordinator.isFilterApplied,
+				createEmptyState = { canResetFilter ->
+					owner.get()?.createEmptyState(canResetFilter) ?: createRemoteListEmptyState(canResetFilter)
+				},
+				mapMangaList = { destination, manga, listMode ->
+					owner.get()?.mapMangaList(destination, manga, listMode) ?: Unit
+				},
+				getFooter = {
+					owner.get()?.getFooter()
+				},
+				onBuildList = { content ->
+					owner.get()?.onBuildList(content) ?: Unit
+				},
+			)
+		}.onEach { list ->
+			contentState.value = list
+		}.launchIn(viewModelScope + Dispatchers.Default)
+
+		filterCoordinator.observe()
+			.debounce(FILTER_MIN_INTERVAL)
+			.onEach { filterState ->
+				loadingJob?.cancelAndJoin()
+				mangaList.value = null
+				loadList(filterState, false)
+			}.catch { error ->
+				listError.value = error
+			}.launchIn(viewModelScope)
+
+		val currentSource = source
+		launchJob(Dispatchers.Default) {
+			trackSourceUsage(sourcesRepository, currentSource)
+		}
+
+		if (source is MangaParserSource && source.isBroken) {
+			// Just notify one. Will show reason in future
+			onSourceBroken.call(Unit)
+		}
+	}
+
+	override fun onCleared() {
+		contentJob?.cancel()
+		loadingJob?.cancel()
+		randomJob?.cancel()
+		contentJob = null
+		loadingJob = null
+		randomJob = null
+		super.onCleared()
+	}
+
+	override fun onRefresh() {
+		loadList(filterCoordinator.snapshot(), append = false)
+	}
+
+	override fun onRetry() {
+		loadList(filterCoordinator.snapshot(), append = !mangaList.value.isNullOrEmpty())
+	}
+
+	fun cycleSortOrder() {
+		val available = filterCoordinator.sortOrder.value.availableItems
+		if (available.isEmpty()) {
+			return
+		}
+		val current = filterCoordinator.snapshot().sortOrder
+		val index = available.indexOf(current).coerceAtLeast(0)
+		val next = available[(index + 1) % available.size]
+		filterCoordinator.setSortOrder(next)
+	}
+
+	fun loadNextPage() {
+		if (hasNextPage.value && listError.value == null) {
+			loadList(filterCoordinator.snapshot(), append = true)
+		}
+	}
+
+	protected fun loadList(filterState: FilterCoordinator.Snapshot, append: Boolean): Job {
+		loadingJob?.let {
+			if (it.isActive) return it
+		}
+		val currentLoadingCounter = loadingCounter
+		val currentRepository = repository
+		val currentMangaList = mangaList
+		val currentHasNextPage = hasNextPage
+		val currentListError = listError
+		val currentErrorEvent = errorEvent
+		return viewModelScope.launch(Dispatchers.Default) {
+			currentLoadingCounter.update { it + 1 }
+			try {
+				loadRemoteList(
+					repository = currentRepository,
+					mangaList = currentMangaList,
+					hasNextPage = currentHasNextPage,
+					listError = currentListError,
+					errorEvent = currentErrorEvent,
+					filterState = filterState,
+					append = append,
+				)
+			} finally {
+				currentLoadingCounter.update { it - 1 }
+			}
+		}.also { loadingJob = it }
+	}
+
+	protected open fun createEmptyState(canResetFilter: Boolean) = createRemoteListEmptyState(canResetFilter)
+
+	protected open suspend fun onBuildList(list: MutableList<ListModel>) = Unit
+
+	protected open suspend fun mapMangaList(
+		destination: MutableCollection<in ListModel>,
+		manga: Collection<Manga>,
+		mode: ListMode
+	) = mangaListMapper.toListModelList(destination, manga, mode)
+
+	protected open fun getFooter(): ButtonFooter? {
+		val filter = filterCoordinator.snapshot().listFilter
+		val hasQuery = !filter.query.isNullOrEmpty()
+		val hasAuthor = !filter.author.isNullOrEmpty()
+		val isOneTag = filter.tags.size == 1
+		return if ((hasQuery xor isOneTag xor hasAuthor) && !(hasQuery && isOneTag && hasAuthor)) {
+			ButtonFooter(R.string.global_search)
+		} else {
+			null
+		}
+	}
+
+	fun openRandom() {
+		if (randomJob?.isActive == true) {
+			return
+		}
+		val currentLoadingCounter = loadingCounter
+		val currentExploreRepository = exploreRepository
+		val currentSource = source
+		val currentRandomLoading = isRandomLoading
+		val currentOnOpenManga = onOpenManga
+		val currentErrorEvent = errorEvent
+		randomJob = viewModelScope.launch(Dispatchers.Default) {
+			currentLoadingCounter.update { it + 1 }
+			try {
+				openRandomManga(
+					exploreRepository = currentExploreRepository,
+					source = currentSource,
+					isRandomLoading = currentRandomLoading,
+					onOpenManga = currentOnOpenManga,
+					onError = currentErrorEvent,
+				)
+			} finally {
+				currentLoadingCounter.update { it - 1 }
+			}
+		}
+	}
+}
+
+private suspend fun trackSourceUsage(
+	sourcesRepository: MangaSourcesRepository,
+	source: com.kosen.reader.parsers.model.MangaSource,
+) {
+	sourcesRepository.trackUsage(source)
+}
+
+private fun createRemoteListEmptyState(canResetFilter: Boolean) = EmptyState(
+	icon = R.drawable.ic_empty_common,
+	textPrimary = R.string.remote_list_empty_title,
+	textSecondary = R.string.remote_list_empty_hint,
+	actionStringRes = if (canResetFilter) R.string.change_sort_order else R.string.try_again,
+	secondaryActionStringRes = R.string.open_another_source,
+	tertiaryActionStringRes = R.string.test_source_short,
+)
+
+private suspend fun buildRemoteListContent(
+	list: List<Manga>?,
+	mode: ListMode,
+	error: Throwable?,
+	hasNext: Boolean,
+	canResetFilter: Boolean,
+	createEmptyState: (Boolean) -> EmptyState,
+	mapMangaList: suspend (MutableCollection<in ListModel>, Collection<Manga>, ListMode) -> Unit,
+	getFooter: () -> ButtonFooter?,
+	onBuildList: suspend (MutableList<ListModel>) -> Unit,
+): List<ListModel> = buildList(list?.size?.plus(2) ?: 2) {
+	when {
+		list.isNullOrEmpty() && error != null -> add(
+			error.toErrorState(
+				canRetry = true,
+				secondaryAction = if (error.getCauseUrl().isNullOrEmpty()) 0 else R.string.open_in_browser,
+			),
+		)
+
+		list == null -> add(LoadingState)
+		list.isEmpty() -> add(createEmptyState(canResetFilter))
+		else -> {
+			mapMangaList(this, list, mode)
+			when {
+				error != null -> add(error.toErrorFooter())
+				hasNext -> add(LoadingFooter())
+				else -> getFooter()?.let(::add)
+			}
+		}
+	}
+	onBuildList(this)
+}
+
+private suspend fun loadRemoteList(
+	repository: MangaRepository,
+	mangaList: MutableStateFlow<List<Manga>?>,
+	hasNextPage: MutableStateFlow<Boolean>,
+	listError: MutableStateFlow<Throwable?>,
+	errorEvent: MutableEventFlow<Throwable>,
+	filterState: FilterCoordinator.Snapshot,
+	append: Boolean,
+) {
+	try {
+		listError.value = null
+		val list = repository.getList(
+			offset = if (append) mangaList.value.sizeOrZero() else 0,
+			order = filterState.sortOrder,
+			filter = filterState.listFilter,
+		)
+		val prevList = mangaList.value.orEmpty()
+		if (!append) {
+			mangaList.value = list.distinctById()
+		} else if (list.isNotEmpty()) {
+			mangaList.value = (prevList + list).distinctById()
+		}
+		hasNextPage.value = if (append) {
+			prevList != mangaList.value
+		} else {
+			list.size > prevList.size || hasNextPage.value
+		}
+	} catch (e: CancellationException) {
+		throw e
+	} catch (e: Throwable) {
+		e.printStackTraceDebug()
+		listError.value = e
+		if (!mangaList.value.isNullOrEmpty()) {
+			errorEvent.call(e)
+		}
+		hasNextPage.value = false
+	}
+}
+
+private suspend fun openRandomManga(
+	exploreRepository: ExploreRepository,
+	source: com.kosen.reader.parsers.model.MangaSource,
+	isRandomLoading: MutableStateFlow<Boolean>,
+	onOpenManga: MutableEventFlow<Manga>,
+	onError: MutableEventFlow<Throwable>,
+) {
+	isRandomLoading.value = true
+	try {
+		val manga = exploreRepository.findRandomManga(source, 16)
+		onOpenManga.call(manga)
+	} catch (e: CancellationException) {
+		throw e
+	} catch (e: Throwable) {
+		e.printStackTraceDebug()
+		onError.call(e)
+	} finally {
+		isRandomLoading.value = false
+	}
+}

@@ -11,10 +11,34 @@
 		android:layout="@layout/preference_toggle_header"
 		android:title="@string/periodic_backups_enable" />
 
-	<Preference
-		android:dependency="backup_periodic"
-		android:key="backup_periodic_output"
-		android:title="@string/backups_output_directory" />
+	<PreferenceCategory
+		android:key="backup_destination_category"
+		android:title="@string/backup_destination_category">
+
+		<Preference
+			android:dependency="backup_periodic"
+			android:key="backup_periodic_output_drive"
+			android:persistent="false"
+			android:summary="@string/backup_periodic_output_drive_summary"
+			android:title="@string/backup_periodic_output_drive" />
+
+		<Preference
+			android:dependency="backup_periodic"
+			android:key="backup_periodic_output_local"
+			android:persistent="false"
+			android:summary="@string/backup_periodic_output_local_summary"
+			android:title="@string/backup_periodic_output_local" />
+
+		<Preference
+			android:dependency="backup_periodic"
+			android:icon="@drawable/ic_info_outline"
+			android:key="backup_periodic_output"
+			android:persistent="false"
+			android:selectable="false"
+			android:summary="@string/backups_output_directory_summary"
+			android:title="@string/backups_output_directory" />
+
+	</PreferenceCategory>
 
 	<ListPreference
 		android:defaultValue="7"
@@ -32,7 +56,7 @@
 		android:summary="@string/delete_old_backups_summary"
 		android:title="@string/delete_old_backups" />
 
-	<org.koitharu.kotatsu.settings.utils.SliderPreference
+	<com.kosen.reader.settings.utils.SliderPreference
 		android:dependency="backup_periodic_trim"
 		android:key="backup_periodic_count"
 		android:stepSize="1"

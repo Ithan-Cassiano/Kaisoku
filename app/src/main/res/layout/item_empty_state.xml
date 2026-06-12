@@ -10,7 +10,7 @@
 	android:paddingHorizontal="32dp"
 	android:paddingBottom="?actionBarSize">
 
-	<org.koitharu.kotatsu.core.image.CoilImageView
+	<com.kosen.reader.core.image.CoilImageView
 		android:id="@+id/icon"
 		android:layout_width="192dp"
 		android:layout_height="192dp"
@@ -46,5 +46,20 @@
 		android:visibility="gone"
 		tools:text="@string/try_again"
 		tools:visibility="visible" />
+
+	<Button
+		android:id="@+id/button_secondary"
+		style="?materialButtonOutlinedStyle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_small"
+		android:visibility="gone" />
+
+	<Button
+		android:id="@+id/button_tertiary"
+		style="?borderlessButtonStyle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone" />
 
 </LinearLayout>

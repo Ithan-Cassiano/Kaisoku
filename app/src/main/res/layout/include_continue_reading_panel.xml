@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/continue_header"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="@dimen/list_spacing_normal"
+		android:layout_marginBottom="@dimen/margin_small"
+		android:visibility="gone"
+		app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+		app:cardElevation="2dp"
+		tools:visibility="visible">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingBottom="@dimen/margin_small">
+
+			<TextView
+				android:id="@+id/section_continue_reading"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingHorizontal="@dimen/margin_small"
+				android:paddingTop="@dimen/margin_small"
+				android:paddingBottom="@dimen/margin_small"
+				android:text="@string/continue_reading"
+				android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/continue_carousel"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:clipToPadding="false"
+				android:nestedScrollingEnabled="false"
+				android:paddingHorizontal="@dimen/margin_small"
+				tools:itemCount="3"
+				tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+				tools:listitem="@layout/item_continue_reading"
+				tools:orientation="horizontal" />
+
+		</LinearLayout>
+
+	</com.google.android.material.card.MaterialCardView>
+
+	<com.google.android.material.chip.Chip
+		android:id="@+id/chip_continue_collapsed"
+		style="@style/Widget.Material3.Chip.Assist"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="@dimen/list_spacing_normal"
+		android:layout_marginBottom="@dimen/margin_small"
+		android:text="@string/continue_reading"
+		android:visibility="gone"
+		app:chipIcon="@drawable/ic_history"
+		tools:visibility="visible" />
+
+	<!-- Stub ids for Kosen UX hero panel (overridden in src/redesign). -->
+	<View
+		android:id="@+id/continue_hero_card"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<View
+		android:id="@+id/continue_hero_cover"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<TextView
+		android:id="@+id/continue_hero_title"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<TextView
+		android:id="@+id/continue_hero_subtitle"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<ProgressBar
+		android:id="@+id/continue_hero_progress"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<TextView
+		android:id="@+id/continue_hero_progress_label"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<Button
+		android:id="@+id/button_continue_hero"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+	<View
+		android:id="@+id/section_for_you"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="gone" />
+
+</LinearLayout>

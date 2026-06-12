@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/widget_root"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/bg_appwidget_root"
+	android:gravity="center_vertical"
+	android:orientation="horizontal"
+	android:padding="@dimen/margin_small">
+
+	<ImageView
+		android:id="@+id/imageView_cover"
+		android:layout_width="@dimen/widget_cover_width"
+		android:layout_height="@dimen/widget_cover_height"
+		android:contentDescription="@string/continue_reading"
+		android:scaleType="centerCrop"
+		tools:src="@tools:sample/backgrounds/scenic" />
+
+	<LinearLayout
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_small"
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/textView_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ellipsize="end"
+			android:maxLines="2"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textStyle="bold"
+			tools:text="Sample Manga Title" />
+
+		<TextView
+			android:id="@+id/textView_subtitle"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ellipsize="end"
+			android:maxLines="1"
+			android:text="@string/continue_reading"
+			android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	</LinearLayout>
+
+</LinearLayout>

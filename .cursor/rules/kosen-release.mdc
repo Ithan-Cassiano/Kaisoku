@@ -48,17 +48,24 @@ Exemplo:
 "@
 ```
 
-Opcional: salvar em `Kaisoku/release-notes/vX.Y.Z.md` e passar o conteúdo ao script.
+Opcional: salvar em `Kosen/release-notes/vX.Y.Z.md` e passar o conteúdo ao script.
 
 ## Repositórios
 
 | Repo | Visibilidade | Uso |
 |------|--------------|-----|
 | `Ithan-Cassiano/Kaisoku` | Privado | Código + releases internas |
-| `Ithan-Cassiano/kaisoku-parsers` | Privado | Parsers |
-| `Ithan-Cassiano/Kosen-Releases` | Público | APKs — **só quando pedir publicação pública** |
+| `Ithan-Cassiano/kosen-parsers` | Privado | Parsers |
+| `Ithan-Cassiano/Kosen-Releases` | **Privado** | APKs pagos — OTA com token no APK |
+| `Ithan-Cassiano/Kosen-Dev-Releases` | Privado | OTA dev |
+
+Links no app: releases públicas + reporte por e-mail (`constants.xml`).
 
 Updates in-app: `Ithan-Cassiano/Kosen-Releases` (`constants.xml` → `github_updates_repo`).
+
+### CI — secret obrigatório
+
+Adicione `KOSEN_REPO_PAT` (PAT read-only em `kosen-parsers`) nos secrets do repo para os workflows funcionarem com repos privados.
 
 ## Fluxo quando o usuário pedir atualização
 
@@ -68,7 +75,7 @@ Updates in-app: `Ithan-Cassiano/Kosen-Releases` (`constants.xml` → `github_upd
 4. Release privada (se pediu atualização/release):
 
 ```powershell
-cd Kaisoku\scripts
+cd Kosen\scripts
 .\publish-release.ps1 -Version X.Y.Z -Description "..."
 ```
 
@@ -87,7 +94,7 @@ cd C:\Users\ithan\Downloads\kaisoku
 .\build.ps1 -Variant release
 ```
 
-APK: `Kaisoku/app/build/outputs/apk/release/app-release.apk`
+APK: `Kosen/app/build/outputs/apk/release/app-release.apk`
 
 ## Identidade
 

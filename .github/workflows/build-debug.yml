@@ -11,6 +11,9 @@ on:
       - devel
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,9 +24,12 @@ jobs:
       - name: Checkout parsers
         uses: actions/checkout@v4
         with:
-          repository: Ithan-Cassiano/kaisoku-parsers
-          path: kaisoku-parsers
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: Ithan-Cassiano/kosen-parsers
+          path: kosen-parsers
+          token: ${{ secrets.KOSEN_REPO_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Verify parsers checkout
+        run: test -f kosen-parsers/settings.gradle.kts || test -f kosen-parsers/build.gradle.kts
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4

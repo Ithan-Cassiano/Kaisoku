@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<com.kosen.reader.core.ui.widgets.ChipsView
+		android:id="@+id/chips_active_filters"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="@dimen/list_spacing_normal"
+		android:layout_marginTop="@dimen/margin_small"
+		android:layout_marginBottom="@dimen/margin_small"
+		android:visibility="gone"
+		tools:visibility="visible" />
+
+	<include
+		android:id="@+id/list_container"
+		layout="@layout/fragment_list"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/button_continue"
+		style="@style/Widget.Material3.Button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="@dimen/list_spacing_normal"
+		android:text="@string/continue_reading"
+		app:icon="@drawable/ic_read"
+		app:iconGravity="textStart" />
+
+</LinearLayout>

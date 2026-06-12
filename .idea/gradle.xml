@@ -7,15 +7,15 @@
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
-              <build path="$PROJECT_DIR$/../kaisoku-parsers" name="kaisoku-parsers">
+              <build path="$PROJECT_DIR$/../kosen-parsers" name="kosen-parsers">
                 <projects>
-                  <project path="$PROJECT_DIR$/../kaisoku-parsers" />
-                  <project path="$PROJECT_DIR$/../kaisoku-parsers/kotatsu-parsers-ksp" />
+                  <project path="$PROJECT_DIR$/../kosen-parsers" />
+                  <project path="$PROJECT_DIR$/../kosen-parsers/kosen-parsers-ksp" />
                 </projects>
               </build>
-              <build path="$PROJECT_DIR$/../kaisoku-parsers/buildSrc" name="buildSrc">
+              <build path="$PROJECT_DIR$/../kosen-parsers/buildSrc" name="buildSrc">
                 <projects>
-                  <project path="$PROJECT_DIR$/../kaisoku-parsers/buildSrc" />
+                  <project path="$PROJECT_DIR$/../kosen-parsers/buildSrc" />
                 </projects>
               </build>
             </builds>
@@ -28,9 +28,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/../kaisoku-parsers" />
-            <option value="$PROJECT_DIR$/../kaisoku-parsers/buildSrc" />
-            <option value="$PROJECT_DIR$/../kaisoku-parsers/kotatsu-parsers-ksp" />
+            <option value="$PROJECT_DIR$/../kosen-parsers" />
+            <option value="$PROJECT_DIR$/../kosen-parsers/buildSrc" />
+            <option value="$PROJECT_DIR$/../kosen-parsers/kosen-parsers-ksp" />
           </set>
         </option>
       </GradleProjectSettings>

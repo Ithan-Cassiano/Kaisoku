@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kosen UX — comic reader palette: pure black + gold yellow (mockup reference). -->
+<resources>
+	<color name="kosenux_primary">#F5C518</color>
+	<color name="kosenux_onPrimary">#000000</color>
+	<color name="kosenux_primaryContainer">#3A3200</color>
+	<color name="kosenux_onPrimaryContainer">#F5C518</color>
+	<color name="kosenux_inversePrimary">#FFD84D</color>
+	<color name="kosenux_secondary">#888888</color>
+	<color name="kosenux_onSecondary">#000000</color>
+	<color name="kosenux_secondaryContainer">#1E1E1E</color>
+	<color name="kosenux_onSecondaryContainer">#CCCCCC</color>
+	<color name="kosenux_tertiary">#F5C518</color>
+	<color name="kosenux_onTertiary">#000000</color>
+	<color name="kosenux_tertiaryContainer">#2A2500</color>
+	<color name="kosenux_onTertiaryContainer">#F5C518</color>
+	<color name="kosenux_error">#FF6B6B</color>
+	<color name="kosenux_onError">#000000</color>
+	<color name="kosenux_errorContainer">#3D1515</color>
+	<color name="kosenux_onErrorContainer">#FFB4AB</color>
+	<color name="kosenux_background">#000000</color>
+	<color name="kosenux_onBackground">#FFFFFF</color>
+	<color name="kosenux_surface">#000000</color>
+	<color name="kosenux_onSurface">#FFFFFF</color>
+	<color name="kosenux_surfaceVariant">#2A2A2A</color>
+	<color name="kosenux_onSurfaceVariant">#B3B3B3</color>
+	<color name="kosenux_outline">#3D3D3D</color>
+	<color name="kosenux_outlineVariant">#2A2A2A</color>
+	<color name="kosenux_inverseSurface">#FFFFFF</color>
+	<color name="kosenux_inverseOnSurface">#000000</color>
+	<color name="kosenux_surfaceDim">#0A0A0A</color>
+	<color name="kosenux_surfaceBright">#1A1A1A</color>
+	<color name="kosenux_surfaceContainerLowest">#000000</color>
+	<color name="kosenux_surfaceContainerLow">#0F0F0F</color>
+	<color name="kosenux_surfaceContainer">#141414</color>
+	<color name="kosenux_surfaceContainerHigh">#1A1A1A</color>
+	<color name="kosenux_surfaceContainerHighest">#222222</color>
+	<color name="kosenux_card">#141414</color>
+	<color name="kosenux_chip_inactive">#1E1E1E</color>
+</resources>

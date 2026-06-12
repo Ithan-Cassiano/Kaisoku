@@ -1,0 +1,60 @@
+package com.kosen.reader.list.ui.model
+
+import android.content.Context
+import androidx.annotation.StringRes
+import com.kosen.reader.core.model.getLocalizedTitle
+import com.kosen.reader.core.ui.model.DateTimeAgo
+import com.kosen.reader.parsers.model.MangaChapter
+
+data class ListHeader private constructor(
+	private val textRaw: Any,
+	@StringRes val buttonTextRes: Int,
+	@StringRes val filterButtonTextRes: Int,
+	val payload: Any?,
+	val badge: String?,
+) : ListModel {
+
+	constructor(
+		text: CharSequence,
+		@StringRes buttonTextRes: Int = 0,
+		@StringRes filterButtonTextRes: Int = 0,
+		payload: Any? = null,
+		badge: String? = null,
+	) : this(textRaw = text, buttonTextRes, filterButtonTextRes, payload, badge)
+
+	constructor(
+		@StringRes textRes: Int,
+		@StringRes buttonTextRes: Int = 0,
+		@StringRes filterButtonTextRes: Int = 0,
+		payload: Any? = null,
+		badge: String? = null,
+	) : this(textRaw = textRes, buttonTextRes, filterButtonTextRes, payload, badge)
+
+	constructor(
+		chapter: MangaChapter,
+		@StringRes buttonTextRes: Int = 0,
+		@StringRes filterButtonTextRes: Int = 0,
+		payload: Any? = null,
+		badge: String? = null,
+	) : this(textRaw = chapter, buttonTextRes, filterButtonTextRes, payload, badge)
+
+	constructor(
+		dateTimeAgo: DateTimeAgo,
+		@StringRes buttonTextRes: Int = 0,
+		@StringRes filterButtonTextRes: Int = 0,
+		payload: Any? = null,
+		badge: String? = null,
+	) : this(textRaw = dateTimeAgo, buttonTextRes, filterButtonTextRes, payload, badge)
+
+	fun getText(context: Context): CharSequence? = when (textRaw) {
+		is CharSequence -> textRaw
+		is Int -> if (textRaw != 0) context.getString(textRaw) else null
+		is DateTimeAgo -> textRaw.format(context)
+		is MangaChapter -> textRaw.getLocalizedTitle(context.resources)
+		else -> null
+	}
+
+	override fun areItemsTheSame(other: ListModel): Boolean {
+		return other is ListHeader && textRaw == other.textRaw
+	}
+}

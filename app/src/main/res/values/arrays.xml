@@ -145,4 +145,16 @@
 		<item>@string/ask_every_time</item>
 		<item>@string/disable</item>
 	</string-array>
+
+	<string-array name="incognito_mode_options" translatable="false">
+		<item>@string/incognito_mode_disabled</item>
+		<item>@string/incognito_mode_no_history</item>
+		<item>@string/incognito_mode_hidden_history</item>
+	</string-array>
+
+	<string-array name="incognito_mode_values" translatable="false">
+		<item>DISABLED</item>
+		<item>NO_HISTORY</item>
+		<item>HIDDEN_HISTORY</item>
+	</string-array>
 </resources>

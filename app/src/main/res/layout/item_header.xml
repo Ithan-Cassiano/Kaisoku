@@ -19,8 +19,17 @@
 		tools:text="@tools:sample/lorem[2]" />
 
 	<com.google.android.material.button.MaterialButton
+		android:id="@+id/button_filter"
+		style="@style/Widget.Kosen.Button.More.Small"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		tools:text="@string/filter"
+		tools:visibility="visible" />
+
+	<com.google.android.material.button.MaterialButton
 		android:id="@+id/button_more"
-		style="@style/Widget.Kotatsu.Button.More.Small"
+		style="@style/Widget.Kosen.Button.More.Small"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:visibility="invisible"

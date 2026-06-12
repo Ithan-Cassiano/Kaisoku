@@ -5,16 +5,16 @@
 
 <div align="center">
 
-**[Kaisoku](https://github.com/glitch-228/Kaisoku) is a free and open-source manga reader for Android with built-in
+**[Kosen](https://github.com/Ithan-Cassiano/Kosen) is a manga reader for Android with built-in
 online content sources and Mihon/Tachiyomi-compatible extension support.**
 
-![Android 6.0](https://img.shields.io/badge/android-6.0+-brightgreen) [![Sources count](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fglitch-228%2Fkaisoku-parsers%2Frefs%2Fheads%2Fmaster%2F.github%2Fsummary.yaml&query=total&label=manga%20sources&color=%23E9321C)](https://github.com/glitch-228/kaisoku-parsers) [![License](https://img.shields.io/github/license/glitch-228/Kaisoku)](https://github.com/glitch-228/Kaisoku/blob/devel/LICENSE)
+![Android 6.0](https://img.shields.io/badge/android-6.0+-brightgreen) [![Sources count](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fglitch-228%2Fkosen-parsers%2Frefs%2Fheads%2Fmaster%2F.github%2Fsummary.yaml&query=total&label=manga%20sources&color=%23E9321C)](https://github.com/Ithan-Cassiano/kosen-parsers) [![License](https://img.shields.io/github/license/Ithan-Cassiano/Kosen)](https://github.com/glitch-228/Kosen/blob/devel/LICENSE)
 
 ### Main Features
 
 <div align="left">
 
-* Online [manga catalogues](https://github.com/glitch-228/kaisoku-parsers) (with 1200+ manga sources)
+* Online [manga catalogues](https://github.com/Ithan-Cassiano/kosen-parsers) (with 1200+ manga sources)
 * Regular source fixes and additions taken from other active forks
 * Mihon/Tachiyomi-compatible extensions, including extension repositories, direct repo-link import from Explore, in-app extension management, and app-private loading without system-wide APK installs
 * Usagi plugins
@@ -54,37 +54,34 @@ online content sources and Mihon/Tachiyomi-compatible extension support.**
 
 ### Localization
 
-**[Kaisoku](https://github.com/glitch-228/Kaisoku) is localized in a number of different languages.**<br>
-**📌 If you would like to help improve these or add new languages,
-please head over to the [Kotatsu-Redo Weblate page](https://hosted.weblate.org/engage/kotatsu/)**
+**[Kosen](https://github.com/Ithan-Cassiano/Kosen) is localized in a number of different languages.**
 
 ### Support And Bug Reports
 
 - Discord: <https://discord.gg/gSabQBGGnj>
-- Telegram: <https://t.me/KaisokuApp>
-- If you find a bug, open an issue in the [Issues tab](https://github.com/glitch-228/Kaisoku/issues).
+- If you find a bug, open an issue in the [Issues tab](https://github.com/Ithan-Cassiano/Kosen/issues).
 
 ### Contributing
 
 <br>
 
-<a href="https://github.com/glitch-228/Kaisoku">
+<a href="https://github.com/Ithan-Cassiano/Kosen">
   <picture>
-    <source srcset="https://github-readme-stats.vercel.app/api/pin/?username=glitch-228&repo=Kaisoku&bg_color=0d1117&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" media="(prefers-color-scheme: dark)">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=glitch-228&repo=Kaisoku&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" alt="Kaisoku GitHub Repository">
+    <source srcset="https://github-readme-stats.vercel.app/api/pin/?username=Ithan-Cassiano&repo=Kosen&bg_color=0d1117&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" media="(prefers-color-scheme: dark)">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=Ithan-Cassiano&repo=Kosen&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" alt="Kosen GitHub Repository">
   </picture>
 </a>
-<a href="https://github.com/glitch-228/kaisoku-parsers">
+<a href="https://github.com/Ithan-Cassiano/kosen-parsers">
   <picture>
-    <source srcset="https://github-readme-stats.vercel.app/api/pin/?username=glitch-228&repo=kaisoku-parsers&bg_color=0d1117&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" media="(prefers-color-scheme: dark)">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=glitch-228&repo=kaisoku-parsers&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" alt="Kaisoku-parsers GitHub Repository">
+    <source srcset="https://github-readme-stats.vercel.app/api/pin/?username=Ithan-Cassiano&repo=kosen-parsers&bg_color=0d1117&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" media="(prefers-color-scheme: dark)">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=Ithan-Cassiano&repo=kosen-parsers&text_color=1976d2&title_color=1976d2&icon_color=0877d2&border_radius=10&description_lines_count=2&show_owner=true" alt="kosen-parsers GitHub Repository">
   </picture>
 </a><br></br>
 
 </br>
 
 **📌 Pull requests are welcome, if you want:
-See [CONTRIBUTING.md](https://github.com/glitch-228/Kaisoku/blob/devel/CONTRIBUTING.md) for the guidelines**
+See [CONTRIBUTING.md](https://github.com/Ithan-Cassiano/Kosen/blob/devel/CONTRIBUTING.md) for the guidelines**
 
 ### Certificate fingerprints
 

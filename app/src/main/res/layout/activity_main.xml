@@ -27,7 +27,7 @@
 		app:liftOnScroll="false"
 		app:liftOnScrollColor="@null">
 
-		<org.koitharu.kotatsu.core.ui.widgets.WindowInsetHolder
+		<com.kosen.reader.core.ui.widgets.WindowInsetHolder
 			android:id="@+id/insetsHolder"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -52,14 +52,23 @@
 		android:hint="@string/search_hint"
 		app:layout_anchor="@id/search_bar">
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/recyclerView_search"
+		<LinearLayout
+			android:id="@+id/search_content"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:clipToPadding="false"
-			android:orientation="vertical"
-			android:scrollbars="vertical"
-			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+			android:orientation="vertical">
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recyclerView_search"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:clipToPadding="false"
+				android:orientation="vertical"
+				android:scrollbars="vertical"
+				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+		</LinearLayout>
 
 	</com.google.android.material.search.SearchView>
 
@@ -73,13 +82,13 @@
 		app:icon="@drawable/ic_read"
 		app:layout_anchor="@id/bottomNav"
 		app:layout_anchorGravity="top|end"
-		app:layout_behavior="org.koitharu.kotatsu.main.ui.MainActionButtonBehavior"
+		app:layout_behavior="com.kosen.reader.main.ui.MainActionButtonBehavior"
 		app:layout_dodgeInsetEdges="bottom"
 		app:layout_insetEdge="bottom"
 		tools:ignore="InconsistentLayout"
 		tools:visibility="visible" />
 
-	<org.koitharu.kotatsu.core.ui.widgets.SlidingBottomNavigationView
+	<com.kosen.reader.core.ui.widgets.SlidingBottomNavigationView
 		android:id="@+id/bottomNav"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

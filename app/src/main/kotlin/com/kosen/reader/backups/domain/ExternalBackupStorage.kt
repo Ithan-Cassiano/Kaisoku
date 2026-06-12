@@ -1,0 +1,119 @@
+package com.kosen.reader.backups.domain
+
+import android.content.Context
+import android.net.Uri
+import androidx.annotation.CheckResult
+import androidx.documentfile.provider.DocumentFile
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runInterruptible
+import okio.buffer
+import okio.sink
+import okio.source
+import org.jetbrains.annotations.Blocking
+import com.kosen.reader.core.prefs.AppSettings
+import com.kosen.reader.core.util.ext.printStackTraceDebug
+import com.kosen.reader.parsers.util.runCatchingCancellable
+import java.io.File
+import javax.inject.Inject
+
+class ExternalBackupStorage @Inject constructor(
+	@ApplicationContext private val context: Context,
+	private val settings: AppSettings,
+) {
+
+	private companion object {
+		const val MIME_ZIP = "application/zip"
+	}
+
+	suspend fun list(): List<BackupFile> = runInterruptible(Dispatchers.IO) {
+		getRootOrThrow().listFiles().mapNotNull {
+			if (it.isFile && it.canRead()) {
+				BackupFile(
+					uri = it.uri,
+					dateTime = it.name?.let { fileName ->
+						BackupUtils.parseBackupDateTime(fileName)
+					} ?: return@mapNotNull null,
+				)
+			} else {
+				null
+			}
+		}.sortedDescending()
+	}
+
+	suspend fun listOrNull() = runCatchingCancellable {
+		list()
+	}.onFailure { e ->
+		e.printStackTraceDebug()
+	}.getOrNull()
+
+	suspend fun put(file: File): Uri = runInterruptible(Dispatchers.IO) {
+		val root = getRootOrThrow()
+		var created = false
+		val out = root.createFile(MIME_ZIP, file.name)?.also {
+			created = true
+		} ?: root.findWritableFile(file.name)
+			?: root.findWritableFile(file.nameWithoutExtension)
+			?: throw IllegalStateException(
+				"Cannot create target backup file ${file.name} in ${root.uri}",
+			)
+		try {
+			checkNotNull(context.contentResolver.openOutputStream(out.uri, "rwt")) {
+				"Cannot open target backup file for writing: ${out.uri}"
+			}.sink().use { sink ->
+				file.source().buffer().use { src ->
+					src.readAll(sink)
+				}
+			}
+		} catch (e: Throwable) {
+			if (created) {
+				out.delete()
+			}
+			throw e
+		}
+		out.uri
+	}
+
+	@CheckResult
+	suspend fun delete(victim: BackupFile) = runInterruptible(Dispatchers.IO) {
+		val df = DocumentFile.fromSingleUri(context, victim.uri)
+		df != null && df.delete()
+	}
+
+	suspend fun getLastBackupDate() = listOrNull()?.maxOfOrNull { it.dateTime }
+
+	suspend fun trim(maxCount: Int): Boolean {
+		if (maxCount == Int.MAX_VALUE) {
+			return false
+		}
+		val list = listOrNull()
+		if (list == null || list.size <= maxCount) {
+			return false
+		}
+		var result = false
+		for (i in maxCount until list.size) {
+			if (delete(list[i])) {
+				result = true
+			}
+		}
+		return result
+	}
+
+	@Blocking
+	private fun getRootOrThrow(): DocumentFile {
+		val uri = checkNotNull(settings.periodicalBackupDirectory) {
+			"Backup directory is not specified"
+		}
+		val root = checkNotNull(DocumentFile.fromTreeUri(context, uri)) {
+			"Cannot obtain DocumentFile from $uri"
+		}
+		check(root.exists()) { "Backup directory does not exist: $uri" }
+		check(root.isDirectory) { "Backup target is not a directory: $uri" }
+		check(root.canWrite()) { "Backup directory is not writable: $uri" }
+		return root
+	}
+
+	private fun DocumentFile.findWritableFile(name: String): DocumentFile? {
+		return findFile(name)?.takeIf { it.isFile && it.canWrite() }
+	}
+}

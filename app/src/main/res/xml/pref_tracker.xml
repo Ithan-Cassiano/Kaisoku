@@ -41,9 +41,16 @@
 
 	<Preference
 		android:dependency="tracker_enabled"
-		android:fragment="org.koitharu.kotatsu.settings.NotificationSettingsLegacyFragment"
+		android:fragment="com.kosen.reader.settings.NotificationSettingsLegacyFragment"
 		android:key="notifications_settings"
 		android:title="@string/notifications_settings" />
+
+	<SwitchPreferenceCompat
+		android:defaultValue="true"
+		android:dependency="tracker_enabled"
+		android:key="tracker_smart_notifications"
+		android:summary="@string/tracker_smart_notifications_summary"
+		android:title="@string/tracker_smart_notifications" />
 
 	<SwitchPreferenceCompat
 		android:defaultValue="false"
@@ -76,7 +83,7 @@
 			android:title="@string/disable_battery_optimization"
 			app:isPreferenceVisible="false" />
 
-		<org.koitharu.kotatsu.settings.utils.LinksPreference
+		<com.kosen.reader.settings.utils.LinksPreference
 			android:icon="@drawable/ic_info_outline"
 			android:key="track_warning"
 			android:persistent="false"

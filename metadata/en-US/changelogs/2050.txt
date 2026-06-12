@@ -1,0 +1,1 @@
+- Yomu: corrigida listagem e capítulos após mudança da API (payload base64 e capitulos_lista)

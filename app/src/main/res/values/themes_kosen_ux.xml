@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Kosen UX design system. Forced in BaseActivity when BuildConfig.UX_REDESIGN is true.
+  ~ Carries the bold fixed palette + rounder shapes + Material 3 Expressive components,
+  ~ so every screen (settings, dialogs, downloads, search, etc.) is restyled at once.
+  ~ Implicit parent is ThemeOverlay.Kosen (Material3 Light by day, Dark by night).
+-->
+<resources>
+
+	<!-- Rounder global shapes (applied to every component that uses M3 corner tokens) -->
+	<style name="ShapeAppearance.KosenUx.ExtraSmall" parent="ShapeAppearance.Material3.Corner.ExtraSmall">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">8dp</item>
+	</style>
+
+	<style name="ShapeAppearance.KosenUx.Small" parent="ShapeAppearance.Material3.Corner.Small">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">16dp</item>
+	</style>
+
+	<style name="ShapeAppearance.KosenUx.Medium" parent="ShapeAppearance.Material3.Corner.Medium">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">20dp</item>
+	</style>
+
+	<style name="ShapeAppearance.KosenUx.Large" parent="ShapeAppearance.Material3.Corner.Large">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">28dp</item>
+	</style>
+
+	<style name="ShapeAppearance.KosenUx.ExtraLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">36dp</item>
+	</style>
+
+	<style name="ThemeOverlay.Kosen.KosenUx">
+		<!-- ===== Palette ===== -->
+		<item name="colorPrimary">@color/kosenux_primary</item>
+		<item name="colorOnPrimary">@color/kosenux_onPrimary</item>
+		<item name="colorPrimaryContainer">@color/kosenux_primaryContainer</item>
+		<item name="colorOnPrimaryContainer">@color/kosenux_onPrimaryContainer</item>
+		<item name="colorPrimaryInverse">@color/kosenux_inversePrimary</item>
+		<item name="colorSecondary">@color/kosenux_secondary</item>
+		<item name="colorOnSecondary">@color/kosenux_onSecondary</item>
+		<item name="colorSecondaryContainer">@color/kosenux_secondaryContainer</item>
+		<item name="colorOnSecondaryContainer">@color/kosenux_onSecondaryContainer</item>
+		<item name="colorTertiary">@color/kosenux_tertiary</item>
+		<item name="colorOnTertiary">@color/kosenux_onTertiary</item>
+		<item name="colorTertiaryContainer">@color/kosenux_tertiaryContainer</item>
+		<item name="colorOnTertiaryContainer">@color/kosenux_onTertiaryContainer</item>
+		<item name="colorError">@color/kosenux_error</item>
+		<item name="colorOnError">@color/kosenux_onError</item>
+		<item name="colorErrorContainer">@color/kosenux_errorContainer</item>
+		<item name="colorOnErrorContainer">@color/kosenux_onErrorContainer</item>
+		<item name="android:colorBackground">@color/kosenux_background</item>
+		<item name="colorOnBackground">@color/kosenux_onBackground</item>
+		<item name="colorSurface">@color/kosenux_surface</item>
+		<item name="colorOnSurface">@color/kosenux_onSurface</item>
+		<item name="colorSurfaceVariant">@color/kosenux_surfaceVariant</item>
+		<item name="colorOnSurfaceVariant">@color/kosenux_onSurfaceVariant</item>
+		<item name="colorOutline">@color/kosenux_outline</item>
+		<item name="colorOutlineVariant">@color/kosenux_outlineVariant</item>
+		<item name="colorSurfaceInverse">@color/kosenux_inverseSurface</item>
+		<item name="colorOnSurfaceInverse">@color/kosenux_inverseOnSurface</item>
+		<item name="colorSurfaceDim">@color/kosenux_surfaceDim</item>
+		<item name="colorSurfaceBright">@color/kosenux_surfaceBright</item>
+		<item name="colorSurfaceContainerLowest">@color/kosenux_surfaceContainerLowest</item>
+		<item name="colorSurfaceContainerLow">@color/kosenux_surfaceContainerLow</item>
+		<item name="colorSurfaceContainer">@color/kosenux_surfaceContainer</item>
+		<item name="colorSurfaceContainerHigh">@color/kosenux_surfaceContainerHigh</item>
+		<item name="colorSurfaceContainerHighest">@color/kosenux_surfaceContainerHighest</item>
+
+		<!-- ===== Rounder shapes everywhere ===== -->
+		<item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.KosenUx.ExtraSmall</item>
+		<item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.KosenUx.Small</item>
+		<item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.KosenUx.Medium</item>
+		<item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.KosenUx.Large</item>
+		<item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.KosenUx.ExtraLarge</item>
+
+		<!-- ===== Material 3 Expressive components (with our fixed palette) ===== -->
+		<item name="alertDialogTheme">@style/ThemeOverlay.Material3Expressive.Dialog.Alert</item>
+		<item name="materialAlertDialogTheme">@style/ThemeOverlay.Material3Expressive.MaterialAlertDialog</item>
+
+		<item name="appBarLayoutStyle">@style/Widget.Material3Expressive.AppBarLayout</item>
+		<item name="collapsingToolbarLayoutStyle">@style/Widget.Material3Expressive.CollapsingToolbar</item>
+		<item name="collapsingToolbarLayoutMediumStyle">@style/Widget.Material3Expressive.CollapsingToolbar.Medium</item>
+		<item name="collapsingToolbarLayoutLargeStyle">@style/Widget.Material3Expressive.CollapsingToolbar.Large</item>
+
+		<item name="materialSearchBarStyle">@style/Widget.Material3Expressive.SearchBar</item>
+
+		<item name="floatingActionButtonStyle">@style/Widget.Material3Expressive.FloatingActionButton</item>
+		<item name="floatingActionButtonMediumStyle">@style/Widget.Material3Expressive.FloatingActionButton.Medium</item>
+		<item name="floatingActionButtonLargeStyle">@style/Widget.Material3Expressive.FloatingActionButton.Large</item>
+		<item name="extendedFloatingActionButtonSmallStyle">@style/Widget.Material3Expressive.ExtendedFloatingActionButton.Small</item>
+		<item name="extendedFloatingActionButtonMediumStyle">@style/Widget.Material3Expressive.ExtendedFloatingActionButton.Medium</item>
+		<item name="extendedFloatingActionButtonLargeStyle">@style/Widget.Material3Expressive.ExtendedFloatingActionButton.Large</item>
+
+		<item name="materialButtonStyle">@style/Widget.Material3Expressive.Button</item>
+		<item name="materialButtonTonalStyle">@style/Widget.Material3Expressive.Button.TonalButton</item>
+		<item name="materialButtonOutlinedStyle">@style/Widget.Material3Expressive.Button.OutlinedButton</item>
+		<item name="materialButtonElevatedStyle">@style/Widget.Material3Expressive.Button.ElevatedButton</item>
+		<item name="borderlessButtonStyle">@style/Widget.Material3Expressive.Button.TextButton</item>
+		<item name="buttonBarButtonStyle">@style/Widget.Material3Expressive.Button.TextButton.Dialog</item>
+		<item name="snackbarButtonStyle">@style/Widget.Material3Expressive.Button.TextButton.Snackbar</item>
+		<item name="materialIconButtonStyle">@style/Widget.Material3Expressive.Button.IconButton.Standard</item>
+		<item name="materialIconButtonOutlinedStyle">@style/Widget.Material3Expressive.Button.IconButton.Outlined</item>
+		<item name="materialIconButtonFilledStyle">@style/Widget.Material3Expressive.Button.IconButton.Filled</item>
+		<item name="materialIconButtonFilledTonalStyle">@style/Widget.Material3Expressive.Button.IconButton.Tonal</item>
+
+		<item name="materialButtonGroupStyle">@style/Widget.Material3Expressive.MaterialButtonGroup</item>
+		<item name="materialButtonToggleGroupStyle">@style/Widget.Material3Expressive.MaterialButtonToggleGroup</item>
+
+		<item name="bottomNavigationStyle">@style/Widget.Material3Expressive.BottomNavigationView</item>
+		<item name="navigationRailStyle">@style/Widget.Material3Expressive.NavigationRailView</item>
+
+		<item name="toolbarStyle">@style/Widget.Material3Expressive.Toolbar</item>
+		<item name="toolbarSurfaceStyle">@style/Widget.Material3Expressive.Toolbar.Surface</item>
+
+		<item name="sliderStyle">@style/Widget.Material3Expressive.Slider.Xsmall</item>
+
+		<item name="collapsingToolbarLayoutMediumSize">@dimen/m3_comp_app_bar_medium_flexible_container_height</item>
+		<item name="collapsingToolbarLayoutLargeSize">@dimen/m3_comp_app_bar_large_flexible_container_height</item>
+		<item name="actionBarSize">@dimen/m3_comp_app_bar_small_container_height</item>
+	</style>
+</resources>

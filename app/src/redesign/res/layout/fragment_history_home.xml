@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kosen UX — history home header (NOW-style). -->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/kosenux_background"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingHorizontal="@dimen/list_spacing_normal"
+		android:paddingTop="20dp"
+		android:paddingBottom="@dimen/margin_small">
+
+		<ImageButton
+			android:id="@+id/button_back_private_history"
+			android:layout_width="44dp"
+			android:layout_height="44dp"
+			android:layout_marginEnd="4dp"
+			android:background="?attr/selectableItemBackgroundBorderless"
+			android:contentDescription="@string/private_history_back_to_main"
+			android:padding="10dp"
+			android:src="@drawable/ic_prev"
+			android:visibility="gone"
+			app:tint="@color/kosenux_onSurface"
+			tools:visibility="visible" />
+
+		<TextView
+			android:id="@+id/textView_page_title"
+			style="@style/TextAppearance.KosenUx.Display"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/history_home_title"
+			tools:text="NOW" />
+
+	</LinearLayout>
+
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/banner_private_history"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="@dimen/list_spacing_normal"
+		android:layout_marginBottom="@dimen/margin_small"
+		android:visibility="gone"
+		app:cardBackgroundColor="@color/kosenux_surfaceContainerHigh"
+		app:cardCornerRadius="16dp"
+		app:cardElevation="0dp"
+		app:strokeColor="@color/kosenux_outline"
+		app:strokeWidth="1dp"
+		tools:visibility="visible">
+
+		<TextView
+			android:id="@+id/textView_private_banner"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/margin_normal"
+			android:text="@string/private_history_banner_message"
+			android:textAppearance="?attr/textAppearanceBodyMedium"
+			android:textColor="@color/kosenux_onSurfaceVariant" />
+
+	</com.google.android.material.card.MaterialCardView>
+
+	<TextView
+		android:id="@+id/textView_stats_hint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="@dimen/list_spacing_normal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/bg_ux_stats_pill"
+		android:drawablePadding="8dp"
+		android:gravity="center_vertical"
+		android:paddingHorizontal="16dp"
+		android:paddingVertical="10dp"
+		android:textAppearance="?attr/textAppearanceLabelMedium"
+		android:textColor="@color/kosenux_primary"
+		android:visibility="gone"
+		app:drawableStartCompat="@drawable/ic_timer"
+		app:drawableTint="@color/kosenux_primary"
+		tools:text="12 h esta semana"
+		tools:visibility="visible" />
+
+	<include
+		android:id="@+id/list_container"
+		layout="@layout/fragment_list"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+</LinearLayout>

@@ -11,21 +11,32 @@
 	android:gravity="center_vertical"
 	android:orientation="horizontal">
 
-	<org.koitharu.kotatsu.core.ui.image.FaviconView
-		android:id="@+id/imageView_icon"
+	<FrameLayout
 		android:layout_width="40dp"
 		android:layout_height="40dp"
 		android:layout_marginStart="8dp"
 		android:layout_marginTop="8dp"
-		android:layout_marginBottom="8dp"
-		android:background="?colorSurfaceContainer"
-		android:scaleType="centerCrop"
-		app:iconStyle="@style/FaviconDrawable.Small"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Kotatsu.Cover.Small"
-		tools:src="@tools:sample/backgrounds/scenic" />
+		android:layout_marginBottom="8dp">
+
+		<com.kosen.reader.core.ui.image.FaviconView
+			android:id="@+id/imageView_icon"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="?colorSurfaceContainer"
+			android:scaleType="centerCrop"
+			app:iconStyle="@style/FaviconDrawable.Small"
+			app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Kosen.Cover.Small"
+			tools:src="@tools:sample/backgrounds/scenic" />
+
+		<View
+			android:id="@+id/view_health_indicator"
+			android:layout_width="10dp"
+			android:layout_height="10dp"
+			android:layout_gravity="end|top"
+			android:background="@drawable/shape_health_dot"
+			android:contentDescription="@null" />
+
+	</FrameLayout>
 
 	<LinearLayout
 		android:layout_width="match_parent"

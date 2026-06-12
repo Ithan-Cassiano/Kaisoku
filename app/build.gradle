@@ -15,7 +15,13 @@ plugins {
 android {
 	compileSdk = 36
 	buildToolsVersion = '35.0.0'
-	namespace = 'org.koitharu.kotatsu'
+	namespace = 'com.kosen.reader'
+
+	// Release and dev builds use independent version tracks and update channels.
+	def releaseVersionCode = 20003
+	def releaseVersionName = '2.0.3'
+	def devVersionCode = 10045
+	def devVersionName = '1.0.45'
 
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
@@ -28,10 +34,10 @@ android {
 		applicationId 'com.kosen.reader'
 		minSdk = 23
 		targetSdk = 36
-		versionCode = 2054
-		versionName = '9.7.16'
+		versionCode releaseVersionCode
+		versionName releaseVersionName
 		generatedDensities = []
-		testInstrumentationRunner 'org.koitharu.kotatsu.HiltTestRunner'
+		testInstrumentationRunner 'com.kosen.reader.HiltTestRunner'
 		ksp {
 			arg('room.generateKotlin', 'true')
 		}
@@ -48,8 +54,18 @@ android {
 		if (telegramBackupBotToken != null && !telegramBackupBotToken.isBlank()) {
 			resValue 'string', 'tg_backup_bot_token', telegramBackupBotToken
 		}
+		buildConfigField 'String', 'DEV_GITHUB_TOKEN', '""'
+		buildConfigField 'String', 'RELEASE_GITHUB_TOKEN', '""'
+		// UX redesign channel flag (true only on the 'redesign' build type / Kosen UX)
+		buildConfigField 'boolean', 'UX_REDESIGN', 'false'
 	}
 	signingConfigs {
+		debug {
+			storeFile rootProject.file('keystore/kosen-dev.keystore')
+			storePassword 'kosen-dev'
+			keyAlias 'kosen-dev'
+			keyPassword 'kosen-dev'
+		}
 		release {
 			def localProperties = new Properties()
 			def localPropertiesFile = rootProject.file('local.properties')
@@ -67,8 +83,19 @@ android {
 	}
 	buildTypes {
 		debug {
-			applicationIdSuffix = '.debug'
-			versionNameSuffix = '-debug'
+			applicationIdSuffix = '.dev'
+			signingConfig signingConfigs.debug
+			def lp = new Properties()
+			def lpf = rootProject.file('local.properties')
+			if (lpf.exists()) {
+				lp.load(new FileInputStream(lpf))
+			}
+			def devToken = lp.getProperty('kosen.dev_github_token', '')
+			if (devToken.isBlank()) {
+				devToken = System.getenv('GH_TOKEN') ?: ''
+			}
+			devToken = devToken.replace('\\', '\\\\').replace('"', '\\"')
+			buildConfigField 'String', 'DEV_GITHUB_TOKEN', '"' + devToken + '"'
 		}
 		release {
 			minifyEnabled true
@@ -79,6 +106,12 @@ android {
 			if (localPropertiesFile.exists()) {
 				localProperties.load(new FileInputStream(localPropertiesFile))
 			}
+			def releaseToken = localProperties.getProperty('kosen.release_github_token', '')
+			if (releaseToken.isBlank()) {
+				releaseToken = System.getenv('KOSEN_RELEASE_GITHUB_TOKEN') ?: ''
+			}
+			releaseToken = releaseToken.replace('\\', '\\\\').replace('"', '\\"')
+			buildConfigField 'String', 'RELEASE_GITHUB_TOKEN', '"' + releaseToken + '"'
 			if (localProperties.getProperty('kosen.storeFile') != null) {
 				signingConfig signingConfigs.release
 			} else {
@@ -93,6 +126,19 @@ android {
 			if (signingConfigs.release.storeFile != null) {
 				signingConfig signingConfigs.release
 			}
+		}
+		// Kosen UX — parallel app for the full UX redesign. Installs alongside Kosen and Kosen Dev.
+		redesign {
+			initWith release
+			applicationIdSuffix = '.ux'
+			versionNameSuffix = '-ux'
+			matchingFallbacks = ['release']
+			// Faster iteration: no shrinking/minification while redesigning the UI.
+			minifyEnabled false
+			shrinkResources false
+			// Always installable locally, like the dev build.
+			signingConfig signingConfigs.debug
+			buildConfigField 'boolean', 'UX_REDESIGN', 'true'
 		}
 	}
 	buildFeatures {
@@ -113,6 +159,12 @@ android {
 	sourceSets {
 		androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
 		main.java.srcDirs += 'src/main/kotlin/'
+		// Kosen UX reuses the release-only sources (KosenApp, stubs, pref_root_debug, bools)
+		// and adds its own redesigned resources/classes on top from src/redesign.
+		redesign {
+			java.srcDirs += 'src/release/kotlin'
+			res.srcDirs += 'src/release/res'
+		}
 	}
 	compileOptions {
 		coreLibraryDesugaringEnabled true
@@ -147,11 +199,16 @@ android {
 		unitTests.includeAndroidResources true
 		unitTests.returnDefaultValues false
 		kotlinOptions {
-			freeCompilerArgs += ['-opt-in=org.koitharu.kotatsu.parsers.InternalParsersApi']
+			freeCompilerArgs += ['-opt-in=com.kosen.reader.parsers.InternalParsersApi']
 		}
 	}
 	applicationVariants.configureEach { variant ->
-		if (variant.name == 'nightly') {
+		if (variant.buildType.name == 'debug') {
+			variant.outputs.each { output ->
+				output.versionCodeOverride = devVersionCode
+				output.versionNameOverride = "${devVersionName}-debug"
+			}
+		} else if (variant.name == 'nightly') {
 			variant.outputs.each { output ->
 				def now = LocalDateTime.now()
 				output.versionCodeOverride = now.format("yyMMdd").toInteger()
@@ -172,11 +229,11 @@ dependencies {
 	def parsersVersion = libs.versions.parsers.get()
 	if (System.properties.containsKey('parsersVersionOverride')) {
 		// usage:
-		// -DparsersVersionOverride=$(curl -s https://api.github.com/repos/glitch-228/kaisoku-parsers/commits/master -H "Accept: application/vnd.github.sha" | cut -c -10)
+		// -DparsersVersionOverride=$(curl -s https://api.github.com/repos/Ithan-Cassiano/kosen-parsers/commits/master -H "Accept: application/vnd.github.sha" | cut -c -10)
 		parsersVersion = System.getProperty('parsersVersionOverride')
 	}
 	//noinspection UseTomlInstead
-	implementation("com.github.glitch-228:kosen-parsers:$parsersVersion") {
+	implementation("com.github.Ithan-Cassiano:kosen-parsers:$parsersVersion") {
 		exclude group: 'org.json', module: 'json'
 	}
 

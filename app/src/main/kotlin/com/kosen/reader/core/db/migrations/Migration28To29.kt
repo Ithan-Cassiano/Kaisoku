@@ -1,0 +1,11 @@
+package com.kosen.reader.core.db.migrations
+
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+
+class Migration28To29 : Migration(28, 29) {
+
+	override fun migrate(db: SupportSQLiteDatabase) {
+		MangaIdentityMerge.mergeDuplicateMangaByIdentity(db)
+	}
+}

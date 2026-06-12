@@ -65,7 +65,7 @@
 					app:layout_constraintTop_toTopOf="parent"
 					tools:visibility="visible">
 
-					<org.koitharu.kotatsu.image.ui.CoverImageView
+					<com.kosen.reader.image.ui.CoverImageView
 						android:id="@+id/backdrop"
 						android:layout_width="match_parent"
 						android:layout_height="match_parent"
@@ -85,7 +85,7 @@
 
 				</FrameLayout>
 
-				<org.koitharu.kotatsu.image.ui.CoverImageView
+				<com.kosen.reader.image.ui.CoverImageView
 					android:id="@+id/imageView_cover"
 					android:layout_width="0dp"
 					android:layout_height="0dp"
@@ -104,14 +104,14 @@
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toTopOf="parent"
 					app:layout_constraintWidth_percent="0.3"
-					app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Kotatsu.Cover"
+					app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Kosen.Cover"
 					app:useExistingDrawable="true"
 					tools:background="@tools:sample/backgrounds/scenic[5]"
 					tools:ignore="ContentDescription,UnusedAttribute" />
 
 				<TextView
 					android:id="@+id/textView_nsfw_16"
-					style="@style/Widget.Kotatsu.TextView.Badge"
+					style="@style/Widget.Kosen.TextView.Badge"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/card_indicator_offset"
@@ -124,7 +124,7 @@
 
 				<TextView
 					android:id="@+id/textView_nsfw_18"
-					style="@style/Widget.Kotatsu.TextView.Badge"
+					style="@style/Widget.Kosen.TextView.Badge"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/card_indicator_offset"
@@ -134,7 +134,7 @@
 					app:layout_constraintBottom_toBottomOf="@id/imageView_cover"
 					app:layout_constraintEnd_toEndOf="@id/imageView_cover" />
 
-				<org.koitharu.kotatsu.core.ui.widgets.SelectableTextView
+				<com.kosen.reader.core.ui.widgets.SelectableTextView
 					android:id="@+id/textView_title"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
 					app:layout_constraintTop_toTopOf="parent"
 					tools:text="@tools:sample/lorem" />
 
-				<org.koitharu.kotatsu.core.ui.widgets.SelectableTextView
+				<com.kosen.reader.core.ui.widgets.SelectableTextView
 					android:id="@+id/textView_subtitle"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
 
 				<com.google.android.material.chip.Chip
 					android:id="@+id/chip_favorite"
-					style="@style/Widget.Kotatsu.Chip.Dropdown"
+					style="@style/Widget.Kosen.Chip.Dropdown"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -205,7 +205,7 @@
 
 				<Button
 					android:id="@+id/button_description_more"
-					style="@style/Widget.Kotatsu.Button.More"
+					style="@style/Widget.Kosen.Button.More"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginEnd="8dp"
@@ -213,7 +213,7 @@
 					app:layout_constraintBaseline_toBaselineOf="@id/textView_description_title"
 					app:layout_constraintEnd_toEndOf="parent" />
 
-				<org.koitharu.kotatsu.core.ui.widgets.SelectableTextView
+				<com.kosen.reader.core.ui.widgets.SelectableTextView
 					android:id="@+id/textView_description"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
@@ -231,7 +231,7 @@
 					tools:ignore="UnusedAttribute"
 					tools:text="@tools:sample/lorem/random" />
 
-				<org.koitharu.kotatsu.core.ui.widgets.ChipsView
+				<com.kosen.reader.core.ui.widgets.ChipsView
 					android:id="@+id/chips_tags"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
 
 				<Button
 					android:id="@+id/button_scrobbling_more"
-					style="@style/Widget.Kotatsu.Button.More"
+					style="@style/Widget.Kosen.Button.More"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginEnd="8dp"
@@ -330,7 +330,7 @@
 
 				<Button
 					android:id="@+id/button_related_more"
-					style="@style/Widget.Kotatsu.Button.More"
+					style="@style/Widget.Kosen.Button.More"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginEnd="8dp"
@@ -383,7 +383,7 @@
 
 		<androidx.fragment.app.FragmentContainerView
 			android:id="@+id/container_side"
-			android:name="org.koitharu.kotatsu.details.ui.pager.ChaptersPagesSheet"
+			android:name="com.kosen.reader.details.ui.pager.ChaptersPagesSheet"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
 

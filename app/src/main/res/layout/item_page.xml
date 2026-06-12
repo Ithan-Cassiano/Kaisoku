@@ -15,7 +15,7 @@
 		app:doubleTapZoomStyle="center"
 		app:restoreStrategy="deferred" />
 
-	<org.koitharu.kotatsu.core.image.CoilImageView
+	<com.kosen.reader.core.image.CoilImageView
 		android:id="@+id/animatedView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"

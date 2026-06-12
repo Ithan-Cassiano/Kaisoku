@@ -15,13 +15,13 @@
         android:title="@string/show_in_grid_view" />
 
     <PreferenceScreen
-        android:fragment="org.koitharu.kotatsu.settings.sources.manage.SourcesManageFragment"
+        android:fragment="com.kosen.reader.settings.sources.manage.SourcesManageFragment"
         android:key="remote_sources"
         android:persistent="false"
         android:title="@string/manage_sources" />
 
     <PreferenceScreen
-        android:fragment="org.koitharu.kotatsu.settings.sources.manage.plugins.PluginsManageFragment"
+        android:fragment="com.kosen.reader.settings.sources.manage.plugins.PluginsManageFragment"
         android:key="plugins_manager"
         android:persistent="false"
         android:title="@string/manage_plugins" />
@@ -57,11 +57,18 @@
         android:title="@string/hide_broken_sources" />
 
     <ListPreference
+        android:entries="@array/incognito_mode_options"
+        android:entryValues="@array/incognito_mode_values"
+        android:key="incognito_mode_type"
+        android:summary="@string/incognito_mode_no_history_summary"
+        android:title="@string/incognito_mode_type"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
         android:entries="@array/incognito_nsfw_options"
         android:key="incognito_nsfw"
         android:title="@string/incognito_for_nsfw"
         app:useSimpleSummaryProvider="true" />
-
 
     <SwitchPreferenceCompat
         android:defaultValue="false"

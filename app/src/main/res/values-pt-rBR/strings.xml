@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="read">Ler</string>
     <string name="you_have_not_favourites_yet">Você ainda não marcou alguma obra como favorita</string>
@@ -148,6 +148,7 @@
     <string name="about_app_translation_summary">Clique e ajude-nos na tradução deste app</string>
     <string name="about_app_translation">Sobre a tradução</string>
     <string name="auth_complete">Autorizado</string>
+    <string name="auth_not_confirmed">Login não detectado. Conclua o acesso no site e toque em Confirmar login.</string>
     <string name="confirm_login">Confirmar login</string>
     <string name="source_auth_status">Status da conta</string>
     <string name="source_auth_status_connected">Conectado — você pode ler os capítulos</string>
@@ -201,6 +202,18 @@
     <string name="text_local_holder_secondary">Salve algo do catálogo online ou importe de um arquivo.</string>
     <string name="check_for_updates">Verificar se há atualizações</string>
     <string name="allow_install_unknown_apps">Permita instalar desta fonte nas configurações do sistema para atualizar o app</string>
+    <string name="update_signature_conflict_title">Reinstalação necessária</string>
+    <string name="update_signature_conflict_message">Esta atualização usa uma assinatura diferente da versão instalada (comum em builds antigos do Kosen Dev). Desinstale o app atual e instale de novo.\n\nOs dados do app serão apagados.</string>
+    <string name="update_uninstall_app">Desinstalar app</string>
+    <string name="update_retry_after_uninstall">Depois de desinstalar, baixe e instale o APK de novo pela página da release ou pelo link direto.</string>
+    <string name="update_version_downgrade_title">Não foi possível instalar</string>
+    <string name="update_version_downgrade_message">A versão instalada é mais recente que este APK (bloqueio do Android). Desinstale o Kosen em Configurações → Apps e instale o APK mais recente da release manualmente.\n\nSeus dados locais serão apagados.</string>
+    <string name="update_package_migration_title">Novo app Kosen Dev</string>
+    <string name="update_package_migration_message">Esta atualização instala um app novo (sem conflito com a versão antiga). Depois de instalar, remova o Kosen Dev anterior em Configurações → Apps.</string>
+    <string name="dev_update_private_channel">As atualizações do Kosen Dev são privadas. Use o botão de atualizar no app.</string>
+    <string name="dev_update_token_missing">Token de atualização dev não configurado. Recompile o app com kosen.dev_github_token em local.properties.</string>
+    <string name="release_update_token_missing">Serviço de atualização indisponível. Instale a versão mais recente pelo canal da sua compra.</string>
+    <string name="ota_release_token_expired">Não foi possível verificar atualizações. Reinstale a versão mais recente pelo canal oficial.</string>
     <string name="text_feed_holder">Novos capítulos da(s) obra(s) que você lê serão mostrados aqui</string>
     <string name="app_version">Versão %s</string>
     <string name="zoom_mode_fit_width">Ajustar à largura</string>
@@ -211,6 +224,8 @@
     <string name="right_to_left">Da direita para a esquerda</string>
     <string name="scale_mode">Modo de escala</string>
     <string name="zoom_mode_fit_height">Ajustar à altura</string>
+    <string name="dev_tab_background">Fundo de webtoons nas abas</string>
+    <string name="dev_tab_background_summary">Exibe um collage atrás de Histórico, Favoritos, Explorar e Fluxo</string>
     <string name="black_dark_theme">Preto</string>
     <string name="backup_restore">Backup e restauração</string>
     <string name="restore_backup">Restaurar do backup</string>
@@ -631,6 +646,8 @@
     <string name="disable_connectivity_check_summary">Ignore a verificação de conectividade caso tenha problemas com ela (por exemplo, entrar no modo off-line mesmo que a rede esteja conectada)</string>
     <string name="webtoon_gaps">Lacunas no modo Webtoon</string>
     <string name="webtoon_gaps_summary">Mostrar lacunas verticais entre as páginas no modo Webtoon</string>
+    <string name="reader_edge_chapter_nav">Toque nas laterais para trocar capítulo</string>
+    <string name="reader_edge_chapter_nav_summary">Toque na borda esquerda ou direita da tela para ir ao capítulo anterior ou próximo</string>
     <string name="authors">Autores</string>
     <string name="ignore_ssl_errors_summary">Você pode desativar a verificação de certificados SSL caso tenha problemas relacionados a SSL ao acessar recursos de rede. Isso pode afetar sua segurança. É necessário reiniciar o aplicativo após alterar essa configuração.</string>
     <string name="search_suggestions">Sugestões de pesquisa</string>
@@ -682,7 +699,10 @@
     <string name="low_rating">Classificação baixa</string>
     <string name="original_language">Idioma original</string>
     <string name="year">Ano</string>
+    <string name="legal_notices">Aviso legal</string>
+    <string name="legal_notices_summary">Licença GPL e bibliotecas de terceiros</string>
     <string name="source_code">Código fonte</string>
+    <string name="public_releases">Versões publicadas</string>
     <string name="user_manual">Manual do usuário</string>
     <string name="telegram_group">Grupo do Discord</string>
     <string name="skip_all">Pular todas</string>

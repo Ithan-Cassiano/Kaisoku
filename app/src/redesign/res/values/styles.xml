@@ -1,0 +1,64 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- Comic-style display headers (ALL BOOKS, NOW, etc.) -->
+	<style name="TextAppearance.KosenUx.Display" parent="TextAppearance.Material3.HeadlineMedium">
+		<item name="android:textColor">@color/kosenux_onSurface</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:letterSpacing">0.04</item>
+		<item name="android:fontFamily">sans-serif-black</item>
+	</style>
+
+	<style name="TextAppearance.KosenUx.Section" parent="TextAppearance.Material3.TitleMedium">
+		<item name="android:textColor">@color/kosenux_primary</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:letterSpacing">0.08</item>
+		<item name="android:fontFamily">sans-serif-medium</item>
+	</style>
+
+	<!-- Primary CTA — yellow pill like mockup -->
+	<style name="Widget.KosenUx.Button.Primary" parent="Widget.Material3.Button">
+		<item name="android:background">@drawable/bg_ux_button_yellow</item>
+		<item name="backgroundTint">@color/kosenux_primary</item>
+		<item name="android:textColor">@color/kosenux_onPrimary</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:letterSpacing">0.06</item>
+		<item name="android:fontFamily">sans-serif-medium</item>
+		<item name="cornerRadius">28dp</item>
+	</style>
+
+	<!-- Filter chips — yellow when active (MYSTERY mockup) -->
+	<style name="Widget.Kosen.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+		<item name="chipBackgroundColor">@color/kosenux_chip_filter_background</item>
+		<item name="android:textColor">@color/kosenux_chip_filter_text</item>
+		<item name="chipStrokeWidth">0dp</item>
+		<item name="checkedIconVisible">false</item>
+	</style>
+
+	<style name="Widget.Kosen.Chip" parent="Widget.Material3.Chip.Suggestion">
+		<item name="chipBackgroundColor">@color/kosenux_chip_inactive</item>
+		<item name="android:textColor">@color/kosenux_onSurface</item>
+	</style>
+
+	<style name="Widget.Kosen.Chip.Assist" parent="Widget.Material3.Chip.Assist">
+		<item name="chipBackgroundColor">@color/kosenux_surfaceContainerHigh</item>
+		<item name="android:textColor">@color/kosenux_primary</item>
+	</style>
+
+	<!-- Covers — rounded posters -->
+	<style name="ShapeAppearanceOverlay.Kosen.Cover" parent="">
+		<item name="cornerSize">14dp</item>
+	</style>
+
+	<style name="ShapeAppearanceOverlay.Kosen.Cover.Medium" parent="">
+		<item name="cornerSize">12dp</item>
+	</style>
+
+	<style name="ShapeAppearanceOverlay.Kosen.Cover.Small" parent="">
+		<item name="cornerSize">10dp</item>
+	</style>
+
+	<style name="TextAppearance.Kosen.GridTitle" parent="TextAppearance.Material3.LabelLarge">
+		<item name="android:textColor">@color/kosenux_onSurface</item>
+	</style>
+
+</resources>

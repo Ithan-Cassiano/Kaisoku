@@ -1,0 +1,70 @@
+package com.kosen.reader.settings.sources.catalog
+
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.view.updatePaddingRelative
+import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
+import com.kosen.reader.R
+import com.kosen.reader.core.model.getSummary
+import com.kosen.reader.core.model.getTitle
+import com.kosen.reader.core.model.PluginMangaSource
+import com.kosen.reader.core.ui.image.FaviconDrawable
+import com.kosen.reader.core.ui.list.OnListItemClickListener
+import com.kosen.reader.core.util.ext.drawableStart
+import com.kosen.reader.core.util.ext.getThemeDimensionPixelOffset
+import com.kosen.reader.core.util.ext.setTextAndVisible
+import com.kosen.reader.databinding.ItemEmptyHintBinding
+import com.kosen.reader.databinding.ItemSourceCatalogBinding
+import com.kosen.reader.list.ui.model.ListModel
+import com.kosen.reader.core.parser.mihon.MihonMangaSource
+import com.kosen.reader.parsers.model.MangaParserSource
+import androidx.appcompat.R as appcompatR
+
+fun sourceCatalogItemSourceAD(
+	listener: OnListItemClickListener<SourceCatalogItem.Source>
+) = adapterDelegateViewBinding<SourceCatalogItem.Source, ListModel, ItemSourceCatalogBinding>(
+	{ layoutInflater, parent ->
+		ItemSourceCatalogBinding.inflate(layoutInflater, parent, false)
+	},
+) {
+
+	binding.imageViewAdd.setOnClickListener { v ->
+		listener.onItemLongClick(item, v)
+	}
+	binding.root.setOnClickListener { v ->
+		listener.onItemClick(item, v)
+	}
+	val basePadding = context.getThemeDimensionPixelOffset(
+		appcompatR.attr.listPreferredItemPaddingEnd,
+		binding.root.paddingStart,
+	)
+	binding.root.updatePaddingRelative(
+		end = (basePadding - context.resources.getDimensionPixelOffset(R.dimen.margin_small)).coerceAtLeast(0),
+	)
+
+	bind {
+		binding.textViewTitle.text = item.source.getTitle(context)
+		binding.textViewDescription.text = item.source.getSummary(context)
+		val parserSource = item.source as? MangaParserSource
+		binding.textViewDescription.drawableStart = when {
+			parserSource?.isBroken == true -> ContextCompat.getDrawable(context, R.drawable.ic_off_small)
+			item.source is MihonMangaSource -> ContextCompat.getDrawable(context, R.drawable.ic_sync)
+			item.source is PluginMangaSource -> ContextCompat.getDrawable(context, R.drawable.ic_services)
+			else -> null
+		}
+		binding.imageViewIcon.setImageAsync(item.source, cacheOnly = true)
+	}
+}
+
+fun sourceCatalogItemHintAD() = adapterDelegateViewBinding<SourceCatalogItem.Hint, ListModel, ItemEmptyHintBinding>(
+	{ inflater, parent -> ItemEmptyHintBinding.inflate(inflater, parent, false) },
+) {
+
+	binding.buttonRetry.isVisible = false
+
+	bind {
+		binding.icon.setImageAsync(item.icon)
+		binding.textPrimary.setText(item.title)
+		binding.textSecondary.setTextAndVisible(item.text)
+	}
+}

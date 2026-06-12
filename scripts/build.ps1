@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('debug', 'release', 'nightly')]
+    [ValidateSet('debug', 'release', 'nightly', 'redesign')]
     [string]$Variant = 'debug'
 )
 
@@ -11,6 +11,7 @@ $task = switch ($Variant) {
     'debug' { 'assembleDebug' }
     'release' { 'assembleRelease' }
     'nightly' { 'assembleNightly' }
+    'redesign' { 'assembleRedesign' }
 }
 
 Write-Host "Building Kosen ($Variant)..." -ForegroundColor Cyan

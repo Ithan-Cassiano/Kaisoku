@@ -1,0 +1,34 @@
+Kosen — Aviso legal e licenças de software
+
+Copyright (c) 2026 Ithan Cassiano e colaboradores do Kosen.
+
+Este aplicativo é software livre licenciado sob a GNU General Public License v3 (GPLv3).
+Você pode redistribuir e/ou modificá-lo nos termos dessa licença.
+
+O Kosen é uma obra derivada de projetos de leitores de mangá de código aberto.
+As modificações realizadas para o Kosen são independentes dos projetos originais.
+
+Texto completo da GPLv3: https://www.gnu.org/licenses/gpl-3.0.html
+
+Distribuição oficial: app pago — atualizações via OTA privada (GitHub Releases).
+
+Sob a GPLv3, você pode solicitar o código-fonte correspondente a esta versão pelo
+formulário de reporte de bugs em Configurações → Sobre (abre o cliente de e-mail).
+
+---
+
+Bibliotecas de terceiros (principais):
+
+• AndroidX / Material Components — Apache License 2.0
+• Kotlin / Kotlin Coroutines — Apache License 2.0
+• Dagger Hilt — Apache License 2.0
+• Room — Apache License 2.0
+• OkHttp / Okio — Apache License 2.0
+• Coil — Apache License 2.0
+• Markwon — Apache License 2.0
+• Subsampling Scale Image View — Apache License 2.0
+• WorkManager — Apache License 2.0
+• Serialization (kotlinx) — Apache License 2.0
+
+Esta lista não substitui os avisos de licença embutidos em cada dependência.
+Consulte o repositório de código-fonte para a lista completa e versões exatas.

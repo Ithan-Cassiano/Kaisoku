@@ -12,8 +12,8 @@ import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import org.koitharu.kotatsu.core.parser.mihon.MihonSourceRegistry
-import org.koitharu.kotatsu.parsers.model.MangaSource
+import com.kosen.reader.core.parser.mihon.MihonSourceRegistry
+import com.kosen.reader.parsers.model.MangaSource
 import rx.Observable
 import uy.kohesive.injekt.injectLazy
 import java.net.URI

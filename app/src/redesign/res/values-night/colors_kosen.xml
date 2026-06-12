@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="kosen_primary">#F5C518</color>
+	<color name="kosen_primaryContainer">#3A3200</color>
+	<color name="kosen_onPrimary">#000000</color>
+	<color name="kosen_onPrimaryContainer">#F5C518</color>
+	<color name="kosen_inversePrimary">#FFD84D</color>
+	<color name="kosen_secondary">#888888</color>
+	<color name="kosen_secondaryContainer">#1E1E1E</color>
+	<color name="kosen_onSecondary">#000000</color>
+	<color name="kosen_onSecondaryContainer">#CCCCCC</color>
+	<color name="kosen_tertiary">#F5C518</color>
+	<color name="kosen_tertiaryContainer">#2A2500</color>
+	<color name="kosen_onTertiary">#000000</color>
+	<color name="kosen_onTertiaryContainer">#F5C518</color>
+	<color name="kosen_surface">#000000</color>
+	<color name="kosen_surfaceDim">#0A0A0A</color>
+	<color name="kosen_surfaceBright">#1A1A1A</color>
+	<color name="kosen_surfaceContainerLowest">#000000</color>
+	<color name="kosen_surfaceContainerLow">#0F0F0F</color>
+	<color name="kosen_surfaceContainer">#141414</color>
+	<color name="kosen_surfaceContainerHigh">#1A1A1A</color>
+	<color name="kosen_surfaceContainerHighest">#222222</color>
+	<color name="kosen_surfaceVariant">#2A2A2A</color>
+	<color name="kosen_onSurface">#FFFFFF</color>
+	<color name="kosen_onSurfaceVariant">#B3B3B3</color>
+	<color name="kosen_inverseSurface">#FFFFFF</color>
+	<color name="kosen_inverseOnSurface">#000000</color>
+	<color name="kosen_background">#000000</color>
+	<color name="kosen_outline">#3D3D3D</color>
+</resources>

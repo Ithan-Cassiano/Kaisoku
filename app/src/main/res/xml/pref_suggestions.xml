@@ -31,7 +31,7 @@
 		android:summary="@string/suggestions_notifications_summary"
 		android:title="@string/notifications_enable" />
 
-	<org.koitharu.kotatsu.settings.utils.MultiAutoCompleteTextViewPreference
+	<com.kosen.reader.settings.utils.MultiAutoCompleteTextViewPreference
 		android:dependency="suggestions"
 		android:key="suggestions_exclude_tags"
 		android:summary="@string/suggestions_excluded_genres_summary"
@@ -44,6 +44,13 @@
 		android:key="suggestions_exclude_nsfw"
 		android:summary="@string/exclude_nsfw_from_suggestions_summary"
 		android:title="@string/exclude_nsfw_from_suggestions" />
+
+	<SwitchPreferenceCompat
+		android:defaultValue="false"
+		android:dependency="suggestions"
+		android:key="nsfw_filter_strict"
+		android:summary="@string/nsfw_filter_strict_summary"
+		android:title="@string/nsfw_filter_strict" />
 
 	<Preference
 		android:icon="@drawable/ic_info_outline"

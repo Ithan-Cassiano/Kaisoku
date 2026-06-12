@@ -6,24 +6,82 @@ param(
 	[Parameter(Mandatory = $false)]
 	[string]$DescriptionFile = "",
 	[string]$ApkPath = "",
+	[string]$ApkName = "",
+	[ValidateSet('release', 'dev')]
+	[string]$Channel = 'release',
 	[string]$Token = $env:GH_TOKEN,
-	[string]$Repo = "Ithan-Cassiano/Kaisoku"
+	[string]$Repo = ""
 )
 
 $ErrorActionPreference = 'Stop'
 $Utf8NoBom = New-Object System.Text.UTF8Encoding $false
 
+if ([string]::IsNullOrWhiteSpace($Repo)) {
+	$Repo = if ($Channel -eq 'dev') {
+		"Ithan-Cassiano/Kosen-Dev-Releases"
+	} else {
+		"Ithan-Cassiano/Kosen-Releases"
+	}
+}
+
+$tag = if ($Version.StartsWith('v')) { $Version } else { "v$Version" }
+$ver = $tag.TrimStart('v')
+$isDevChannel = $Channel -eq 'dev'
+
 if (-not [string]::IsNullOrWhiteSpace($DescriptionFile)) {
+	if (-not (Test-Path $DescriptionFile)) {
+		$notesSubdir = if ($isDevChannel) { 'dev' } else { 'release' }
+		$DescriptionFile = Join-Path $PSScriptRoot "..\release-notes\$notesSubdir\v$ver.md"
+	}
 	$Description = [System.IO.File]::ReadAllText((Resolve-Path $DescriptionFile).Path, $Utf8NoBom)
+} elseif ([string]::IsNullOrWhiteSpace($Description)) {
+	$notesSubdir = if ($isDevChannel) { 'dev' } else { 'release' }
+	$autoNotes = Join-Path $PSScriptRoot "..\release-notes\$notesSubdir\v$ver.md"
+	if (Test-Path $autoNotes) {
+		$Description = [System.IO.File]::ReadAllText((Resolve-Path $autoNotes).Path, $Utf8NoBom)
+	}
 }
 
 if ([string]::IsNullOrWhiteSpace($Token)) {
 	$Token = & (Join-Path $PSScriptRoot "Get-GitHubToken.ps1")
 }
 
-$tag = if ($Version.StartsWith('v')) { $Version } else { "v$Version" }
-$ver = $tag.TrimStart('v')
 $Description = $Description.Trim()
+
+function Get-AppVersionCode {
+	param([ValidateSet('release', 'dev')][string]$ChannelName = 'release')
+	$gradle = Join-Path $PSScriptRoot "..\app\build.gradle"
+	if (-not (Test-Path $gradle)) { return 0 }
+	$pattern = if ($ChannelName -eq 'dev') {
+		'devVersionCode\s*=\s*(\d+)'
+	} else {
+		'releaseVersionCode\s*=\s*(\d+)'
+	}
+	$m = Select-String -Path $gradle -Pattern $pattern | Select-Object -First 1
+	if ($m) { return [int]$m.Matches.Groups[1].Value }
+	return 0
+}
+
+function Add-VersionCodeMarker {
+	param([string]$Text)
+	$code = Get-AppVersionCode -ChannelName $Channel
+	if ($code -le 0 -or $Text -match 'versionCode:\d+') {
+		return $Text
+	}
+	return ($Text.TrimEnd() + "`n`n[versionCode:$code]")
+}
+
+function Add-ChannelMarker {
+	param([string]$Text)
+	$marker = if ($isDevChannel) { '[channel:dev]' } else { '[channel:release]' }
+	if ($Text -match '\[channel:(dev|release)\]') {
+		return $Text
+	}
+	return ($Text.TrimEnd() + "`n`n$marker")
+}
+
+$Description = Add-VersionCodeMarker $Description
+$Description = Add-ChannelMarker $Description
 
 if ([string]::IsNullOrWhiteSpace($Description)) {
 	Write-Error "Descrição da release obrigatória. Use -Description '...' ou -DescriptionFile."
@@ -42,11 +100,18 @@ function Invoke-GitHubJson {
 }
 
 if ([string]::IsNullOrWhiteSpace($ApkPath)) {
-	$candidates = @(
-		(Join-Path $PSScriptRoot "..\..\Kosen-$tag.apk"),
-		(Join-Path $PSScriptRoot "..\app\build\outputs\apk\release\app-release.apk"),
-		(Join-Path $PSScriptRoot "..\..\Kosen-v$ver.apk")
-	)
+	$candidates = if ($isDevChannel) {
+		@(
+			(Join-Path $PSScriptRoot "..\..\Kosen-Dev-$ver-debug.apk"),
+			(Join-Path $PSScriptRoot "..\app\build\outputs\apk\debug\app-debug.apk")
+		)
+	} else {
+		@(
+			(Join-Path $PSScriptRoot "..\..\Kosen-$tag.apk"),
+			(Join-Path $PSScriptRoot "..\app\build\outputs\apk\release\app-release.apk"),
+			(Join-Path $PSScriptRoot "..\..\Kosen-v$ver.apk")
+		)
+	}
 	foreach ($c in $candidates) {
 		if (Test-Path $c) { $ApkPath = (Resolve-Path $c).Path; break }
 	}
@@ -56,8 +121,11 @@ if (-not (Test-Path $ApkPath)) {
 	Write-Error "APK não encontrado. Informe -ApkPath."
 }
 
-$apkName = "Kosen-$tag.apk"
-$releaseName = "Kosen $ver"
+if ([string]::IsNullOrWhiteSpace($ApkName)) {
+	$ApkName = if ($isDevChannel) { "Kosen-Dev-$ver-debug.apk" } else { "Kosen-$tag.apk" }
+}
+$apkName = $ApkName
+$releaseName = if ($isDevChannel) { "Kosen Dev $ver" } else { "Kosen $ver" }
 $headers = @{
 	Authorization = "Bearer $Token"
 	Accept = "application/vnd.github+json"
@@ -66,10 +134,10 @@ $headers = @{
 
 function Update-ReleaseMetadata {
 	param($ReleaseId)
-	if (-not [string]::IsNullOrWhiteSpace($DescriptionFile)) {
+	if (-not [string]::IsNullOrWhiteSpace($DescriptionFile) -and -not $isDevChannel) {
 		$notesScript = Join-Path $PSScriptRoot "update-release-notes.py"
-		$ver = $tag.TrimStart('v')
-		python $notesScript $Token $ver
+		$verArg = $tag.TrimStart('v')
+		python $notesScript $Token $Repo $verArg
 		return
 	}
 	$patchBody = @{
@@ -82,7 +150,7 @@ function Update-ReleaseMetadata {
 		-Body $patchBody
 }
 
-Write-Host "Criando release $tag em $Repo..." -ForegroundColor Cyan
+Write-Host "Criando release $tag em $Repo (canal: $Channel)..." -ForegroundColor Cyan
 $releaseBody = @{
 	tag_name = $tag
 	name = $releaseName
@@ -120,10 +188,10 @@ $uploadHeaders = @{
 
 Invoke-RestMethod -Method Post -Uri $uploadUrl -Headers $uploadHeaders -InFile $ApkPath | Out-Null
 
-if (-not [string]::IsNullOrWhiteSpace($DescriptionFile)) {
+if (-not [string]::IsNullOrWhiteSpace($DescriptionFile) -and -not $isDevChannel) {
 	$notesScript = Join-Path $PSScriptRoot "update-release-notes.py"
-	$ver = $tag.TrimStart('v')
-	python $notesScript $Token $ver
+	$verArg = $tag.TrimStart('v')
+	python $notesScript $Token $Repo $verArg
 }
 
 Write-Host "Release publicado: $($release.html_url)" -ForegroundColor Green

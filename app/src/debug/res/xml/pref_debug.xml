@@ -3,7 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<org.koitharu.kotatsu.settings.utils.SplitSwitchPreference
+	<com.kosen.reader.settings.utils.SplitSwitchPreference
 		android:key="leak_canary"
 		android:persistent="false"
 		android:title="LeakCanary" />
@@ -19,5 +19,20 @@
 		android:title="@string/test_parser"
 		app:allowDividerAbove="true" />
 
+	<Preference
+		android:key="source_health"
+		android:persistent="false"
+		android:title="@string/dev_source_health_title" />
+
+	<SwitchPreferenceCompat
+		android:defaultValue="false"
+		android:key="nsfw_filter_strict"
+		android:summary="@string/dev_nsfw_filter_strict_summary"
+		android:title="@string/dev_nsfw_filter_strict" />
+
+	<EditTextPreference
+		android:key="dev_github_token"
+		android:summary="@string/dev_github_token_summary"
+		android:title="@string/dev_github_token" />
 
 </androidx.preference.PreferenceScreen>

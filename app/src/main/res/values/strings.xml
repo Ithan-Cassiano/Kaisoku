@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Kosen</string>
     <string name="local_storage">Local storage</string>
@@ -140,6 +140,18 @@
     <string name="app_version">Version %s</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="allow_install_unknown_apps">Allow installing from this source in system settings to update the app</string>
+    <string name="update_signature_conflict_title">Reinstall required</string>
+    <string name="update_signature_conflict_message">This update uses a different signing key than your installed app (common after switching to Kosen Dev builds). Uninstall the current app, then tap Update again to install the new version.\n\nYour library data in this app will be removed.</string>
+    <string name="update_uninstall_app">Uninstall app</string>
+    <string name="update_retry_after_uninstall">After uninstalling, open Kosen again from the launcher or download the APK from the release page.</string>
+    <string name="update_version_downgrade_title">Could not install</string>
+    <string name="update_version_downgrade_message">The installed version is newer than this APK (Android blocks downgrades). Uninstall Kosen in Settings → Apps, then install the latest release APK manually.\n\nYour local app data will be removed.</string>
+    <string name="update_package_migration_title">New Kosen Dev app</string>
+    <string name="update_package_migration_message">This update installs as a new app (no conflict with the old version). After installing, you can remove the previous Kosen Dev from Settings → Apps.</string>
+    <string name="dev_update_private_channel">Kosen Dev updates are distributed privately. Use the in-app update button.</string>
+    <string name="dev_update_token_missing">Dev update token not configured. Rebuild the app with kosen.dev_github_token in local.properties.</string>
+    <string name="release_update_token_missing">Update service unavailable. Install the latest build from your purchase channel.</string>
+    <string name="ota_release_token_expired">Could not check for updates. Reinstall the latest version from the official channel.</string>
     <string name="no_update_available">No updates available</string>
     <string name="right_to_left">Right-to-left</string>
     <string name="create_category">New category</string>
@@ -150,6 +162,8 @@
     <string name="zoom_mode_keep_start">Keep at start</string>
     <string name="black_dark_theme">Black</string>
     <string name="black_dark_theme_summary">Uses less power on AMOLED screens</string>
+    <string name="dev_tab_background">Webtoon tab background</string>
+    <string name="dev_tab_background_summary">Shows a collage behind History, Favorites, Explore and Feed</string>
     <string name="amoled_navbar">Pure black bottom navigation</string>
     <string name="amoled_navbar_summary">Force the bottom navigation bar to pure black on the AMOLED theme. Turn off to keep the default Material tint.</string>
     <string name="backup_restore">Backup and restore</string>
@@ -196,6 +210,7 @@
     <string name="about_app_translation_summary">Translate this app</string>
     <string name="about_app_translation">Translation</string>
     <string name="auth_complete">Authorized</string>
+    <string name="auth_not_confirmed">Login not detected. Finish signing in on the site, then tap Confirm login.</string>
     <string name="confirm_login">Confirm login</string>
     <string name="source_auth_status">Account status</string>
     <string name="source_auth_status_connected">Connected — you can read chapters</string>
@@ -287,7 +302,7 @@
     <string name="disable_battery_optimization">Disable battery optimization</string>
     <string name="disable_battery_optimization_summary">Helps with background updates checks</string>
     <string name="crash_text">Something went wrong. Please submit a bug report to the developers to help us fix it.</string>
-    <string name="crash_dialog_message">Kosen crashed. The crash report was copied to the clipboard. Open GitHub Issues and paste the crash message or stack trace there if the form is not filled automatically.</string>
+    <string name="crash_dialog_message">Kosen crashed. The crash report was copied to the clipboard. Use Report to open your email app with the details pre-filled.</string>
     <string name="copy_crash_report">Copy report</string>
     <string name="crash_report_copied">Crash report copied</string>
     <string name="open_github_issues">Open GitHub Issues</string>
@@ -717,6 +732,8 @@
     <string name="show_updated">Show updated</string>
     <string name="webtoon_gaps">Gaps in webtoon mode</string>
     <string name="webtoon_gaps_summary">Show vertical gaps between pages in webtoon mode</string>
+    <string name="reader_edge_chapter_nav">Edge taps for chapters</string>
+    <string name="reader_edge_chapter_nav_summary">Tap the left or right edge of the screen to go to the previous or next chapter</string>
     <string name="enable_pull_gesture_title">Enable pull gesture</string>
     <string name="enable_pull_gesture_summary">Use pull gesture to switch chapters in webtoon</string>
     <string name="less_frequently">Less frequently</string>
@@ -817,7 +834,10 @@
     <string name="content_type_artist_cg">Artist CG</string>
     <string name="content_type_game_cg">Game CG</string>
     <string name="debug">Debug</string>
+    <string name="legal_notices">Legal notices</string>
+    <string name="legal_notices_summary">GPL license and third-party libraries</string>
     <string name="source_code">Source code</string>
+    <string name="public_releases">Public releases</string>
     <string name="user_manual">User manual</string>
     <string name="telegram_group">Discord server</string>
     <string name="error_image_format">Unsupported image format: %s</string>

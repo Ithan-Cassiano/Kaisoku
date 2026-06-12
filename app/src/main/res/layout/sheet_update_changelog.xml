@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingBottom="8dp">
+
+	<View
+		android:layout_width="40dp"
+		android:layout_height="4dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="20dp"
+		android:background="@drawable/bg_sheet_handle" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingHorizontal="24dp">
+
+		<com.google.android.material.imageview.ShapeableImageView
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:contentDescription="@null"
+			android:scaleType="centerInside"
+			android:src="@drawable/ic_app_update"
+			app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+			app:tint="?attr/colorPrimary" />
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/text_title"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textAppearance="?attr/textAppearanceTitleLarge"
+				tools:text="Nova versão 1.0.29" />
+
+			<TextView
+				android:id="@+id/text_version_badge"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="4dp"
+				android:textAppearance="?attr/textAppearanceLabelMedium"
+				android:textColor="?attr/colorPrimary"
+				tools:text="Canal dev" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<androidx.core.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:maxHeight="320dp"
+		android:paddingHorizontal="24dp"
+		android:scrollbars="vertical">
+
+		<TextView
+			android:id="@+id/text_changelog"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:lineSpacingExtra="4dp"
+			android:textAppearance="?attr/textAppearanceBodyMedium"
+			android:textColor="?android:attr/textColorSecondary"
+			tools:text="Melhorias e correções desta versão." />
+
+	</androidx.core.widget.NestedScrollView>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:orientation="horizontal"
+		android:paddingHorizontal="24dp">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_later"
+			style="?attr/materialButtonOutlinedStyle"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:layout_weight="1"
+			android:text="@string/update_later" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_update"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/update_now" />
+
+	</LinearLayout>
+
+</LinearLayout>

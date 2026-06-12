@@ -3,6 +3,7 @@
 /signing/
 *.jks
 *.keystore
+!keystore/kosen-dev.keystore
 /local.properties
 /.idea/caches
 /.idea/libraries

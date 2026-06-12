@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="account_type_sync" translatable="false">com.kosen.reader.debug.sync</string>
-	<string name="sync_authority_history" translatable="false">com.kosen.reader.debug.history</string>
-	<string name="sync_authority_favourites" translatable="false">com.kosen.reader.debug.favourites</string>
+	<!-- Dev app: repo PRIVADO no GitHub — requer token em local.properties (kosen.dev_github_token) -->
+	<string name="github_updates_repo" translatable="false">Ithan-Cassiano/Kosen-Dev-Releases</string>
+	<!-- Must differ from release (com.kosen.reader.*) or Android blocks install with package conflict -->
+	<string name="account_type_sync" translatable="false">com.kosen.reader.dev.sync</string>
+	<string name="sync_authority_history" translatable="false">com.kosen.reader.dev.history</string>
+	<string name="sync_authority_favourites" translatable="false">com.kosen.reader.dev.favourites</string>
 </resources>

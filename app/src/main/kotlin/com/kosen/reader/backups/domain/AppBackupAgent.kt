@@ -1,0 +1,127 @@
+package com.kosen.reader.backups.domain
+
+import android.app.backup.BackupAgent
+import android.app.backup.BackupDataInput
+import android.app.backup.BackupDataOutput
+import android.app.backup.FullBackupDataOutput
+import android.content.Context
+import android.os.ParcelFileDescriptor
+import androidx.annotation.VisibleForTesting
+import com.google.common.io.ByteStreams
+import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.runBlocking
+import com.kosen.reader.backups.data.BackupRepository
+import com.kosen.reader.core.db.MangaDatabase
+import com.kosen.reader.core.prefs.AppSettings
+import com.kosen.reader.explore.data.MangaSourcesRepository
+import com.kosen.reader.filter.data.SavedFiltersRepository
+import com.kosen.reader.reader.data.TapGridSettings
+import java.io.File
+import java.io.FileDescriptor
+import java.io.FileInputStream
+import java.util.EnumSet
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
+
+class AppBackupAgent : BackupAgent() {
+
+	private val backupEntryPoint: BackupAgentEntryPoint
+		get() = EntryPointAccessors.fromApplication(applicationContext, BackupAgentEntryPoint::class.java)
+
+	override fun onBackup(
+		oldState: ParcelFileDescriptor?,
+		data: BackupDataOutput?,
+		newState: ParcelFileDescriptor?
+	) = Unit
+
+	override fun onRestore(
+		data: BackupDataInput?,
+		appVersionCode: Int,
+		newState: ParcelFileDescriptor?
+	) = Unit
+
+	override fun onFullBackup(data: FullBackupDataOutput) {
+		super.onFullBackup(data)
+		val settings = AppSettings(applicationContext)
+		val file = createBackupFile(
+			this,
+			BackupRepository(
+				database = MangaDatabase(context = applicationContext),
+				settings = settings,
+				tapGridSettings = TapGridSettings(applicationContext, settings),
+				mangaSourcesRepository = MangaSourcesRepository(
+					context = applicationContext,
+					db = MangaDatabase(context = applicationContext),
+					settings = AppSettings(applicationContext),
+					mihonExtensionManager = backupEntryPoint.mihonExtensionManager,
+				),
+				savedFiltersRepository = SavedFiltersRepository(
+					context = applicationContext,
+				),
+			),
+		)
+		try {
+			fullBackupFile(file, data)
+		} finally {
+			file.delete()
+		}
+	}
+
+	override fun onRestoreFile(
+		data: ParcelFileDescriptor,
+		size: Long,
+		destination: File?,
+		type: Int,
+		mode: Long,
+		mtime: Long
+	) {
+		if (destination?.name?.endsWith(".bk.zip") == true) {
+			val settings = AppSettings(applicationContext)
+			restoreBackupFile(
+				data.fileDescriptor,
+				size,
+				BackupRepository(
+					database = MangaDatabase(applicationContext),
+					settings = settings,
+					tapGridSettings = TapGridSettings(applicationContext, settings),
+					mangaSourcesRepository = MangaSourcesRepository(
+						context = applicationContext,
+						db = MangaDatabase(context = applicationContext),
+						settings = AppSettings(applicationContext),
+						mihonExtensionManager = backupEntryPoint.mihonExtensionManager,
+					),
+					savedFiltersRepository = SavedFiltersRepository(
+						context = applicationContext,
+					),
+				),
+			)
+			destination.delete()
+		} else {
+			super.onRestoreFile(data, size, destination, type, mode, mtime)
+		}
+	}
+
+	@VisibleForTesting
+	fun createBackupFile(context: Context, repository: BackupRepository): File {
+		val file = BackupUtils.createTempFile(context)
+		ZipOutputStream(file.outputStream()).use { output ->
+			runBlocking {
+				repository.createBackup(output, null)
+			}
+		}
+		return file
+	}
+
+	@VisibleForTesting
+	fun restoreBackupFile(fd: FileDescriptor, size: Long, repository: BackupRepository) {
+		ZipInputStream(ByteStreams.limit(FileInputStream(fd), size)).use { input ->
+			val sections = EnumSet.allOf(BackupSection::class.java)
+			// managed externally
+			sections.remove(BackupSection.SETTINGS)
+			sections.remove(BackupSection.SETTINGS_READER_GRID)
+			runBlocking {
+				repository.restoreBackup(input, sections, null)
+			}
+		}
+	}
+}

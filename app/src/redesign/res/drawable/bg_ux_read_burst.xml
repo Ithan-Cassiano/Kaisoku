@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Comic burst shape for READ NOW CTA -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:width="280dp"
+	android:height="56dp"
+	android:viewportWidth="280"
+	android:viewportHeight="56">
+	<path
+		android:fillColor="#F5C518"
+		android:pathData="M140,4 L155,18 L172,10 L166,28 L184,32 L166,36 L172,54 L155,46 L140,60 L125,46 L108,54 L114,36 L96,32 L114,28 L108,10 L125,18 Z" />
+</vector>

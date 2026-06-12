@@ -1,25 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:title="@string/backup_restore">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:title="@string/backup_restore">
 
-    <Preference
-        android:key="backup"
-        android:persistent="false"
-        android:summary="@string/backup_information"
-        android:title="@string/create_backup" />
+	<Preference
+		android:key="backup"
+		android:persistent="false"
+		android:summary="@string/backup_information"
+		android:title="@string/create_backup" />
 
-    <Preference
-        android:key="restore"
-        android:persistent="false"
-        android:summary="@string/restore_summary"
-        android:title="@string/restore_backup" />
+	<Preference
+		android:key="restore"
+		android:persistent="false"
+		android:summary="@string/restore_summary"
+		android:title="@string/restore_backup" />
 
-    <PreferenceScreen
-        android:fragment="org.koitharu.kotatsu.backups.ui.periodical.PeriodicalBackupSettingsFragment"
-        android:key="backup_periodic"
-        android:persistent="false"
-        android:title="@string/periodic_backups" />
+	<PreferenceScreen
+		android:fragment="com.kosen.reader.backups.ui.periodical.PeriodicalBackupSettingsFragment"
+		android:key="backup_periodic"
+		android:persistent="false"
+		android:summary="@string/periodic_backups_summary"
+		android:title="@string/periodic_backups" />
+
+	<PreferenceCategory
+		android:key="private_history_category"
+		android:title="@string/backup_private_history_category"
+		app:allowDividerAbove="true">
+
+		<SwitchPreferenceCompat
+			android:defaultValue="false"
+			android:key="private_history_lock"
+			android:summary="@string/private_history_lock_summary"
+			android:title="@string/private_history_lock" />
+
+		<SwitchPreferenceCompat
+			android:defaultValue="true"
+			android:dependency="private_history_lock"
+			android:key="private_history_lock_bio"
+			android:summary="@string/private_history_lock_bio_summary"
+			android:title="@string/use_fingerprint" />
+
+		<SwitchPreferenceCompat
+			android:defaultValue="false"
+			android:dependency="private_history_lock"
+			android:key="private_history_volume_shortcut"
+			android:summary="@string/private_history_volume_shortcut_summary"
+			android:title="@string/private_history_volume_shortcut" />
+
+		<Preference
+			android:dependency="private_history_lock"
+			android:key="private_history_change_pin"
+			android:persistent="false"
+			android:title="@string/private_history_change_pin" />
+
+		<Preference
+			android:key="private_history_export"
+			android:persistent="false"
+			android:summary="@string/private_history_export_summary"
+			android:title="@string/private_history_export" />
+
+		<Preference
+			android:key="private_history_clear"
+			android:persistent="false"
+			android:summary="@string/private_history_clear_summary"
+			android:title="@string/private_history_clear" />
+
+	</PreferenceCategory>
 
 </PreferenceScreen>

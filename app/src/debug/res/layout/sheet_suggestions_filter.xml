@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<com.kosen.reader.core.ui.sheet.AdaptiveSheetHeaderBar
+		android:id="@+id/headerBar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:title="@string/filter" />
+
+	<androidx.core.widget.NestedScrollView
+		android:id="@+id/scrollView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clipToPadding="false"
+		android:scrollIndicators="top"
+		android:scrollbars="vertical">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingBottom="@dimen/margin_normal">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:text="@string/dev_filter_section_rating"
+				android:textAppearance="?textAppearanceTitleSmall" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:layout_marginTop="@dimen/margin_small"
+				android:text="@string/suggestions_filter_rating"
+				android:textAppearance="?textAppearanceBodySmall"
+				android:textColor="?android:attr/textColorSecondary" />
+
+			<com.kosen.reader.core.ui.widgets.ChipsView
+				android:id="@+id/chipsNsfw"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:layout_marginTop="@dimen/margin_small" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:layout_marginTop="@dimen/margin_normal"
+				android:text="@string/dev_filter_section_type"
+				android:textAppearance="?textAppearanceTitleSmall" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:layout_marginTop="@dimen/margin_small"
+				android:text="@string/type"
+				android:textAppearance="?textAppearanceBodySmall"
+				android:textColor="?android:attr/textColorSecondary" />
+
+			<com.kosen.reader.core.ui.widgets.ChipsView
+				android:id="@+id/chipsContentType"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:layout_marginTop="@dimen/margin_small" />
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/button_clear"
+				style="@style/Widget.Material3.Button.TextButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginHorizontal="@dimen/margin_normal"
+				android:layout_marginTop="@dimen/margin_small"
+				android:text="@string/reset_filter" />
+
+		</LinearLayout>
+	</androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kosen UX — chapters sheet with yellow READ button. Same ids as base. -->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/kosenux_background"
+	android:orientation="vertical">
+
+	<com.kosen.reader.core.ui.sheet.AdaptiveSheetHeaderBar
+		android:id="@+id/headerBar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:title="@string/chapters" />
+
+	<com.google.android.material.appbar.MaterialToolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/kosenux_background">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:baselineAligned="false"
+			android:orientation="horizontal">
+
+			<com.google.android.material.tabs.TabLayout
+				android:id="@+id/tabs"
+				style="?tabSecondaryStyle"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_gravity="start|center_vertical"
+				android:layout_weight="1"
+				android:background="@null"
+				app:tabGravity="start"
+				app:tabIndicator="@drawable/bg_tab_pill"
+				app:tabIndicatorAnimationMode="fade"
+				app:tabIndicatorColor="@color/kosenux_primary"
+				app:tabIndicatorFullWidth="true"
+				app:tabIndicatorGravity="stretch"
+				app:tabInlineLabel="true"
+				app:tabMinWidth="0dp"
+				app:tabMode="scrollable"
+				app:tabSelectedTextColor="@color/kosenux_onPrimary"
+				app:tabTextColor="@color/kosenux_onSurfaceVariant"
+				app:tabUnboundedRipple="true" />
+
+			<com.google.android.material.button.MaterialSplitButton
+				android:id="@+id/split_button_read"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end|center_vertical"
+				android:paddingTop="0dp"
+				android:paddingBottom="0dp">
+
+				<Button
+					android:id="@+id/button_read"
+					style="@style/Widget.KosenUx.Button.Primary"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:minWidth="@dimen/read_button_min_width"
+					android:text="@string/read" />
+
+				<Button
+					android:id="@+id/button_read_menu"
+					style="?materialSplitButtonIconFilledStyle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:backgroundTint="@color/kosenux_primary"
+					android:contentDescription="@string/show_menu"
+					app:icon="?expandCollapseIndicator"
+					app:iconTint="@color/kosenux_onPrimary"
+					app:toggleCheckedStateOnClick="false" />
+
+			</com.google.android.material.button.MaterialSplitButton>
+
+		</LinearLayout>
+
+	</com.google.android.material.appbar.MaterialToolbar>
+
+	<com.kosen.reader.core.ui.widgets.TouchBlockLayout
+		android:id="@+id/layout_touchBlock"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<androidx.viewpager2.widget.ViewPager2
+			android:id="@+id/pager"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+
+	</com.kosen.reader.core.ui.widgets.TouchBlockLayout>
+
+</LinearLayout>

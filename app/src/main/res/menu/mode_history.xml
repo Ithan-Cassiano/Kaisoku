@@ -45,4 +45,28 @@
 		android:title="@string/mark_as_completed"
 		app:showAsAction="ifRoom|withText" />
 
+	<item
+		android:id="@+id/action_hide_from_main"
+		android:icon="@drawable/ic_incognito"
+		android:title="@string/hide_from_main_history"
+		app:showAsAction="ifRoom|withText" />
+
+	<item
+		android:id="@+id/action_show_in_main"
+		android:icon="@drawable/ic_eye_check"
+		android:title="@string/show_in_main_history"
+		app:showAsAction="ifRoom|withText" />
+
+	<item
+		android:id="@+id/action_hide_source"
+		android:icon="@drawable/ic_incognito"
+		android:title="@string/hide_all_from_source"
+		app:showAsAction="never" />
+
+	<item
+		android:id="@+id/action_hide_tag"
+		android:icon="@drawable/ic_incognito"
+		android:title="@string/hide_all_with_tag"
+		app:showAsAction="never" />
+
 </menu>

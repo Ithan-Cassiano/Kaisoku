@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kosen UX — softer, more spacious design tokens applied app-wide. -->
+<resources>
+	<dimen name="list_spacing_normal">12dp</dimen>
+	<dimen name="list_spacing_large">16dp</dimen>
+	<dimen name="grid_spacing">10dp</dimen>
+	<dimen name="list_spacing">12dp</dimen>
+	<dimen name="list_selector_corner">20dp</dimen>
+	<dimen name="m3_card_corner">22dp</dimen>
+	<dimen name="reader_toolbar_corner_radius">28dp</dimen>
+	<dimen name="details_bs_peek_height">132dp</dimen>
+</resources>

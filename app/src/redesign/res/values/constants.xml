@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Must differ from release (com.kosen.reader.*) and dev (.dev) so the UX app
+	     installs side by side without a sync provider/account authority conflict. -->
+	<string name="account_type_sync" translatable="false">com.kosen.reader.ux.sync</string>
+	<string name="sync_authority_history" translatable="false">com.kosen.reader.ux.history</string>
+	<string name="sync_authority_favourites" translatable="false">com.kosen.reader.ux.favourites</string>
+	<string name="github_updates_repo" translatable="false">Ithan-Cassiano/Kosen-Releases</string>
+</resources>

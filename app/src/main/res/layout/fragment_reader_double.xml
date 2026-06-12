@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.koitharu.kotatsu.reader.ui.pager.doublepage.DoublePageScalingFrame
+<com.kosen.reader.reader.ui.pager.doublepage.DoublePageScalingFrame
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/frame"
@@ -14,6 +14,6 @@
 		android:layout_height="match_parent"
 		android:defaultFocusHighlightEnabled="false"
 		android:orientation="horizontal"
-		app:layoutManager="org.koitharu.kotatsu.reader.ui.pager.doublepage.DoublePageLayoutManager" />
+		app:layoutManager="com.kosen.reader.reader.ui.pager.doublepage.DoublePageLayoutManager" />
 
-</org.koitharu.kotatsu.reader.ui.pager.doublepage.DoublePageScalingFrame>
+</com.kosen.reader.reader.ui.pager.doublepage.DoublePageScalingFrame>

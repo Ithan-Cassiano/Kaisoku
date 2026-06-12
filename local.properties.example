@@ -3,11 +3,37 @@
 
 # sdk.dir=C\:\\Users\\SeuUsuario\\AppData\\Local\\Android\\Sdk
 
+# --- kosen-parsers (obrigatório para compilar) ---
+# Clone o repo privado ao lado do app ou dentro de Kaisoku/:
+#   git clone git@github.com:Ithan-Cassiano/kosen-parsers.git ../kosen-parsers
+
 # Assinatura release (opcional para debug)
 # kosen.storeFile=../kosen-release.jks
-# kosen.storePassword=D16m12260722@
+# kosen.storePassword=
 # kosen.keyAlias=kosen
-# kosen.keyPassword=D16m12260722@
+# kosen.keyPassword=
 
 # Token do bot Telegram para backups (opcional)
 # tg_backup_bot_token=
+
+# --- OTA Kosen Release (repo PRIVADO Kosen-Releases — app pago) ---
+# Fine-grained PAT: Contents read-only APENAS em Ithan-Cassiano/Kosen-Releases
+# kosen.release_github_token=github_pat_...
+#
+# Alternativa: KOSEN_RELEASE_GITHUB_TOKEN ao rodar assembleRelease.
+# NÃO use aqui o token de publicação (escrita) — crie um PAT read-only separado.
+
+# --- OTA Kosen Dev (repo privado Kosen-Dev-Releases) ---
+# Fine-grained PAT: Contents read-only em Ithan-Cassiano/Kosen-Dev-Releases
+# kosen.dev_github_token=github_pat_...
+#
+# Alternativa: GH_TOKEN (mesmo escopo) ao rodar assembleDebug.
+# Também pode ser definido no app: Configurações → Debug → Token GitHub.
+
+# --- Publicar releases (só na sua máquina — NÃO vai para o APK) ---
+# Token com Contents read/write em Kosen-Releases — usado por Get-GitHubToken.ps1
+# Configure via: gh auth login  OU  variável GH_TOKEN na sessão ao publicar
+
+# --- CI local / GitHub Actions (opcional) ---
+# PAT read-only em Kosen + kosen-parsers — secret KOSEN_REPO_PAT no GitHub Actions
+# GH_TOKEN=ghp_...

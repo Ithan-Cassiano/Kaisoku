@@ -35,7 +35,7 @@
 		android:summary="@string/webtoon_zoom_summary"
 		android:title="@string/webtoon_zoom" />
 
-	<org.koitharu.kotatsu.settings.utils.SliderPreference
+	<com.kosen.reader.settings.utils.SliderPreference
 		android:dependency="webtoon_zoom"
 		android:key="webtoon_zoom_out"
 		android:stepSize="10"
@@ -50,6 +50,12 @@
 		android:key="webtoon_gaps"
 		android:summary="@string/webtoon_gaps_summary"
 		android:title="@string/webtoon_gaps" />
+
+	<SwitchPreferenceCompat
+		android:defaultValue="false"
+		android:key="reader_edge_chapter_nav"
+		android:summary="@string/reader_edge_chapter_nav_summary"
+		android:title="@string/reader_edge_chapter_nav" />
 
 	<MultiSelectListPreference
 		android:entries="@array/reader_controls"
@@ -156,7 +162,7 @@
 		android:summary="@string/reader_float_bar_summary"
 		android:title="@string/reader_float_bar" />
 
-	<org.koitharu.kotatsu.settings.utils.SliderPreference
+	<com.kosen.reader.settings.utils.SliderPreference
 		android:key="reader_top_bar_opacity"
 		android:stepSize="5"
 		android:title="@string/reader_top_bar_opacity"
@@ -165,7 +171,7 @@
 		app:defaultValue="50"
 		app:tickVisible="true" />
 
-	<org.koitharu.kotatsu.settings.utils.SliderPreference
+	<com.kosen.reader.settings.utils.SliderPreference
 		android:key="reader_bottom_bar_opacity"
 		android:stepSize="5"
 		android:title="@string/reader_bottom_bar_opacity"

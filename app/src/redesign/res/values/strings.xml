@@ -1,0 +1,8 @@
+<resources>
+	<string name="app_name" translatable="false">Kosen UX</string>
+	<string name="history_home_title" translatable="false">NOW</string>
+	<string name="continue_reading" translatable="false">Continue Reading</string>
+	<string name="ux_section_for_you" translatable="false">FOR YOU</string>
+	<string name="ux_continue_reading_cta" translatable="false">Continue Reading</string>
+	<string name="ux_hero_progress_pattern" translatable="false">%1$s%% • %2$s</string>
+</resources>

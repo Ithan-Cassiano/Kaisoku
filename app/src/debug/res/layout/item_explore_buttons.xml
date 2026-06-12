@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/card_local"
+		style="@style/Widget.Material3.CardView.Filled"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toStartOf="@+id/card_random"
+		app:layout_constraintHorizontal_chainStyle="spread"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_local"
+			style="@style/Widget.Material3.Button.TextButton"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingVertical="@dimen/margin_normal"
+			android:text="@string/local_storage"
+			app:icon="@drawable/ic_storage"
+			app:iconGravity="textTop" />
+	</com.google.android.material.card.MaterialCardView>
+
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/card_random"
+		style="@style/Widget.Material3.CardView.Filled"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_small"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/card_local"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_random"
+			style="@style/Widget.Material3.Button.TextButton"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingVertical="@dimen/margin_normal"
+			android:text="@string/random"
+			app:icon="@drawable/ic_dice"
+			app:iconGravity="textTop" />
+	</com.google.android.material.card.MaterialCardView>
+
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/card_bookmarks"
+		style="@style/Widget.Material3.CardView.Filled"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_small"
+		app:layout_constraintEnd_toStartOf="@+id/card_downloads"
+		app:layout_constraintHorizontal_chainStyle="spread"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/card_local">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_bookmarks"
+			style="@style/Widget.Material3.Button.TextButton"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingVertical="@dimen/margin_normal"
+			android:text="@string/bookmarks"
+			app:icon="@drawable/ic_bookmark"
+			app:iconGravity="textTop" />
+	</com.google.android.material.card.MaterialCardView>
+
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/card_downloads"
+		style="@style/Widget.Material3.CardView.Filled"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_small"
+		android:layout_marginTop="@dimen/margin_small"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/card_bookmarks"
+		app:layout_constraintTop_toBottomOf="@+id/card_random">
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_downloads"
+			style="@style/Widget.Material3.Button.TextButton"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingVertical="@dimen/margin_normal"
+			android:text="@string/downloads"
+			app:icon="@drawable/ic_download"
+			app:iconGravity="textTop" />
+	</com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

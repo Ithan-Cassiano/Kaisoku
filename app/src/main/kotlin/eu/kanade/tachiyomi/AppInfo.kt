@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi
 
-import org.koitharu.kotatsu.BuildConfig
+import com.kosen.reader.BuildConfig
 
 /**
  * Stub class for Mihon extensions that reference AppInfo.

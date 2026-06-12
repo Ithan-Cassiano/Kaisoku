@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="100dp"
+	android:layout_height="wrap_content"
+	android:layout_marginEnd="@dimen/margin_small"
+	android:background="@drawable/list_selector"
+	android:orientation="vertical"
+	android:paddingBottom="@dimen/margin_small">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="140dp">
+
+		<com.kosen.reader.image.ui.CoverImageView
+			android:id="@+id/imageView_cover"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:scaleType="centerCrop"
+			app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Kosen.Cover.Medium"
+			tools:src="@tools:sample/backgrounds/scenic" />
+
+		<com.kosen.reader.history.ui.util.ReadingProgressView
+			android:id="@+id/progressView"
+			android:layout_width="@dimen/card_indicator_size"
+			android:layout_height="@dimen/card_indicator_size"
+			android:layout_gravity="bottom|end"
+			android:layout_margin="@dimen/margin_small" />
+
+	</FrameLayout>
+
+	<TextView
+		android:id="@+id/textView_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_small"
+		android:ellipsize="end"
+		android:gravity="center_horizontal"
+		android:maxLines="2"
+		android:textAppearance="?attr/textAppearanceBodySmall"
+		tools:text="Super Gene" />
+
+</LinearLayout>

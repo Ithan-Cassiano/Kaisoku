@@ -16,12 +16,12 @@
 -dontwarn com.google.j2objc.annotations.**
 -dontwarn coil3.PlatformContext
 
--keep class org.koitharu.kotatsu.settings.NotificationSettingsLegacyFragment
--keep class org.koitharu.kotatsu.settings.about.changelog.ChangelogFragment
+-keep class com.kosen.reader.settings.NotificationSettingsLegacyFragment
+-keep class com.kosen.reader.settings.about.changelog.ChangelogFragment
 
--keep class org.koitharu.kotatsu.core.exceptions.* { *; }
--keep class org.koitharu.kotatsu.core.prefs.ScreenshotsPolicy { *; }
--keep class org.koitharu.kotatsu.backups.ui.periodical.PeriodicalBackupSettingsFragment { *; }
+-keep class com.kosen.reader.core.exceptions.* { *; }
+-keep class com.kosen.reader.core.prefs.ScreenshotsPolicy { *; }
+-keep class com.kosen.reader.backups.ui.periodical.PeriodicalBackupSettingsFragment { *; }
 -keep class org.jsoup.** { *; }
 -keepclassmembers class org.jsoup.** {
     public <init>(...);
@@ -62,8 +62,8 @@
     public protected *;
 }
 
--keep class org.koitharu.kotatsu.core.parser.mihon.** { *; }
--keeppackagenames org.koitharu.kotatsu.core.parser.mihon.**
+-keep class com.kosen.reader.core.parser.mihon.** { *; }
+-keeppackagenames com.kosen.reader.core.parser.mihon.**
 
 -keep class rx.** { *; }
 -keep interface rx.** { *; }

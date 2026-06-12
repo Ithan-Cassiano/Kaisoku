@@ -28,15 +28,21 @@ dependencyResolutionManagement {
 	}
 }
 
-def parsersDir = [file('../kaisoku-parsers'), file('kaisoku-parsers')].find { it.exists() }
+def parsersDir = [file('../kosen-parsers'), file('../kosen-parsers'), file('kosen-parsers'), file('kosen-parsers')].find { it.exists() }
 if (parsersDir != null) {
 	includeBuild(parsersDir) {
 		dependencySubstitution {
-			substitute module('com.github.glitch-228:kosen-parsers') using project(':')
+			substitute module('com.github.Ithan-Cassiano:kosen-parsers') using project(':')
 		}
 	}
 } else {
-	logger.lifecycle('kaisoku-parsers not found locally — using JitPack dependency')
+	throw new GradleException(
+		'kosen-parsers não encontrado. Clone o repositório privado ao lado do app:\n' +
+		'  git clone git@github.com:Ithan-Cassiano/kosen-parsers.git ../kosen-parsers\n' +
+		'ou dentro da pasta do app:\n' +
+		'  git clone git@github.com:Ithan-Cassiano/kosen-parsers.git kosen-parsers\n' +
+		'JitPack não funciona com repositório privado.'
+	)
 }
 
 include ':app'

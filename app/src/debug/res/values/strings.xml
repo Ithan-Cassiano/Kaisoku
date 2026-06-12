@@ -1,4 +1,28 @@
 <resources>
-	<string name="app_name" translatable="false">Kaisoku Dev</string>
+	<string name="app_name" translatable="false">Kosen Dev</string>
 	<string name="strict_mode">Strict mode</string>
+	<string name="dev_filter_section_rating">Classificação</string>
+	<string name="dev_filter_section_type">Tipo de conteúdo</string>
+	<string name="dev_suggestions_empty_title">Nenhuma sugestão por aqui</string>
+	<string name="dev_suggestions_empty_filtered">Nenhuma sugestão com esses filtros — tente remover %1$s.</string>
+	<string name="dev_refresh_suggestions">Atualizar sugestões</string>
+	<string name="dev_explore_sources">Explorar fontes</string>
+	<string name="dev_suggestions_count">%1$d obras</string>
+	<string name="dev_source_status_ok">OK</string>
+	<string name="dev_source_status_unstable">Instável</string>
+	<string name="dev_source_status_offline">Offline</string>
+	<string name="dev_nsfw_filter_strict">Filtro +18 estrito</string>
+	<string name="dev_nsfw_filter_strict_summary">Estrito: só hentai/+18. Desligado: inclui Echi/Harém.</string>
+	<string name="dev_onboarding_step1_title">Explorar</string>
+	<string name="dev_onboarding_step1_message">Continue lendo e sugestões personalizadas ficam no topo do Explorar.</string>
+	<string name="dev_onboarding_step2_title">Filtros</string>
+	<string name="dev_onboarding_step2_message">Use os chips abaixo de Sugestões para ver e remover filtros ativos.</string>
+	<string name="dev_onboarding_step3_title">Histórico oculto</string>
+	<string name="dev_onboarding_step3_message">Obras ocultas têm um ícone discreto. Use o modo de seleção para restaurar.</string>
+	<string name="dev_search_scope_title">Título</string>
+	<string name="dev_search_scope_source">Fonte</string>
+	<string name="dev_search_scope_tag">Tag</string>
+	<string name="dev_search_scope_author">Autor</string>
+	<string name="dev_widget_continue_label">Continuar leitura</string>
+	<string name="dev_hidden_from_main_badge">Oculto da lista principal</string>
 </resources>
