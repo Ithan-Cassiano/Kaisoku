@@ -18,8 +18,8 @@ android {
 	namespace = 'com.kosen.reader'
 
 	// Release and dev builds use independent version tracks and update channels.
-	def releaseVersionCode = 20073
-	def releaseVersionName = '2.0.73'
+	def releaseVersionCode = 20074
+	def releaseVersionName = '2.0.74'
 	def devVersionCode = 10045
 	def devVersionName = '1.0.45'
 
