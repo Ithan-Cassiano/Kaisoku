@@ -18,8 +18,8 @@ android {
 	namespace = 'com.kosen.reader'
 
 	// Release and dev builds use independent version tracks and update channels.
-	def releaseVersionCode = 20003
-	def releaseVersionName = '2.0.3'
+	def releaseVersionCode = 20073
+	def releaseVersionName = '2.0.73'
 	def devVersionCode = 10045
 	def devVersionName = '1.0.45'
 
@@ -30,14 +30,18 @@ android {
         includeInBundle = false
     }
 
-    defaultConfig {
-		applicationId 'com.kosen.reader'
+	defaultConfig {
+		// com.kosen.app: old com.kosen.reader kept-data + new signing key blocks install on Samsung
+		applicationId 'com.kosen.app'
 		minSdk = 23
 		targetSdk = 36
 		versionCode releaseVersionCode
 		versionName releaseVersionName
 		generatedDensities = []
 		testInstrumentationRunner 'com.kosen.reader.HiltTestRunner'
+		ndk {
+			abiFilters 'arm64-v8a', 'armeabi-v7a'
+		}
 		ksp {
 			arg('room.generateKotlin', 'true')
 		}
@@ -78,6 +82,9 @@ android {
 				storePassword localProperties.getProperty('kosen.storePassword')
 				keyAlias localProperties.getProperty('kosen.keyAlias')
 				keyPassword localProperties.getProperty('kosen.keyPassword')
+				enableV1Signing true
+				enableV2Signing true
+				enableV3Signing true
 			}
 		}
 	}
@@ -147,7 +154,8 @@ android {
 	}
 	packagingOptions {
 		jniLibs {
-			useLegacyPackaging true
+			// Uncompressed + zip-aligned .so required for 16KB page-size devices (Android 15+)
+			useLegacyPackaging false
 		}
 		resources {
 			excludes += [
